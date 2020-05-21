@@ -1,6 +1,6 @@
 const exec = require('@actions/exec');
 const io = require('@actions/io');
-const lernaJson = require('./lerna.json');
+const path = require('path');
 const glob = require('glob');
 const fs = require('fs');
 
@@ -28,18 +28,26 @@ function gitTagExists(remoteTags, tag) {
   const regex = new RegExp(`${tag}$`);
   const result = regex.exec(remoteTags);
 
-  return result.length !== 0;
+  return result != null && result.length !== 0;
 }
 
 async function publish(gitPath, npmPath, directory, packageJson, remoteTags) {
   const gitRemoteUrl = await exec.exec(gitPath, ['config', '--get', 'remote.origin.url']);
   const gitTagName = `${packageJson.name}_v${packageJson.version}`;
-  const packageDiff = await exec.exec(gitPath, ['diff', 'HEAD~', '--', `${directory}/package.json`]);
-  const packageChanged = packageDiff.includes('version:');
+  let packageDiffOutput = '';
+  await exec.exec(gitPath, ['diff', 'HEAD~', '--', `${directory}/package.json`], {
+    listeners: {
+      stdout: (data) => {
+        packageDiffOutput = data.toString();
+      }
+    }
+  });
+  console.log(packageDiffOutput);
+  const packageChanged = packageDiffOutput != '' && packageDiffOutput.includes('"version":');
 
   if (gitTagExists(remoteTags, gitTagName)) {
     console.log(`Skipping publish, tag for v${packageJson.version} of ${packageJson.name} already exists.`)
-  } else if (packageChanged) {
+  } else if (!packageChanged) {
     console.log(`Skipping publish, ${packageJson.name} version has not changed.`)
   } else {
     const tagMessage = gitTagMessage(packageJson.name, packageJson.version);
@@ -62,34 +70,43 @@ async function publish(gitPath, npmPath, directory, packageJson, remoteTags) {
 
 async function isPublishable(npmPath, packageName, packageVersion) {
   try {
-    const versions = await exec.exec(npmPath, ['info', '--json', packageName, 'versions']);
+    let versions = '';
+    await exec.exec(npmPath, ['info', '--json', packageName, 'versions'], {
+      listeners: {
+        stdout: (data) => {
+          versions = data.toString();
+        }
+      }
+    });
     const parsed = JSON.parse(versions);
 
     return parsed.find(version => version === packageVersion) == null;
   } catch (e) {
-    console.error(e);
-
     return false;
   }
 }
 
-export default async function publishEach(npmRegistry, npmAuth) {
+exports.publishEach = async function publishEach(npmRegistry, npmAuth) {
+  const workspace = process.env.GITHUB_WORKSPACE;
   const gitPath = await io.which('git', true);
-  const npmPath = io.which('npm', true);
+  const npmPath = await io.which('npm', true);
 
   await exec.exec(npmPath, ['config', 'set', `//${npmRegistry}/:_authToken=${npmAuth}`]);
   
   const remoteTags = await exec.exec(gitPath, ['ls-remote', '--tags']);
-  const packageDirectories = lernaJson.packages.reduce(async (directories, p) => { 
+  await exec.exec('echo', [path.resolve(workspace, 'lerna.json')]);
+  const lernaJson = require(path.resolve(workspace, 'lerna.json'));
+  const packageDirectories = await lernaJson.packages.reduce(async (directories, p) => { 
     if (p.includes('*')) { 
       const expanded = await new Promise((resolve) => glob(p, (error, matches) => resolve(matches))); 
-      return [...directories, ...expanded];
+      return [...directories, ...expanded.map(d => path.resolve(workspace, d))];
     }
-    else return [...directories, p]; 
+    else return [...directories, path.resolve(workspace, p)]; 
   }, []);
 
-  packageDirectories.forEach(async (directory) => {
-    const packageJson = require(`${directory}/package.json`);
+  await packageDirectories.forEach(async (directory) => {
+    const packageJsonContent = fs.readFileSync(`${directory}/package.json`);
+    const packageJson = JSON.parse(packageJsonContent);
 
     startBlock(`${packageJson.name}@${packageJson.version}`);
 

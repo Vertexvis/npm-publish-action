@@ -42,8 +42,6 @@ module.exports =
 /******/ 		// Load entry module and return exports
 /******/ 		return __webpack_require__(104);
 /******/ 	};
-/******/ 	// initialize runtime
-/******/ 	runtime(__webpack_require__);
 /******/
 /******/ 	// run startup
 /******/ 	return startup();
@@ -1044,32 +1042,10 @@ function onceStrict (fn) {
 
 /***/ }),
 
-/***/ 52:
-/***/ (function(module) {
-
-module.exports = eval("require")("./lerna.json");
-
-
-/***/ }),
-
-/***/ 64:
-/***/ (function(module) {
-
-module.exports = {"name":"@actions/core","version":"1.2.4","description":"Actions core lib","keywords":["github","actions","core"],"homepage":"https://github.com/actions/toolkit/tree/master/packages/core","license":"MIT","main":"lib/core.js","types":"lib/core.d.ts","directories":{"lib":"lib","test":"__tests__"},"files":["lib"],"publishConfig":{"access":"public"},"repository":{"type":"git","url":"git+https://github.com/actions/toolkit.git","directory":"packages/core"},"scripts":{"audit-moderate":"npm install && npm audit --audit-level=moderate","test":"echo \"Error: run tests from root\" && exit 1","tsc":"tsc"},"bugs":{"url":"https://github.com/actions/toolkit/issues"},"devDependencies":{"@types/node":"^12.0.2"}};
-
-/***/ }),
-
 /***/ 87:
 /***/ (function(module) {
 
 module.exports = require("os");
-
-/***/ }),
-
-/***/ 88:
-/***/ (function(module) {
-
-module.exports = {"name":"balanced-match","description":"Match balanced character pairs, like \"{\" and \"}\"","version":"1.0.0","repository":{"type":"git","url":"git://github.com/juliangruber/balanced-match.git"},"homepage":"https://github.com/juliangruber/balanced-match","main":"index.js","scripts":{"test":"make test","bench":"make bench"},"dependencies":{},"devDependencies":{"matcha":"^0.7.0","tape":"^4.6.0"},"keywords":["match","regexp","test","balanced","parse"],"author":{"name":"Julian Gruber","email":"mail@juliangruber.com","url":"http://juliangruber.com"},"license":"MIT","testling":{"files":"test/*.js","browsers":["ie/8..latest","firefox/20..latest","firefox/nightly","chrome/25..latest","chrome/canary","opera/12..latest","opera/next","safari/5.1..latest","ipad/6.0..latest","iphone/6.0..latest","android-browser/4.2..latest"]}};
 
 /***/ }),
 
@@ -2007,23 +1983,19 @@ function regExpEscape (s) {
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470);
-const exec = __webpack_require__(986);
-const io = __webpack_require__(1);
-const publishEach = __webpack_require__(621);
+const publish = __webpack_require__(621);
 
 async function run() {
+  const contextToken = process.env.GITHUB_TOKEN;
+  const githubToken = core.getInput('github-token');
   const npmAuth = core.getInput('npm-auth-token');
   const npmRegistry = core.getInput('npm-registry');
 
-  // const gitPath = await io.which('git', true);
-  // const npmPath = await io.which('npm', true);
+  await core.exportVariable("GITHUB_TOKEN", githubToken);
 
-  await exec.exec('ls -l');
-  // await exec.exec('./npm-publish-action/configure_env.sh', [npmPath, npmRegistry, npmAuth]);
-  // await exec.exec('./npm-publish-action/publish.sh', [gitPath, npmPath]);
+  await publish.publishEach(npmRegistry, npmAuth);
 
-  await exec.exec('cd', ['$GITHUB_WORKSPACE']);
-  await publishEach(npmRegistry, npmAuth);
+  await core.exportVariable("GITHUB_TOKEN", contextToken);
 }
 
 run();
@@ -2345,64 +2317,6 @@ exports.realpath = function realpath(p, cache, cb) {
 /***/ (function(module) {
 
 module.exports = require("child_process");
-
-/***/ }),
-
-/***/ 131:
-/***/ (function(module) {
-
-module.exports = {"name":"inflight","version":"1.0.6","description":"Add callbacks to requests in flight to avoid async duplication","main":"inflight.js","files":["inflight.js"],"dependencies":{"once":"^1.3.0","wrappy":"1"},"devDependencies":{"tap":"^7.1.2"},"scripts":{"test":"tap test.js --100"},"repository":{"type":"git","url":"https://github.com/npm/inflight.git"},"author":"Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)","bugs":{"url":"https://github.com/isaacs/inflight/issues"},"homepage":"https://github.com/isaacs/inflight","license":"ISC"};
-
-/***/ }),
-
-/***/ 149:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-var map = {
-	"./package.json": 731,
-	"@actions/core/package.json": 64,
-	"@actions/exec/package.json": 451,
-	"@actions/io/package.json": 401,
-	"@zeit/ncc/package.json": 262,
-	"balanced-match/package.json": 88,
-	"brace-expansion/package.json": 626,
-	"concat-map/package.json": 486,
-	"fs.realpath/package.json": 544,
-	"glob/package.json": 195,
-	"inflight/package.json": 131,
-	"inherits/package.json": 526,
-	"minimatch/package.json": 472,
-	"once/package.json": 573,
-	"path-is-absolute/package.json": 368,
-	"wrappy/package.json": 838
-};
-
-
-function webpackContext(req) {
-	var id = webpackContextResolve(req);
-	return __webpack_require__(id);
-}
-function webpackContextResolve(req) {
-	if(!Object.prototype.hasOwnProperty.call(map, req)) {
-		var e = new Error("Cannot find module '" + req + "'");
-		e.code = 'MODULE_NOT_FOUND';
-		throw e;
-	}
-	return map[req];
-}
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 149;
-
-/***/ }),
-
-/***/ 195:
-/***/ (function(module) {
-
-module.exports = {"author":"Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)","name":"glob","description":"a little globber","version":"7.1.6","repository":{"type":"git","url":"git://github.com/isaacs/node-glob.git"},"main":"glob.js","files":["glob.js","sync.js","common.js"],"engines":{"node":"*"},"dependencies":{"fs.realpath":"^1.0.0","inflight":"^1.0.4","inherits":"2","minimatch":"^3.0.4","once":"^1.3.0","path-is-absolute":"^1.0.0"},"devDependencies":{"mkdirp":"0","rimraf":"^2.2.8","tap":"^12.0.1","tick":"0.0.6"},"scripts":{"prepublish":"npm run benchclean","profclean":"rm -f v8.log profile.txt","test":"tap test/*.js --cov","test-regen":"npm run profclean && TEST_REGEN=1 node test/00-setup.js","bench":"bash benchmark.sh","prof":"bash prof.sh && cat profile.txt","benchclean":"node benchclean.js"},"license":"ISC","funding":{"url":"https://github.com/sponsors/isaacs"}};
 
 /***/ }),
 
@@ -2899,13 +2813,6 @@ GlobSync.prototype._makeAbs = function (f) {
 
 /***/ }),
 
-/***/ 262:
-/***/ (function(module) {
-
-module.exports = {"name":"@zeit/ncc","version":"0.22.2","repository":"zeit/ncc","license":"MIT","main":"./dist/ncc/index.js","bin":{"ncc":"./dist/ncc/cli.js"},"scripts":{"build":"node scripts/build","build-test-binary":"cd test/binary && node-gyp rebuild && cp build/Release/hello.node ../integration/hello.node","codecov":"codecov","test":"node --expose-gc --max_old_space_size=3072 node_modules/.bin/jest","test-coverage":"node --expose-gc --max_old_space_size=3072 node_modules/.bin/jest --coverage --globals \"{\\\"coverage\\\":true}\" && codecov","prepublish":"in-publish && npm test || not-in-publish"},"devDependencies":{"@azure/cosmos":"^2.0.5","@bugsnag/js":"^5.0.1","@ffmpeg-installer/ffmpeg":"^1.0.17","@google-cloud/bigquery":"^2.0.1","@google-cloud/firestore":"^2.2.0","@sentry/node":"^4.3.0","@tensorflow/tfjs-node":"^0.3.0","@zeit/webpack-asset-relocator-loader":"0.7.2","analytics-node":"^3.3.0","apollo-server-express":"^2.2.2","arg":"^4.1.0","auth0":"^2.14.0","aws-sdk":"^2.356.0","axios":"^0.18.1","azure-storage":"^2.10.2","browserify-middleware":"^8.1.1","bytes":"^3.0.0","canvas":"^2.2.0","chromeless":"^1.5.2","codecov":"^3.6.5","consolidate":"^0.15.1","copy":"^0.3.2","core-js":"^2.5.7","cowsay":"^1.3.1","esm":"^3.2.22","express":"^4.16.4","fetch-h2":"^1.0.2","firebase":"^6.1.1","firebase-admin":"^6.3.0","fluent-ffmpeg":"^2.1.2","fontkit":"^1.7.7","get-folder-size":"^2.0.0","glob":"^7.1.3","got":"^9.3.2","graceful-fs":"^4.1.15","graphql":"^14.0.2","highlights":"^3.1.1","hot-shots":"^5.9.2","in-publish":"^2.0.0","ioredis":"^4.2.0","isomorphic-unfetch":"^3.0.0","jest":"^23.6.0","jimp":"^0.5.6","jugglingdb":"2.0.1","koa":"^2.6.2","leveldown":"^5.6.0","lighthouse":"^5.0.0","loopback":"^3.24.0","mailgun":"^0.5.0","mariadb":"^2.0.1-beta","memcached":"^2.2.2","mkdirp":"^0.5.1","mongoose":"^5.3.12","mysql":"^2.16.0","node-gyp":"^3.8.0","npm":"^6.13.4","oracledb":"^4.2.0","passport":"^0.4.0","passport-google-oauth":"^1.0.0","path-platform":"^0.11.15","pdf2json":"^1.1.8","pdfkit":"^0.8.3","pg":"^7.6.1","pug":"^2.0.3","react":"^16.6.3","react-dom":"^16.6.3","redis":"^2.8.0","request":"^2.88.0","rxjs":"^6.3.3","saslprep":"^1.0.2","sequelize":"^5.8.6","sharp":"^0.25.2","shebang-loader":"^0.0.1","socket.io":"^2.2.0","source-map-support":"^0.5.9","stripe":"^6.15.0","swig":"^1.4.2","terser":"^3.11.0","the-answer":"^1.0.0","tiny-json-http":"^7.0.2","ts-loader":"^5.3.1","tsconfig-paths":"^3.7.0","tsconfig-paths-webpack-plugin":"^3.2.0","twilio":"^3.23.2","typescript":"^3.2.2","vm2":"^3.6.6","vue":"^2.5.17","vue-server-renderer":"^2.5.17","webpack":"5.0.0-alpha.17","when":"^3.7.8"}};
-
-/***/ }),
-
 /***/ 284:
 /***/ (function(module) {
 
@@ -3292,20 +3199,6 @@ if (typeof Object.create === 'function') {
 /***/ (function(module) {
 
 module.exports = require("assert");
-
-/***/ }),
-
-/***/ 368:
-/***/ (function(module) {
-
-module.exports = {"name":"path-is-absolute","version":"1.0.1","description":"Node.js 0.12 path.isAbsolute() ponyfill","license":"MIT","repository":"sindresorhus/path-is-absolute","author":{"name":"Sindre Sorhus","email":"sindresorhus@gmail.com","url":"sindresorhus.com"},"engines":{"node":">=0.10.0"},"scripts":{"test":"xo && node test.js"},"files":["index.js"],"keywords":["path","paths","file","dir","absolute","isabsolute","is-absolute","built-in","util","utils","core","ponyfill","polyfill","shim","is","detect","check"],"devDependencies":{"xo":"^0.16.0"}};
-
-/***/ }),
-
-/***/ 401:
-/***/ (function(module) {
-
-module.exports = {"name":"@actions/io","version":"1.0.2","description":"Actions io lib","keywords":["github","actions","io"],"homepage":"https://github.com/actions/toolkit/tree/master/packages/io","license":"MIT","main":"lib/io.js","types":"lib/io.d.ts","directories":{"lib":"lib","test":"__tests__"},"files":["lib"],"publishConfig":{"access":"public"},"repository":{"type":"git","url":"git+https://github.com/actions/toolkit.git","directory":"packages/io"},"scripts":{"audit-moderate":"npm install && npm audit --audit-level=moderate","test":"echo \"Error: run tests from root\" && exit 1","tsc":"tsc"},"bugs":{"url":"https://github.com/actions/toolkit/issues"}};
 
 /***/ }),
 
@@ -4205,13 +4098,6 @@ function escapeProperty(s) {
 
 /***/ }),
 
-/***/ 451:
-/***/ (function(module) {
-
-module.exports = {"name":"@actions/exec","version":"1.0.4","description":"Actions exec lib","keywords":["github","actions","exec"],"homepage":"https://github.com/actions/toolkit/tree/master/packages/exec","license":"MIT","main":"lib/exec.js","types":"lib/exec.d.ts","directories":{"lib":"lib","test":"__tests__"},"files":["lib"],"publishConfig":{"access":"public"},"repository":{"type":"git","url":"git+https://github.com/actions/toolkit.git","directory":"packages/exec"},"scripts":{"audit-moderate":"npm install && npm audit --audit-level=moderate","test":"echo \"Error: run tests from root\" && exit 1","tsc":"tsc"},"bugs":{"url":"https://github.com/actions/toolkit/issues"},"dependencies":{"@actions/io":"^1.0.1"}};
-
-/***/ }),
-
 /***/ 470:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -4441,41 +4327,6 @@ exports.getState = getState;
 
 /***/ }),
 
-/***/ 472:
-/***/ (function(module) {
-
-module.exports = {"author":"Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)","name":"minimatch","description":"a glob matcher in javascript","version":"3.0.4","repository":{"type":"git","url":"git://github.com/isaacs/minimatch.git"},"main":"minimatch.js","scripts":{"test":"tap test/*.js --cov","preversion":"npm test","postversion":"npm publish","postpublish":"git push origin --all; git push origin --tags"},"engines":{"node":"*"},"dependencies":{"brace-expansion":"^1.1.7"},"devDependencies":{"tap":"^10.3.2"},"license":"ISC","files":["minimatch.js"]};
-
-/***/ }),
-
-/***/ 486:
-/***/ (function(module) {
-
-module.exports = {"name":"concat-map","description":"concatenative mapdashery","version":"0.0.1","repository":{"type":"git","url":"git://github.com/substack/node-concat-map.git"},"main":"index.js","keywords":["concat","concatMap","map","functional","higher-order"],"directories":{"example":"example","test":"test"},"scripts":{"test":"tape test/*.js"},"devDependencies":{"tape":"~2.4.0"},"license":"MIT","author":{"name":"James Halliday","email":"mail@substack.net","url":"http://substack.net"},"testling":{"files":"test/*.js","browsers":{"ie":[6,7,8,9],"ff":[3.5,10,15],"chrome":[10,22],"safari":[5.1],"opera":[12]}}};
-
-/***/ }),
-
-/***/ 526:
-/***/ (function(module) {
-
-module.exports = {"name":"inherits","description":"Browser-friendly inheritance fully compatible with standard node.js inherits()","version":"2.0.4","keywords":["inheritance","class","klass","oop","object-oriented","inherits","browser","browserify"],"main":"./inherits.js","browser":"./inherits_browser.js","repository":"git://github.com/isaacs/inherits","license":"ISC","scripts":{"test":"tap"},"devDependencies":{"tap":"^14.2.4"},"files":["inherits.js","inherits_browser.js"]};
-
-/***/ }),
-
-/***/ 544:
-/***/ (function(module) {
-
-module.exports = {"name":"fs.realpath","version":"1.0.0","description":"Use node's fs.realpath, but fall back to the JS implementation if the native one fails","main":"index.js","dependencies":{},"devDependencies":{},"scripts":{"test":"tap test/*.js --cov"},"repository":{"type":"git","url":"git+https://github.com/isaacs/fs.realpath.git"},"keywords":["realpath","fs","polyfill"],"author":"Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)","license":"ISC","files":["old.js","index.js"]};
-
-/***/ }),
-
-/***/ 573:
-/***/ (function(module) {
-
-module.exports = {"name":"once","version":"1.4.0","description":"Run a function exactly one time","main":"once.js","directories":{"test":"test"},"dependencies":{"wrappy":"1"},"devDependencies":{"tap":"^7.0.1"},"scripts":{"test":"tap test/*.js"},"files":["once.js"],"repository":{"type":"git","url":"git://github.com/isaacs/once"},"keywords":["once","function","one","single"],"author":"Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)","license":"ISC"};
-
-/***/ }),
-
 /***/ 614:
 /***/ (function(module) {
 
@@ -4484,14 +4335,11 @@ module.exports = require("events");
 /***/ }),
 
 /***/ 621:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return publishEach; });
 const exec = __webpack_require__(986);
 const io = __webpack_require__(1);
-const lernaJson = __webpack_require__(52);
+const path = __webpack_require__(622);
 const glob = __webpack_require__(402);
 const fs = __webpack_require__(747);
 
@@ -4519,18 +4367,26 @@ function gitTagExists(remoteTags, tag) {
   const regex = new RegExp(`${tag}$`);
   const result = regex.exec(remoteTags);
 
-  return result.length !== 0;
+  return result != null && result.length !== 0;
 }
 
 async function publish(gitPath, npmPath, directory, packageJson, remoteTags) {
   const gitRemoteUrl = await exec.exec(gitPath, ['config', '--get', 'remote.origin.url']);
   const gitTagName = `${packageJson.name}_v${packageJson.version}`;
-  const packageDiff = await exec.exec(gitPath, ['diff', 'HEAD~', '--', `${directory}/package.json`]);
-  const packageChanged = packageDiff.includes('version:');
+  let packageDiffOutput = '';
+  await exec.exec(gitPath, ['diff', 'HEAD~', '--', `${directory}/package.json`], {
+    listeners: {
+      stdout: (data) => {
+        packageDiffOutput = data.toString();
+      }
+    }
+  });
+  console.log(packageDiffOutput);
+  const packageChanged = packageDiffOutput != '' && packageDiffOutput.includes('"version":');
 
   if (gitTagExists(remoteTags, gitTagName)) {
     console.log(`Skipping publish, tag for v${packageJson.version} of ${packageJson.name} already exists.`)
-  } else if (packageChanged) {
+  } else if (!packageChanged) {
     console.log(`Skipping publish, ${packageJson.name} version has not changed.`)
   } else {
     const tagMessage = gitTagMessage(packageJson.name, packageJson.version);
@@ -4553,34 +4409,43 @@ async function publish(gitPath, npmPath, directory, packageJson, remoteTags) {
 
 async function isPublishable(npmPath, packageName, packageVersion) {
   try {
-    const versions = await exec.exec(npmPath, ['info', '--json', packageName, 'versions']);
+    let versions = '';
+    await exec.exec(npmPath, ['info', '--json', packageName, 'versions'], {
+      listeners: {
+        stdout: (data) => {
+          versions = data.toString();
+        }
+      }
+    });
     const parsed = JSON.parse(versions);
 
     return parsed.find(version => version === packageVersion) == null;
   } catch (e) {
-    console.error(e);
-
     return false;
   }
 }
 
-async function publishEach(npmRegistry, npmAuth) {
+exports.publishEach = async function publishEach(npmRegistry, npmAuth) {
+  const workspace = process.env.GITHUB_WORKSPACE;
   const gitPath = await io.which('git', true);
-  const npmPath = io.which('npm', true);
+  const npmPath = await io.which('npm', true);
 
   await exec.exec(npmPath, ['config', 'set', `//${npmRegistry}/:_authToken=${npmAuth}`]);
   
   const remoteTags = await exec.exec(gitPath, ['ls-remote', '--tags']);
-  const packageDirectories = lernaJson.packages.reduce(async (directories, p) => { 
+  await exec.exec('echo', [path.resolve(workspace, 'lerna.json')]);
+  const lernaJson = require(path.resolve(workspace, 'lerna.json'));
+  const packageDirectories = await lernaJson.packages.reduce(async (directories, p) => { 
     if (p.includes('*')) { 
       const expanded = await new Promise((resolve) => glob(p, (error, matches) => resolve(matches))); 
-      return [...directories, ...expanded];
+      return [...directories, ...expanded.map(d => path.resolve(workspace, d))];
     }
-    else return [...directories, p]; 
+    else return [...directories, path.resolve(workspace, p)]; 
   }, []);
 
-  packageDirectories.forEach(async (directory) => {
-    const packageJson = __webpack_require__(149)(`${directory}/package.json`);
+  await packageDirectories.forEach(async (directory) => {
+    const packageJsonContent = fs.readFileSync(`${directory}/package.json`);
+    const packageJson = JSON.parse(packageJsonContent);
 
     startBlock(`${packageJson.name}@${packageJson.version}`);
 
@@ -4592,19 +4457,13 @@ async function publishEach(npmRegistry, npmAuth) {
   })
 }
 
+
 /***/ }),
 
 /***/ 622:
 /***/ (function(module) {
 
 module.exports = require("path");
-
-/***/ }),
-
-/***/ 626:
-/***/ (function(module) {
-
-module.exports = {"name":"brace-expansion","description":"Brace expansion as known from sh/bash","version":"1.1.11","repository":{"type":"git","url":"git://github.com/juliangruber/brace-expansion.git"},"homepage":"https://github.com/juliangruber/brace-expansion","main":"index.js","scripts":{"test":"tape test/*.js","gentest":"bash test/generate.sh","bench":"matcha test/perf/bench.js"},"dependencies":{"balanced-match":"^1.0.0","concat-map":"0.0.1"},"devDependencies":{"matcha":"^0.7.0","tape":"^4.6.0"},"keywords":[],"author":{"name":"Julian Gruber","email":"mail@juliangruber.com","url":"http://juliangruber.com"},"license":"MIT","testling":{"files":"test/*.js","browsers":["ie/8..latest","firefox/20..latest","firefox/nightly","chrome/25..latest","chrome/canary","opera/12..latest","opera/next","safari/5.1..latest","ipad/6.0..latest","iphone/6.0..latest","android-browser/4.2..latest"]}};
 
 /***/ }),
 
@@ -4922,24 +4781,10 @@ try {
 
 /***/ }),
 
-/***/ 731:
-/***/ (function(module) {
-
-module.exports = {"name":"npm-publish-action","version":"1.0.0","description":"","main":"index.js","scripts":{"test":"echo \"Error: no test specified\" && exit 1","build":"ncc build index.js --out build"},"keywords":[],"author":"","license":"UNLICENSED","dependencies":{"@actions/core":"^1.2.4","@actions/exec":"^1.0.4","@actions/io":"^1.0.2","glob":"^7.1.6"},"devDependencies":{"@zeit/ncc":"^0.22.2"}};
-
-/***/ }),
-
 /***/ 747:
 /***/ (function(module) {
 
 module.exports = require("fs");
-
-/***/ }),
-
-/***/ 838:
-/***/ (function(module) {
-
-module.exports = {"name":"wrappy","version":"1.0.2","description":"Callback wrapping utility","main":"wrappy.js","files":["wrappy.js"],"directories":{"test":"test"},"dependencies":{},"devDependencies":{"tap":"^2.3.1"},"scripts":{"test":"tap --coverage test/*.js"},"repository":{"type":"git","url":"https://github.com/npm/wrappy"},"author":"Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)","license":"ISC","bugs":{"url":"https://github.com/npm/wrappy/issues"},"homepage":"https://github.com/npm/wrappy"};
 
 /***/ }),
 
@@ -5261,31 +5106,4 @@ exports.exec = exec;
 
 /***/ })
 
-/******/ },
-/******/ function(__webpack_require__) { // webpackRuntimeModules
-/******/ 	"use strict";
-/******/ 
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getter */
-/******/ 	!function() {
-/******/ 		// define getter function for harmony exports
-/******/ 		var hasOwnProperty = Object.prototype.hasOwnProperty;
-/******/ 		__webpack_require__.d = function(exports, name, getter) {
-/******/ 			if(!hasOwnProperty.call(exports, name)) {
-/******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ }
-);
+/******/ });
