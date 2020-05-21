@@ -1,16 +1,17 @@
 const core = require("@actions/core");
-const exec = require("@actions/exec");
-const io = require("@actions/io");
+const publish = require('./publish');
 
 async function run() {
+  const contextToken = process.env.GITHUB_TOKEN;
+  const githubToken = core.getInput('github-token');
   const npmAuth = core.getInput('npm-auth-token');
   const npmRegistry = core.getInput('npm-registry');
 
-  const gitPath = await io.which('git', true);
-  const npmPath = await io.which('npm', true);
+  await core.exportVariable("GITHUB_TOKEN", githubToken);
 
-  await exec.exec('./npm-publish-action/configure_env.sh', [npmPath, npmRegistry, npmAuth]);
-  await exec.exec('./npm-publish-action/publish.sh', [gitPath, npmPath]);
+  await publish.publishEach(npmRegistry, npmAuth);
+
+  await core.exportVariable("GITHUB_TOKEN", contextToken);
 }
 
 run();

@@ -1,6 +1,9 @@
 name: 'NPM Configure and Publish'
 description: 'Configures npm with the provided auth token, and optionally the provided registry url, then publishes packages.'
 inputs:
+  github-token:
+    description: "Token used to authenticate with GitHub."
+    required: true
   npm-auth-token:
     description: "Auth token that will be set for the provided registry using npm config."
     required: true
