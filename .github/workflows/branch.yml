@@ -10,4 +10,4 @@ jobs:
         env:
           test-secret: ${{ secrets.TEST_SECRET }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        run: 'echo "$test-secret" && echo "$github-token"'
+        run: 'echo "$test-secret"'
