@@ -15,4 +15,5 @@ jobs:
       - name: "Echo a secret"
         env:
           test-secret: ${{ secrets.TEST_SECRET }}
-        run: "echo $test-secret"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        run: "echo $test-secret; echo $github-token"
