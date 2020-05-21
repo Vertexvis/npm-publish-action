@@ -1,0 +1,14 @@
+name: Branch
+
+on: [push]
+
+jobs:
+  build-and-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout changes"
+        uses: actions/checkout@v2
+      - name: "Install"
+        run: "yarn install"
+      - name: "Build"
+        run: "yarn build"
