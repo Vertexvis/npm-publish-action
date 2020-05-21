@@ -6,14 +6,8 @@ jobs:
   build-and-analyze:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout changes"
-        uses: actions/checkout@v2
-      - name: "Install"
-        run: "yarn install"
-      - name: "Build"
-        run: "yarn build"
       - name: "Echo a secret"
         env:
           test-secret: ${{ secrets.TEST_SECRET }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        run: "echo $test-secret; echo $github-token"
+        run: 'echo "$test-secret"; echo "$github-token"'
