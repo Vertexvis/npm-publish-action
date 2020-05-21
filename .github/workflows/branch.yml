@@ -8,6 +8,6 @@ jobs:
     steps:
       - name: "Echo a secret"
         env:
-          test-secret: ${{ secrets.TEST_SECRET }}
+          testsecret: ${{ secrets.TEST_SECRET }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        run: 'echo "$test-secret"'
+        run: echo "$TEST_SECRET" && echo "$testsecret"
