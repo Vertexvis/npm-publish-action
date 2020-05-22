@@ -1,31 +1,15 @@
-const exec = require("@actions/exec");
-const io = require("@actions/io");
-const github = require("@actions/github");
-const path = require("path");
-const glob = require("glob");
-const fs = require("fs");
-
-function startBlock(text) {
-  console.log(`=== ${text} ===`);
-}
-
-function startStep(text) {
-  console.log(`› ${text}`);
-}
-
-function endBlock() {
-  console.log("");
-}
-
-function endStep() {
-  console.log("");
-}
-
-function startAndEndStep(text) {}
+import { exec } from "@actions/exec";
+import { GitHub } from "@actions/github";
+import { which } from '@actions/io';
+import logger from "./utils/logger";
+import fs from "fs";
+import glob from "glob";
+import path from "path";
+import { createTagAndRef, gitTagMessage, gitTagExists } from "./utils/git";
 
 async function execResultAsString(commandLine, args, options = {}) {
   let result = "";
-  await exec.exec(commandLine, args, {
+  await exec(commandLine, args, {
     ...options,
     listeners: {
       stdout: (data) => {
@@ -37,17 +21,6 @@ async function execResultAsString(commandLine, args, options = {}) {
   return result;
 }
 
-function gitTagMessage(packageName, packageVersion) {
-  return `${packageName}_v${packageVersion}\n\nAutomated release of v${packageVersion} for ${packageName}.`;
-}
-
-function gitTagExists(remoteTags, tag) {
-  const regex = new RegExp(`${tag}$`);
-  const result = regex.exec(remoteTags);
-
-  return result != null && result.length !== 0;
-}
-
 async function publish(
   gitPath,
   npmPath,
@@ -56,7 +29,7 @@ async function publish(
   remoteTags,
   isDryRun = false
 ) {
-  const githubClient = new github.GitHub(process.env.GITHUB_TOKEN);
+  const githubClient = new GitHub(process.env.GITHUB_TOKEN);
   const gitRemoteUrl = await execResultAsString(
     gitPath,
     ["config", "--get", "remote.origin.url"],
@@ -83,32 +56,15 @@ async function publish(
     const tagMessage = gitTagMessage(packageJson.name, packageJson.version);
 
     if (!isDryRun) {
-      startStep(`Publishing ${packageJson.name}@${packageJson.version}`);
-      // await exec.exec(npmPath, ["publish", directory]);
-      endStep();
+      logger.startStep(`Publishing ${packageJson.name}@${packageJson.version}`);
+      // await exec(npmPath, ["publish", directory]);
+      logger.endStep();
 
-      startStep(`Tagging ${packageJson.name}@${packageJson.version}`);
-      // fs.writeFileSync("temp.txt", tagMessage);
-      // await exec.exec(gitPath, ["tag", "-a", gitTagName, "-F", "./temp.txt"]);
-
-      const tag = await githubClient.git.createTag({
-        tag: gitTagName,
-        message: tagMessage,
-        object: github.context.sha,
-        type: "commit",
-      });
-
-      // fs.unlinkSync("temp.txt");
-      endStep();
-
-      startStep(`Pushing tag ${gitTagName} to upstream`);
-      // await exec.exec(gitPath, ["push", gitRemoteUrl, gitTagName]);
-
-      await githubClient.git.createRef({
-        ref: `refs/tags/${gitTagName}`,
-        sha: tag.data.sha,
-      });
-      endStep();
+      logger.startStep(
+        `Tagging and pushing ${packageJson.name}@${packageJson.version}`
+      );
+      createTagAndRef(githubClient, gitTagName, tagMessage);
+      logger.endStep();
     } else {
       console.log(`Would publish ${directory}`);
       console.log(`Command: ${npmPath} publish ${directory}`);
@@ -131,12 +87,12 @@ async function isPublishable(npmPath, packageName, packageVersion) {
   }
 }
 
-exports.publishEach = async function publishEach(npmRegistry, npmAuth, isDryRun = false) {
+export async function publishEach(npmRegistry, npmAuth, isDryRun = false) {
   const workspace = process.env.GITHUB_WORKSPACE;
-  const gitPath = await io.which("git", true);
-  const npmPath = await io.which("npm", true);
+  const gitPath = await which("git", true);
+  const npmPath = await which("npm", true);
 
-  await exec.exec(npmPath, [
+  await exec(npmPath, [
     "config",
     "set",
     `//${npmRegistry}/:_authToken=${npmAuth}`,
@@ -151,9 +107,9 @@ exports.publishEach = async function publishEach(npmRegistry, npmAuth, isDryRun 
   );
   const lernaJson = require(path.resolve(workspace, "lerna.json"));
   const packageDirectories = await lernaJson.packages.reduce(
-    async (directories, p) => {
+    async (directories: string[], p) => {
       if (p.includes("*")) {
-        const expanded = await new Promise((resolve, reject) =>
+        const expanded = await new Promise<string[]>((resolve, reject) =>
           glob(p, (error, matches) =>
             error != null ? reject(error) : resolve(matches)
           )
@@ -168,19 +124,28 @@ exports.publishEach = async function publishEach(npmRegistry, npmAuth, isDryRun 
   );
 
   await packageDirectories.forEach(async (directory) => {
-    const packageJsonContent = fs.readFileSync(`${directory}/package.json`);
+    const packageJsonContent = fs.readFileSync(`${directory}/package.json`, {
+      encoding: "utf-8",
+    });
     const packageJson = JSON.parse(packageJsonContent);
 
-    startBlock(`${packageJson.name}@${packageJson.version}`);
+    logger.startBlock(`${packageJson.name}@${packageJson.version}`);
 
     if (isPublishable(npmPath, packageJson.name, packageJson.version)) {
-      await publish(gitPath, npmPath, directory, packageJson, remoteTags, isDryRun);
+      await publish(
+        gitPath,
+        npmPath,
+        directory,
+        packageJson,
+        remoteTags,
+        isDryRun
+      );
     } else {
       console.log(
         `Skipping, ${packageJson.name}@${packageJson.version} has been published.`
       );
     }
 
-    endBlock();
+    logger.endBlock();
   });
-};
+}

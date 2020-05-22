@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(104);
+/******/ 		return __webpack_require__(429);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -2228,25 +2228,6 @@ function globUnescape (s) {
 function regExpEscape (s) {
   return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
-
-
-/***/ }),
-
-/***/ 104:
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
-
-const core = __webpack_require__(470);
-const publish = __webpack_require__(621);
-
-async function run() {
-  const npmAuth = core.getInput('npm-auth-token');
-  const npmRegistry = core.getInput('npm-registry');
-  const isDryRun = core.getInput("dry-run")
-
-  await publish.publishEach(npmRegistry, npmAuth);
-}
-
-run();
 
 
 /***/ }),
@@ -7953,6 +7934,14 @@ function hasLastPage (link) {
 
 /***/ }),
 
+/***/ 346:
+/***/ (function(module) {
+
+module.exports = eval("require")("./utils/logger");
+
+
+/***/ }),
+
 /***/ 348:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -8255,7 +8244,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var isPlainObject = _interopDefault(__webpack_require__(696));
+var isPlainObject = _interopDefault(__webpack_require__(626));
 var universalUserAgent = __webpack_require__(796);
 
 function lowercaseKeys(object) {
@@ -8758,6 +8747,486 @@ function errname(uv, code) {
 	return `Unknown system error ${code}`;
 }
 
+
+
+/***/ }),
+
+/***/ 429:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _core = __webpack_require__(470);
+
+var _publish = __webpack_require__(538);
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function run() {
+  return _run.apply(this, arguments);
+}
+
+function _run() {
+  _run = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var npmAuth, npmRegistry, isDryRun;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            npmAuth = (0, _core.getInput)("npm-auth-token");
+            npmRegistry = (0, _core.getInput)("npm-registry");
+            isDryRun = (0, _core.getInput)("dry-run");
+            _context.next = 5;
+            return (0, _publish.publishEach)(npmRegistry, npmAuth);
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _run.apply(this, arguments);
+}
+
+run();
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.publishEach = publishEach;
+
+var _exec = __webpack_require__(986);
+
+var _github = __webpack_require__(469);
+
+var _io = __webpack_require__(1);
+
+var _logger = _interopRequireDefault(__webpack_require__(346));
+
+var _fs = _interopRequireDefault(__webpack_require__(747));
+
+var _glob = _interopRequireDefault(__webpack_require__(120));
+
+var _path = _interopRequireDefault(__webpack_require__(622));
+
+var _git = __webpack_require__(560);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function execResultAsString(_x, _x2) {
+  return _execResultAsString.apply(this, arguments);
+}
+
+function _execResultAsString() {
+  _execResultAsString = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(commandLine, args) {
+    var options,
+        result,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+            result = "";
+            _context.next = 4;
+            return (0, _exec.exec)(commandLine, args, _objectSpread(_objectSpread({}, options), {}, {
+              listeners: {
+                stdout: function stdout(data) {
+                  result = data.toString();
+                }
+              }
+            }));
+
+          case 4:
+            return _context.abrupt("return", result);
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _execResultAsString.apply(this, arguments);
+}
+
+function publish(_x3, _x4, _x5, _x6, _x7) {
+  return _publish.apply(this, arguments);
+}
+
+function _publish() {
+  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(gitPath, npmPath, directory, packageJson, remoteTags) {
+    var isDryRun,
+        githubClient,
+        gitRemoteUrl,
+        gitTagName,
+        packageDiffOutput,
+        packageChanged,
+        tagMessage,
+        _args2 = arguments;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            isDryRun = _args2.length > 5 && _args2[5] !== undefined ? _args2[5] : false;
+            githubClient = new _github.GitHub(process.env.GITHUB_TOKEN);
+            _context2.next = 4;
+            return execResultAsString(gitPath, ["config", "--get", "remote.origin.url"], {
+              silent: true
+            });
+
+          case 4:
+            gitRemoteUrl = _context2.sent;
+            gitTagName = "".concat(packageJson.name, "_v").concat(packageJson.version);
+            _context2.next = 8;
+            return execResultAsString(gitPath, ["diff", "HEAD~", "--", "".concat(directory, "/package.json")], {
+              silent: true
+            });
+
+          case 8:
+            packageDiffOutput = _context2.sent;
+            packageChanged = packageDiffOutput != "" && packageDiffOutput.includes('"version":');
+
+            if ((0, _git.gitTagExists)(remoteTags, gitTagName)) {
+              console.log("Skipping publish, tag for v".concat(packageJson.version, " of ").concat(packageJson.name, " already exists."));
+            } else if (!packageChanged) {
+              console.log("Skipping publish, ".concat(packageJson.name, " version has not changed."));
+            } else {
+              tagMessage = (0, _git.gitTagMessage)(packageJson.name, packageJson.version);
+
+              if (!isDryRun) {
+                _logger["default"].startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version)); // await exec(npmPath, ["publish", directory]);
+
+
+                _logger["default"].endStep();
+
+                _logger["default"].startStep("Tagging and pushing ".concat(packageJson.name, "@").concat(packageJson.version));
+
+                (0, _git.createTagAndRef)(githubClient, gitTagName, tagMessage);
+
+                _logger["default"].endStep();
+              } else {
+                console.log("Would publish ".concat(directory));
+                console.log("Command: ".concat(npmPath, " publish ").concat(directory));
+              }
+            }
+
+          case 11:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _publish.apply(this, arguments);
+}
+
+function isPublishable(_x8, _x9, _x10) {
+  return _isPublishable.apply(this, arguments);
+}
+
+function _isPublishable() {
+  _isPublishable = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(npmPath, packageName, packageVersion) {
+    var versions, parsed;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return execResultAsString(npmPath, ["info", "--json", packageName, "versions"], {
+              silent: true
+            });
+
+          case 3:
+            versions = _context3.sent;
+            parsed = JSON.parse(versions);
+            return _context3.abrupt("return", parsed.find(function (version) {
+              return version === packageVersion;
+            }) == null);
+
+          case 8:
+            _context3.prev = 8;
+            _context3.t0 = _context3["catch"](0);
+            return _context3.abrupt("return", false);
+
+          case 11:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, null, [[0, 8]]);
+  }));
+  return _isPublishable.apply(this, arguments);
+}
+
+function publishEach(_x11, _x12) {
+  return _publishEach.apply(this, arguments);
+}
+
+function _publishEach() {
+  _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(npmRegistry, npmAuth) {
+    var isDryRun,
+        workspace,
+        gitPath,
+        npmPath,
+        remoteTags,
+        lernaJson,
+        packageDirectories,
+        _args6 = arguments;
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            isDryRun = _args6.length > 2 && _args6[2] !== undefined ? _args6[2] : false;
+            workspace = process.env.GITHUB_WORKSPACE;
+            _context6.next = 4;
+            return (0, _io.which)("git", true);
+
+          case 4:
+            gitPath = _context6.sent;
+            _context6.next = 7;
+            return (0, _io.which)("npm", true);
+
+          case 7:
+            npmPath = _context6.sent;
+            _context6.next = 10;
+            return (0, _exec.exec)(npmPath, ["config", "set", "//".concat(npmRegistry, "/:_authToken=").concat(npmAuth)]);
+
+          case 10:
+            _context6.next = 12;
+            return execResultAsString(gitPath, ["ls-remote", "--tags"], {
+              silent: true
+            });
+
+          case 12:
+            remoteTags = _context6.sent;
+            lernaJson = require(_path["default"].resolve(workspace, "lerna.json"));
+            _context6.next = 16;
+            return lernaJson.packages.reduce( /*#__PURE__*/function () {
+              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(directories, p) {
+                var expanded;
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                  while (1) {
+                    switch (_context4.prev = _context4.next) {
+                      case 0:
+                        if (!p.includes("*")) {
+                          _context4.next = 7;
+                          break;
+                        }
+
+                        _context4.next = 3;
+                        return new Promise(function (resolve, reject) {
+                          return (0, _glob["default"])(p, function (error, matches) {
+                            return error != null ? reject(error) : resolve(matches);
+                          });
+                        });
+
+                      case 3:
+                        expanded = _context4.sent;
+                        return _context4.abrupt("return", [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
+                          return _path["default"].resolve(workspace, d);
+                        }))));
+
+                      case 7:
+                        return _context4.abrupt("return", [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspace, p)]));
+
+                      case 8:
+                      case "end":
+                        return _context4.stop();
+                    }
+                  }
+                }, _callee4);
+              }));
+
+              return function (_x13, _x14) {
+                return _ref.apply(this, arguments);
+              };
+            }(), []);
+
+          case 16:
+            packageDirectories = _context6.sent;
+            _context6.next = 19;
+            return packageDirectories.forEach( /*#__PURE__*/function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(directory) {
+                var packageJsonContent, packageJson;
+                return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                  while (1) {
+                    switch (_context5.prev = _context5.next) {
+                      case 0:
+                        packageJsonContent = _fs["default"].readFileSync("".concat(directory, "/package.json"), {
+                          encoding: "utf-8"
+                        });
+                        packageJson = JSON.parse(packageJsonContent);
+
+                        _logger["default"].startBlock("".concat(packageJson.name, "@").concat(packageJson.version));
+
+                        if (!isPublishable(npmPath, packageJson.name, packageJson.version)) {
+                          _context5.next = 8;
+                          break;
+                        }
+
+                        _context5.next = 6;
+                        return publish(gitPath, npmPath, directory, packageJson, remoteTags, isDryRun);
+
+                      case 6:
+                        _context5.next = 9;
+                        break;
+
+                      case 8:
+                        console.log("Skipping, ".concat(packageJson.name, "@").concat(packageJson.version, " has been published."));
+
+                      case 9:
+                        _logger["default"].endBlock();
+
+                      case 10:
+                      case "end":
+                        return _context5.stop();
+                    }
+                  }
+                }, _callee5);
+              }));
+
+              return function (_x15) {
+                return _ref2.apply(this, arguments);
+              };
+            }());
+
+          case 19:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6);
+  }));
+  return _publishEach.apply(this, arguments);
+}
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.gitTagMessage = gitTagMessage;
+exports.gitTagExists = gitTagExists;
+exports.createTagAndRef = createTagAndRef;
+
+var _github = __webpack_require__(469);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function gitTagMessage(packageName, packageVersion) {
+  return "".concat(packageName, "_v").concat(packageVersion, "\n\nAutomated release of v").concat(packageVersion, " for ").concat(packageName, ".");
+}
+
+function gitTagExists(remoteTags, tag) {
+  var regex = new RegExp("".concat(tag, "$"));
+  var result = regex.exec(remoteTags);
+  return result != null && result.length !== 0;
+}
+
+function createTagAndRef(_x, _x2, _x3) {
+  return _createTagAndRef.apply(this, arguments);
+}
+
+function _createTagAndRef() {
+  _createTagAndRef = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(client, tag, message) {
+    var tagResponse;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return client.git.createTag(_objectSpread(_objectSpread({}, _github.context.repo), {}, {
+              tag: tag,
+              message: message,
+              object: _github.context.sha,
+              type: "commit"
+            }));
+
+          case 2:
+            tagResponse = _context.sent;
+            _context.next = 5;
+            return client.git.createRef(_objectSpread(_objectSpread({}, _github.context.repo), {}, {
+              ref: "refs/tags/".concat(tag),
+              sha: tagResponse.data.sha
+            }));
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _createTagAndRef.apply(this, arguments);
+}
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+function startBlock(text) {
+  console.log("=== ".concat(text, " ==="));
+}
+
+function startStep(text) {
+  console.log("\u203A ".concat(text));
+}
+
+function endBlock() {
+  console.log("");
+}
+
+function endStep() {
+  console.log("");
+}
+
+var _default = {
+  log: console.log,
+  error: console.error,
+  startBlock: startBlock,
+  startStep: startStep,
+  endBlock: endBlock,
+  endStep: endStep
+};
+exports["default"] = _default;
 
 
 /***/ }),
@@ -11232,53 +11701,6 @@ function addHook (state, kind, name, hook) {
 
 /***/ }),
 
-/***/ 512:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-const path = __webpack_require__(622);
-const pathKey = __webpack_require__(39);
-
-module.exports = opts => {
-	opts = Object.assign({
-		cwd: process.cwd(),
-		path: process.env[pathKey()]
-	}, opts);
-
-	let prev;
-	let pth = path.resolve(opts.cwd);
-	const ret = [];
-
-	while (prev !== pth) {
-		ret.push(path.join(pth, 'node_modules/.bin'));
-		prev = pth;
-		pth = path.resolve(pth, '..');
-	}
-
-	// ensure the running `node` binary is used
-	ret.push(path.dirname(process.execPath));
-
-	return ret.concat(opts.path).join(path.delimiter);
-};
-
-module.exports.env = opts => {
-	opts = Object.assign({
-		env: process.env
-	}, opts);
-
-	const env = Object.assign({}, opts.env);
-	const path = pathKey({env});
-
-	opts.path = env[path];
-	env[path] = module.exports(opts);
-
-	return env;
-};
-
-
-/***/ }),
-
 /***/ 523:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -11365,6 +11787,14 @@ function hasFirstPage (link) {
   deprecate(`octokit.hasFirstPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
   return getPageLinks(link).first
 }
+
+
+/***/ }),
+
+/***/ 538:
+/***/ (function(module) {
+
+module.exports = eval("require")("./publish");
 
 
 /***/ }),
@@ -11908,6 +12338,62 @@ exports.HttpClient = HttpClient;
 
 /***/ }),
 
+/***/ 548:
+/***/ (function(module) {
+
+"use strict";
+
+
+/*!
+ * isobject <https://github.com/jonschlinkert/isobject>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+function isObject(val) {
+  return val != null && typeof val === 'object' && Array.isArray(val) === false;
+}
+
+/*!
+ * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+function isObjectObject(o) {
+  return isObject(o) === true
+    && Object.prototype.toString.call(o) === '[object Object]';
+}
+
+function isPlainObject(o) {
+  var ctor,prot;
+
+  if (isObjectObject(o) === false) return false;
+
+  // If has modified constructor
+  ctor = o.constructor;
+  if (typeof ctor !== 'function') return false;
+
+  // If has modified prototype
+  prot = ctor.prototype;
+  if (isObjectObject(prot) === false) return false;
+
+  // If constructor does not have an Object-specific method
+  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+    return false;
+  }
+
+  // Most likely a plain Object
+  return true;
+}
+
+module.exports = isPlainObject;
+
+
+/***/ }),
+
 /***/ 550:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -11934,6 +12420,14 @@ function hasPreviousPage (link) {
   deprecate(`octokit.hasPreviousPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
   return getPageLinks(link).prev
 }
+
+
+/***/ }),
+
+/***/ 560:
+/***/ (function(module) {
+
+module.exports = eval("require")("./utils/git");
 
 
 /***/ }),
@@ -12253,193 +12747,47 @@ exports.getUserAgent = getUserAgent;
 /***/ }),
 
 /***/ 621:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
-const exec = __webpack_require__(986);
-const io = __webpack_require__(1);
-const github = __webpack_require__(469);
+"use strict";
+
 const path = __webpack_require__(622);
-const glob = __webpack_require__(120);
-const fs = __webpack_require__(747);
+const pathKey = __webpack_require__(39);
 
-function startBlock(text) {
-  console.log(`=== ${text} ===`);
-}
+module.exports = opts => {
+	opts = Object.assign({
+		cwd: process.cwd(),
+		path: process.env[pathKey()]
+	}, opts);
 
-function startStep(text) {
-  console.log(`› ${text}`);
-}
+	let prev;
+	let pth = path.resolve(opts.cwd);
+	const ret = [];
 
-function endBlock() {
-  console.log("");
-}
+	while (prev !== pth) {
+		ret.push(path.join(pth, 'node_modules/.bin'));
+		prev = pth;
+		pth = path.resolve(pth, '..');
+	}
 
-function endStep() {
-  console.log("");
-}
+	// ensure the running `node` binary is used
+	ret.push(path.dirname(process.execPath));
 
-function startAndEndStep(text) {}
+	return ret.concat(opts.path).join(path.delimiter);
+};
 
-async function execResultAsString(commandLine, args, options = {}) {
-  let result = "";
-  await exec.exec(commandLine, args, {
-    ...options,
-    listeners: {
-      stdout: (data) => {
-        result = data.toString();
-      },
-    },
-  });
+module.exports.env = opts => {
+	opts = Object.assign({
+		env: process.env
+	}, opts);
 
-  return result;
-}
+	const env = Object.assign({}, opts.env);
+	const path = pathKey({env});
 
-function gitTagMessage(packageName, packageVersion) {
-  return `${packageName}_v${packageVersion}\n\nAutomated release of v${packageVersion} for ${packageName}.`;
-}
+	opts.path = env[path];
+	env[path] = module.exports(opts);
 
-function gitTagExists(remoteTags, tag) {
-  const regex = new RegExp(`${tag}$`);
-  const result = regex.exec(remoteTags);
-
-  return result != null && result.length !== 0;
-}
-
-async function publish(
-  gitPath,
-  npmPath,
-  directory,
-  packageJson,
-  remoteTags,
-  isDryRun = false
-) {
-  const githubClient = new github.GitHub(process.env.GITHUB_TOKEN);
-  const gitRemoteUrl = await execResultAsString(
-    gitPath,
-    ["config", "--get", "remote.origin.url"],
-    { silent: true }
-  );
-  const gitTagName = `${packageJson.name}_v${packageJson.version}`;
-  const packageDiffOutput = await execResultAsString(
-    gitPath,
-    ["diff", "HEAD~", "--", `${directory}/package.json`],
-    { silent: true }
-  );
-  const packageChanged =
-    packageDiffOutput != "" && packageDiffOutput.includes('"version":');
-
-  if (gitTagExists(remoteTags, gitTagName)) {
-    console.log(
-      `Skipping publish, tag for v${packageJson.version} of ${packageJson.name} already exists.`
-    );
-  } else if (!packageChanged) {
-    console.log(
-      `Skipping publish, ${packageJson.name} version has not changed.`
-    );
-  } else {
-    const tagMessage = gitTagMessage(packageJson.name, packageJson.version);
-
-    if (!isDryRun) {
-      startStep(`Publishing ${packageJson.name}@${packageJson.version}`);
-      // await exec.exec(npmPath, ["publish", directory]);
-      endStep();
-
-      startStep(`Tagging ${packageJson.name}@${packageJson.version}`);
-      // fs.writeFileSync("temp.txt", tagMessage);
-      // await exec.exec(gitPath, ["tag", "-a", gitTagName, "-F", "./temp.txt"]);
-
-      const tag = await githubClient.git.createTag({
-        tag: gitTagName,
-        message: tagMessage,
-        object: github.context.sha,
-        type: "commit",
-      });
-
-      // fs.unlinkSync("temp.txt");
-      endStep();
-
-      startStep(`Pushing tag ${gitTagName} to upstream`);
-      // await exec.exec(gitPath, ["push", gitRemoteUrl, gitTagName]);
-
-      await githubClient.git.createRef({
-        ref: `refs/tags/${gitTagName}`,
-        sha: tag.data.sha,
-      });
-      endStep();
-    } else {
-      console.log(`Would publish ${directory}`);
-      console.log(`Command: ${npmPath} publish ${directory}`);
-    }
-  }
-}
-
-async function isPublishable(npmPath, packageName, packageVersion) {
-  try {
-    const versions = await execResultAsString(
-      npmPath,
-      ["info", "--json", packageName, "versions"],
-      { silent: true }
-    );
-    const parsed = JSON.parse(versions);
-
-    return parsed.find((version) => version === packageVersion) == null;
-  } catch (e) {
-    return false;
-  }
-}
-
-exports.publishEach = async function publishEach(npmRegistry, npmAuth, isDryRun = false) {
-  const workspace = process.env.GITHUB_WORKSPACE;
-  const gitPath = await io.which("git", true);
-  const npmPath = await io.which("npm", true);
-
-  await exec.exec(npmPath, [
-    "config",
-    "set",
-    `//${npmRegistry}/:_authToken=${npmAuth}`,
-  ]);
-
-  const remoteTags = await execResultAsString(
-    gitPath,
-    ["ls-remote", "--tags"],
-    {
-      silent: true,
-    }
-  );
-  const lernaJson = require(path.resolve(workspace, "lerna.json"));
-  const packageDirectories = await lernaJson.packages.reduce(
-    async (directories, p) => {
-      if (p.includes("*")) {
-        const expanded = await new Promise((resolve, reject) =>
-          glob(p, (error, matches) =>
-            error != null ? reject(error) : resolve(matches)
-          )
-        );
-        return [
-          ...directories,
-          ...expanded.map((d) => path.resolve(workspace, d)),
-        ];
-      } else return [...directories, path.resolve(workspace, p)];
-    },
-    []
-  );
-
-  await packageDirectories.forEach(async (directory) => {
-    const packageJsonContent = fs.readFileSync(`${directory}/package.json`);
-    const packageJson = JSON.parse(packageJsonContent);
-
-    startBlock(`${packageJson.name}@${packageJson.version}`);
-
-    if (isPublishable(npmPath, packageJson.name, packageJson.version)) {
-      await publish(gitPath, npmPath, directory, packageJson, remoteTags, isDryRun);
-    } else {
-      console.log(
-        `Skipping, ${packageJson.name}@${packageJson.version} has been published.`
-      );
-    }
-
-    endBlock();
-  });
+	return env;
 };
 
 
@@ -12449,6 +12797,62 @@ exports.publishEach = async function publishEach(npmRegistry, npmAuth, isDryRun 
 /***/ (function(module) {
 
 module.exports = require("path");
+
+/***/ }),
+
+/***/ 626:
+/***/ (function(module) {
+
+"use strict";
+
+
+/*!
+ * isobject <https://github.com/jonschlinkert/isobject>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+function isObject(val) {
+  return val != null && typeof val === 'object' && Array.isArray(val) === false;
+}
+
+/*!
+ * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+
+function isObjectObject(o) {
+  return isObject(o) === true
+    && Object.prototype.toString.call(o) === '[object Object]';
+}
+
+function isPlainObject(o) {
+  var ctor,prot;
+
+  if (isObjectObject(o) === false) return false;
+
+  // If has modified constructor
+  ctor = o.constructor;
+  if (typeof ctor !== 'function') return false;
+
+  // If has modified prototype
+  prot = ctor.prototype;
+  if (isObjectObject(prot) === false) return false;
+
+  // If constructor does not have an Object-specific method
+  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+    return false;
+  }
+
+  // Most likely a plain Object
+  return true;
+}
+
+module.exports = isPlainObject;
+
 
 /***/ }),
 
@@ -13191,62 +13595,6 @@ exports.Deprecation = Deprecation;
 
 /***/ }),
 
-/***/ 696:
-/***/ (function(module) {
-
-"use strict";
-
-
-/*!
- * isobject <https://github.com/jonschlinkert/isobject>
- *
- * Copyright (c) 2014-2017, Jon Schlinkert.
- * Released under the MIT License.
- */
-
-function isObject(val) {
-  return val != null && typeof val === 'object' && Array.isArray(val) === false;
-}
-
-/*!
- * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
- *
- * Copyright (c) 2014-2017, Jon Schlinkert.
- * Released under the MIT License.
- */
-
-function isObjectObject(o) {
-  return isObject(o) === true
-    && Object.prototype.toString.call(o) === '[object Object]';
-}
-
-function isPlainObject(o) {
-  var ctor,prot;
-
-  if (isObjectObject(o) === false) return false;
-
-  // If has modified constructor
-  ctor = o.constructor;
-  if (typeof ctor !== 'function') return false;
-
-  // If has modified prototype
-  prot = ctor.prototype;
-  if (isObjectObject(prot) === false) return false;
-
-  // If constructor does not have an Object-specific method
-  if (prot.hasOwnProperty('isPrototypeOf') === false) {
-    return false;
-  }
-
-  // Most likely a plain Object
-  return true;
-}
-
-module.exports = isPlainObject;
-
-
-/***/ }),
-
 /***/ 697:
 /***/ (function(module) {
 
@@ -13353,7 +13701,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var endpoint = __webpack_require__(385);
 var universalUserAgent = __webpack_require__(796);
-var isPlainObject = _interopDefault(__webpack_require__(696));
+var isPlainObject = _interopDefault(__webpack_require__(548));
 var nodeFetch = _interopDefault(__webpack_require__(454));
 var requestError = __webpack_require__(257);
 
@@ -29485,7 +29833,7 @@ const path = __webpack_require__(622);
 const childProcess = __webpack_require__(129);
 const crossSpawn = __webpack_require__(20);
 const stripEof = __webpack_require__(768);
-const npmRunPath = __webpack_require__(512);
+const npmRunPath = __webpack_require__(621);
 const isStream = __webpack_require__(323);
 const _getStream = __webpack_require__(145);
 const pFinally = __webpack_require__(697);
