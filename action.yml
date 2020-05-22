@@ -1,9 +1,6 @@
 name: 'NPM Configure and Publish'
 description: 'Configures npm with the provided auth token, and optionally the provided registry url, then publishes packages.'
 inputs:
-  github-token:
-    description: "Token used to authenticate with GitHub."
-    required: true
   npm-auth-token:
     description: "Auth token that will be set for the provided registry using npm config."
     required: true
@@ -11,6 +8,10 @@ inputs:
     description: "The url of the npm registry to publish to. This defaults to 'registry.npmjs.org'."
     required: false
     default: "registry.npmjs.org"
+  dry-run:
+    description: "Runs this action replacing actual publishes and tagging with logging."
+    required: false
+    default: "false"
 runs:
   using: 'node12'
   main: 'build/index.js'
