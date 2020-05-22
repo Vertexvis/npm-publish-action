@@ -1,40 +1,27 @@
 import { exec } from "@actions/exec";
 import { GitHub } from "@actions/github";
-import { which } from '@actions/io';
-import logger from "./utils/logger";
+import { which } from "@actions/io";
+import { logger } from "./utils/logger";
 import fs from "fs";
 import glob from "glob";
 import path from "path";
 import { createTagAndRef, gitTagMessage, gitTagExists } from "./utils/git";
+import { execResultAsString } from "./utils/exec";
 
-async function execResultAsString(commandLine, args, options = {}) {
-  let result = "";
-  await exec(commandLine, args, {
-    ...options,
-    listeners: {
-      stdout: (data) => {
-        result = data.toString();
-      },
-    },
-  });
-
-  return result;
+interface PackageJson {
+  name: string;
+  version: string;
 }
 
 async function publish(
-  gitPath,
-  npmPath,
-  directory,
-  packageJson,
-  remoteTags,
-  isDryRun = false
-) {
+  gitPath: string,
+  npmPath: string,
+  directory: string,
+  packageJson: PackageJson,
+  remoteTags: string,
+  isDryRun: boolean = false
+): Promise<void> {
   const githubClient = new GitHub(process.env.GITHUB_TOKEN);
-  const gitRemoteUrl = await execResultAsString(
-    gitPath,
-    ["config", "--get", "remote.origin.url"],
-    { silent: true }
-  );
   const gitTagName = `${packageJson.name}_v${packageJson.version}`;
   const packageDiffOutput = await execResultAsString(
     gitPath,
@@ -87,7 +74,11 @@ async function isPublishable(npmPath, packageName, packageVersion) {
   }
 }
 
-export async function publishEach(npmRegistry, npmAuth, isDryRun = false) {
+export async function publishEach(
+  npmRegistry: string,
+  npmAuth: string,
+  isDryRun: boolean = false
+): Promise<void> {
   const workspace = process.env.GITHUB_WORKSPACE;
   const gitPath = await which("git", true);
   const npmPath = await which("npm", true);

@@ -1,3 +1,14 @@
+type ConsoleFunction = (message?: any, ...optionalParams: any[]) => void;
+
+interface Logger {
+  log: ConsoleFunction;
+  error: ConsoleFunction;
+  startBlock: (text: string) => void;
+  startStep: (text: string) => void;
+  endBlock: VoidFunction;
+  endStep: VoidFunction;
+}
+
 function startBlock(text: string): void {
   console.log(`=== ${text} ===`);
 }
@@ -14,7 +25,7 @@ function endStep(): void {
   console.log("");
 }
 
-export default {
+export const logger: Logger = {
   log: console.log,
   error: console.error,
   startBlock,
