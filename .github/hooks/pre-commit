@@ -1,7 +1,12 @@
 #!/bin/sh
 
-echo Building and adding updated dist/index.js file to commit...
+changes=`git diff src`
 
-yarn build
+if test -n "$changes";
+then
+  echo Building and adding updated dist/index.js file to commit...
 
-git add dist/index.js
+  yarn build
+
+  git add dist/index.js
+fi
