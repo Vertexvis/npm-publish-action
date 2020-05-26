@@ -16,12 +16,13 @@ interface PackageJson {
 async function publish(
   gitPath: string,
   npmPath: string,
+  githubToken: string,
   directory: string,
   packageJson: PackageJson,
   remoteTags: string,
   isDryRun: boolean = false
 ): Promise<void> {
-  const githubClient = new GitHub(process.env.GITHUB_TOKEN);
+  const githubClient = new GitHub(githubToken);
   const gitTagName = `${packageJson.name}_v${packageJson.version}`;
   const packageDiffOutput = await execResultAsString(
     gitPath,
@@ -59,7 +60,11 @@ async function publish(
   }
 }
 
-async function isPublishable(npmPath, packageName, packageVersion) {
+async function isPublishable(
+  npmPath: string,
+  packageName: string,
+  packageVersion: string
+) {
   try {
     const versions = await execResultAsString(
       npmPath,
@@ -68,7 +73,7 @@ async function isPublishable(npmPath, packageName, packageVersion) {
     );
     const parsed = JSON.parse(versions);
 
-    return parsed.find((version) => version === packageVersion) == null;
+    return parsed.find((version: string) => version === packageVersion) == null;
   } catch (e) {
     return false;
   }
@@ -80,64 +85,77 @@ export async function publishEach(
   configFilePath: string,
   isDryRun: boolean = false
 ): Promise<void> {
-  const workspace = process.env.GITHUB_WORKSPACE;
-  const gitPath = await which("git", true);
-  const npmPath = await which("npm", true);
+  const githubWorkspace = process.env.GITHUB_WORKSPACE;
+  const githubToken = process.env.GITHUB_TOKEN;
 
-  await exec(npmPath, [
-    "config",
-    "set",
-    `//${npmRegistry}/:_authToken=${npmAuth}`,
-  ]);
+  if (githubWorkspace != null && githubToken != null) {
+    const gitPath = await which("git", true);
+    const npmPath = await which("npm", true);
 
-  const remoteTags = await execResultAsString(
-    gitPath,
-    ["ls-remote", "--tags"],
-    {
-      silent: true,
-    }
-  );
-  const configJson = require(path.resolve(workspace, configFilePath));
-  const packageDirectories = await configJson.packages.reduce(
-    async (directories: string[], p) => {
-      if (p.includes("*")) {
-        const expanded = await new Promise<string[]>((resolve, reject) =>
-          glob(p, (error, matches) =>
-            error != null ? reject(error) : resolve(matches)
-          )
+    await exec(npmPath, [
+      "config",
+      "set",
+      `//${npmRegistry}/:_authToken=${npmAuth}`,
+    ]);
+
+    const remoteTags = await execResultAsString(
+      gitPath,
+      ["ls-remote", "--tags"],
+      {
+        silent: true,
+      }
+    );
+    const configJson = require(path.resolve(githubWorkspace, configFilePath));
+    const packageDirectories = await configJson.packages.reduce(
+      async (directories: string[], p: string) => {
+        if (p.includes("*")) {
+          const expanded = await new Promise<string[]>((resolve, reject) =>
+            glob(p, (error, matches) =>
+              error != null ? reject(error) : resolve(matches)
+            )
+          );
+          return [
+            ...directories,
+            ...expanded.map((d) => path.resolve(githubWorkspace, d)),
+          ];
+        } else return [...directories, path.resolve(githubWorkspace, p)];
+      },
+      []
+    );
+
+    await packageDirectories.forEach(async (directory: string) => {
+      const packageJsonContent = fs.readFileSync(`${directory}/package.json`, {
+        encoding: "utf-8",
+      });
+      const packageJson = JSON.parse(packageJsonContent);
+
+      logger.startBlock(`${packageJson.name}@${packageJson.version}`);
+
+      if (isPublishable(npmPath, packageJson.name, packageJson.version)) {
+        await publish(
+          gitPath,
+          npmPath,
+          githubToken,
+          directory,
+          packageJson,
+          remoteTags,
+          isDryRun
         );
-        return [
-          ...directories,
-          ...expanded.map((d) => path.resolve(workspace, d)),
-        ];
-      } else return [...directories, path.resolve(workspace, p)];
-    },
-    []
-  );
+      } else {
+        console.log(
+          `Skipping, ${packageJson.name}@${packageJson.version} has been published.`
+        );
+      }
 
-  await packageDirectories.forEach(async (directory) => {
-    const packageJsonContent = fs.readFileSync(`${directory}/package.json`, {
-      encoding: "utf-8",
+      logger.endBlock();
     });
-    const packageJson = JSON.parse(packageJsonContent);
-
-    logger.startBlock(`${packageJson.name}@${packageJson.version}`);
-
-    if (isPublishable(npmPath, packageJson.name, packageJson.version)) {
-      await publish(
-        gitPath,
-        npmPath,
-        directory,
-        packageJson,
-        remoteTags,
-        isDryRun
-      );
-    } else {
-      console.log(
-        `Skipping, ${packageJson.name}@${packageJson.version} has been published.`
-      );
-    }
-
-    logger.endBlock();
-  });
+  } else if (githubToken == null) {
+    throw new Error(
+      `Unable to resolve a GITHUB_TOKEN environment variable, skipping publish. Please ensure that a "env" block with a GITHUB_TOKEN was provided.`
+    );
+  } else {
+    throw new Error(
+      `Unable to resolve a GITHUB_WORKSPACE environment variable, skipping publish.`
+    );
+  }
 }

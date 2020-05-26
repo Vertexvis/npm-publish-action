@@ -5,8 +5,8 @@ interface Logger {
   error: ConsoleFunction;
   startBlock: (text: string) => void;
   startStep: (text: string) => void;
-  endBlock: VoidFunction;
-  endStep: VoidFunction;
+  endBlock: () => void;
+  endStep: () => void;
 }
 
 function startBlock(text: string): void {
