@@ -8780,7 +8780,7 @@ function _run() {
             npmRegistry = (0, _core.getInput)("npm-registry");
             isDryRun = (0, _core.getInput)("dry-run");
             _context.next = 5;
-            return (0, _publish.publishEach)(npmRegistry, npmAuth);
+            return (0, _publish.publishEach)(npmRegistry, npmAuth, isDryRun === "true");
 
           case 5:
           case "end":
@@ -8806,7 +8806,7 @@ var _github = __webpack_require__(469);
 
 var _io = __webpack_require__(1);
 
-var _logger = _interopRequireDefault(__webpack_require__(346));
+var _logger = __webpack_require__(346);
 
 var _fs = _interopRequireDefault(__webpack_require__(747));
 
@@ -8815,6 +8815,8 @@ var _glob = _interopRequireDefault(__webpack_require__(120));
 var _path = _interopRequireDefault(__webpack_require__(622));
 
 var _git = __webpack_require__(560);
+
+var _exec2 = __webpack_require__(478);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -8829,6 +8831,262 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.it
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function publish(_x, _x2, _x3, _x4, _x5) {
+  return _publish.apply(this, arguments);
+}
+
+function _publish() {
+  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(gitPath, npmPath, directory, packageJson, remoteTags) {
+    var isDryRun,
+        githubClient,
+        gitTagName,
+        packageDiffOutput,
+        packageChanged,
+        tagMessage,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            isDryRun = _args.length > 5 && _args[5] !== undefined ? _args[5] : false;
+            githubClient = new _github.GitHub(process.env.GITHUB_TOKEN);
+            gitTagName = "".concat(packageJson.name, "_v").concat(packageJson.version);
+            _context.next = 5;
+            return (0, _exec2.execResultAsString)(gitPath, ["diff", "HEAD~", "--", "".concat(directory, "/package.json")], {
+              silent: true
+            });
+
+          case 5:
+            packageDiffOutput = _context.sent;
+            packageChanged = packageDiffOutput != "" && packageDiffOutput.includes('"version":');
+
+            if ((0, _git.gitTagExists)(remoteTags, gitTagName)) {
+              console.log("Skipping publish, tag for v".concat(packageJson.version, " of ").concat(packageJson.name, " already exists."));
+            } else if (!packageChanged) {
+              console.log("Skipping publish, ".concat(packageJson.name, " version has not changed."));
+            } else {
+              tagMessage = (0, _git.gitTagMessage)(packageJson.name, packageJson.version);
+
+              if (!isDryRun) {
+                _logger.logger.startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version)); // await exec(npmPath, ["publish", directory]);
+
+
+                _logger.logger.endStep();
+
+                _logger.logger.startStep("Tagging and pushing ".concat(packageJson.name, "@").concat(packageJson.version));
+
+                (0, _git.createTagAndRef)(githubClient, gitTagName, tagMessage);
+
+                _logger.logger.endStep();
+              } else {
+                console.log("Would publish ".concat(directory));
+                console.log("Command: ".concat(npmPath, " publish ").concat(directory));
+              }
+            }
+
+          case 8:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _publish.apply(this, arguments);
+}
+
+function isPublishable(_x6, _x7, _x8) {
+  return _isPublishable.apply(this, arguments);
+}
+
+function _isPublishable() {
+  _isPublishable = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(npmPath, packageName, packageVersion) {
+    var versions, parsed;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return (0, _exec2.execResultAsString)(npmPath, ["info", "--json", packageName, "versions"], {
+              silent: true
+            });
+
+          case 3:
+            versions = _context2.sent;
+            parsed = JSON.parse(versions);
+            return _context2.abrupt("return", parsed.find(function (version) {
+              return version === packageVersion;
+            }) == null);
+
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2["catch"](0);
+            return _context2.abrupt("return", false);
+
+          case 11:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 8]]);
+  }));
+  return _isPublishable.apply(this, arguments);
+}
+
+function publishEach(_x9, _x10) {
+  return _publishEach.apply(this, arguments);
+}
+
+function _publishEach() {
+  _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(npmRegistry, npmAuth) {
+    var isDryRun,
+        workspace,
+        gitPath,
+        npmPath,
+        remoteTags,
+        lernaJson,
+        packageDirectories,
+        _args5 = arguments;
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            isDryRun = _args5.length > 2 && _args5[2] !== undefined ? _args5[2] : false;
+            workspace = process.env.GITHUB_WORKSPACE;
+            _context5.next = 4;
+            return (0, _io.which)("git", true);
+
+          case 4:
+            gitPath = _context5.sent;
+            _context5.next = 7;
+            return (0, _io.which)("npm", true);
+
+          case 7:
+            npmPath = _context5.sent;
+            _context5.next = 10;
+            return (0, _exec.exec)(npmPath, ["config", "set", "//".concat(npmRegistry, "/:_authToken=").concat(npmAuth)]);
+
+          case 10:
+            _context5.next = 12;
+            return (0, _exec2.execResultAsString)(gitPath, ["ls-remote", "--tags"], {
+              silent: true
+            });
+
+          case 12:
+            remoteTags = _context5.sent;
+            lernaJson = require(_path["default"].resolve(workspace, "lerna.json"));
+            _context5.next = 16;
+            return lernaJson.packages.reduce( /*#__PURE__*/function () {
+              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(directories, p) {
+                var expanded;
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                  while (1) {
+                    switch (_context3.prev = _context3.next) {
+                      case 0:
+                        if (!p.includes("*")) {
+                          _context3.next = 7;
+                          break;
+                        }
+
+                        _context3.next = 3;
+                        return new Promise(function (resolve, reject) {
+                          return (0, _glob["default"])(p, function (error, matches) {
+                            return error != null ? reject(error) : resolve(matches);
+                          });
+                        });
+
+                      case 3:
+                        expanded = _context3.sent;
+                        return _context3.abrupt("return", [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
+                          return _path["default"].resolve(workspace, d);
+                        }))));
+
+                      case 7:
+                        return _context3.abrupt("return", [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspace, p)]));
+
+                      case 8:
+                      case "end":
+                        return _context3.stop();
+                    }
+                  }
+                }, _callee3);
+              }));
+
+              return function (_x11, _x12) {
+                return _ref.apply(this, arguments);
+              };
+            }(), []);
+
+          case 16:
+            packageDirectories = _context5.sent;
+            _context5.next = 19;
+            return packageDirectories.forEach( /*#__PURE__*/function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(directory) {
+                var packageJsonContent, packageJson;
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                  while (1) {
+                    switch (_context4.prev = _context4.next) {
+                      case 0:
+                        packageJsonContent = _fs["default"].readFileSync("".concat(directory, "/package.json"), {
+                          encoding: "utf-8"
+                        });
+                        packageJson = JSON.parse(packageJsonContent);
+
+                        _logger.logger.startBlock("".concat(packageJson.name, "@").concat(packageJson.version));
+
+                        if (!isPublishable(npmPath, packageJson.name, packageJson.version)) {
+                          _context4.next = 8;
+                          break;
+                        }
+
+                        _context4.next = 6;
+                        return publish(gitPath, npmPath, directory, packageJson, remoteTags, isDryRun);
+
+                      case 6:
+                        _context4.next = 9;
+                        break;
+
+                      case 8:
+                        console.log("Skipping, ".concat(packageJson.name, "@").concat(packageJson.version, " has been published."));
+
+                      case 9:
+                        _logger.logger.endBlock();
+
+                      case 10:
+                      case "end":
+                        return _context4.stop();
+                    }
+                  }
+                }, _callee4);
+              }));
+
+              return function (_x13) {
+                return _ref2.apply(this, arguments);
+              };
+            }());
+
+          case 19:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+  return _publishEach.apply(this, arguments);
+}
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.execResultAsString = execResultAsString;
+
+var _exec = __webpack_require__(986);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -8875,258 +9133,6 @@ function _execResultAsString() {
     }, _callee);
   }));
   return _execResultAsString.apply(this, arguments);
-}
-
-function publish(_x3, _x4, _x5, _x6, _x7) {
-  return _publish.apply(this, arguments);
-}
-
-function _publish() {
-  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(gitPath, npmPath, directory, packageJson, remoteTags) {
-    var isDryRun,
-        githubClient,
-        gitRemoteUrl,
-        gitTagName,
-        packageDiffOutput,
-        packageChanged,
-        tagMessage,
-        _args2 = arguments;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            isDryRun = _args2.length > 5 && _args2[5] !== undefined ? _args2[5] : false;
-            githubClient = new _github.GitHub(process.env.GITHUB_TOKEN);
-            _context2.next = 4;
-            return execResultAsString(gitPath, ["config", "--get", "remote.origin.url"], {
-              silent: true
-            });
-
-          case 4:
-            gitRemoteUrl = _context2.sent;
-            gitTagName = "".concat(packageJson.name, "_v").concat(packageJson.version);
-            _context2.next = 8;
-            return execResultAsString(gitPath, ["diff", "HEAD~", "--", "".concat(directory, "/package.json")], {
-              silent: true
-            });
-
-          case 8:
-            packageDiffOutput = _context2.sent;
-            packageChanged = packageDiffOutput != "" && packageDiffOutput.includes('"version":');
-
-            if ((0, _git.gitTagExists)(remoteTags, gitTagName)) {
-              console.log("Skipping publish, tag for v".concat(packageJson.version, " of ").concat(packageJson.name, " already exists."));
-            } else if (!packageChanged) {
-              console.log("Skipping publish, ".concat(packageJson.name, " version has not changed."));
-            } else {
-              tagMessage = (0, _git.gitTagMessage)(packageJson.name, packageJson.version);
-
-              if (!isDryRun) {
-                _logger["default"].startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version)); // await exec(npmPath, ["publish", directory]);
-
-
-                _logger["default"].endStep();
-
-                _logger["default"].startStep("Tagging and pushing ".concat(packageJson.name, "@").concat(packageJson.version));
-
-                (0, _git.createTagAndRef)(githubClient, gitTagName, tagMessage);
-
-                _logger["default"].endStep();
-              } else {
-                console.log("Would publish ".concat(directory));
-                console.log("Command: ".concat(npmPath, " publish ").concat(directory));
-              }
-            }
-
-          case 11:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-  return _publish.apply(this, arguments);
-}
-
-function isPublishable(_x8, _x9, _x10) {
-  return _isPublishable.apply(this, arguments);
-}
-
-function _isPublishable() {
-  _isPublishable = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(npmPath, packageName, packageVersion) {
-    var versions, parsed;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.prev = 0;
-            _context3.next = 3;
-            return execResultAsString(npmPath, ["info", "--json", packageName, "versions"], {
-              silent: true
-            });
-
-          case 3:
-            versions = _context3.sent;
-            parsed = JSON.parse(versions);
-            return _context3.abrupt("return", parsed.find(function (version) {
-              return version === packageVersion;
-            }) == null);
-
-          case 8:
-            _context3.prev = 8;
-            _context3.t0 = _context3["catch"](0);
-            return _context3.abrupt("return", false);
-
-          case 11:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3, null, [[0, 8]]);
-  }));
-  return _isPublishable.apply(this, arguments);
-}
-
-function publishEach(_x11, _x12) {
-  return _publishEach.apply(this, arguments);
-}
-
-function _publishEach() {
-  _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(npmRegistry, npmAuth) {
-    var isDryRun,
-        workspace,
-        gitPath,
-        npmPath,
-        remoteTags,
-        lernaJson,
-        packageDirectories,
-        _args6 = arguments;
-    return regeneratorRuntime.wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            isDryRun = _args6.length > 2 && _args6[2] !== undefined ? _args6[2] : false;
-            workspace = process.env.GITHUB_WORKSPACE;
-            _context6.next = 4;
-            return (0, _io.which)("git", true);
-
-          case 4:
-            gitPath = _context6.sent;
-            _context6.next = 7;
-            return (0, _io.which)("npm", true);
-
-          case 7:
-            npmPath = _context6.sent;
-            _context6.next = 10;
-            return (0, _exec.exec)(npmPath, ["config", "set", "//".concat(npmRegistry, "/:_authToken=").concat(npmAuth)]);
-
-          case 10:
-            _context6.next = 12;
-            return execResultAsString(gitPath, ["ls-remote", "--tags"], {
-              silent: true
-            });
-
-          case 12:
-            remoteTags = _context6.sent;
-            lernaJson = require(_path["default"].resolve(workspace, "lerna.json"));
-            _context6.next = 16;
-            return lernaJson.packages.reduce( /*#__PURE__*/function () {
-              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(directories, p) {
-                var expanded;
-                return regeneratorRuntime.wrap(function _callee4$(_context4) {
-                  while (1) {
-                    switch (_context4.prev = _context4.next) {
-                      case 0:
-                        if (!p.includes("*")) {
-                          _context4.next = 7;
-                          break;
-                        }
-
-                        _context4.next = 3;
-                        return new Promise(function (resolve, reject) {
-                          return (0, _glob["default"])(p, function (error, matches) {
-                            return error != null ? reject(error) : resolve(matches);
-                          });
-                        });
-
-                      case 3:
-                        expanded = _context4.sent;
-                        return _context4.abrupt("return", [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
-                          return _path["default"].resolve(workspace, d);
-                        }))));
-
-                      case 7:
-                        return _context4.abrupt("return", [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspace, p)]));
-
-                      case 8:
-                      case "end":
-                        return _context4.stop();
-                    }
-                  }
-                }, _callee4);
-              }));
-
-              return function (_x13, _x14) {
-                return _ref.apply(this, arguments);
-              };
-            }(), []);
-
-          case 16:
-            packageDirectories = _context6.sent;
-            _context6.next = 19;
-            return packageDirectories.forEach( /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(directory) {
-                var packageJsonContent, packageJson;
-                return regeneratorRuntime.wrap(function _callee5$(_context5) {
-                  while (1) {
-                    switch (_context5.prev = _context5.next) {
-                      case 0:
-                        packageJsonContent = _fs["default"].readFileSync("".concat(directory, "/package.json"), {
-                          encoding: "utf-8"
-                        });
-                        packageJson = JSON.parse(packageJsonContent);
-
-                        _logger["default"].startBlock("".concat(packageJson.name, "@").concat(packageJson.version));
-
-                        if (!isPublishable(npmPath, packageJson.name, packageJson.version)) {
-                          _context5.next = 8;
-                          break;
-                        }
-
-                        _context5.next = 6;
-                        return publish(gitPath, npmPath, directory, packageJson, remoteTags, isDryRun);
-
-                      case 6:
-                        _context5.next = 9;
-                        break;
-
-                      case 8:
-                        console.log("Skipping, ".concat(packageJson.name, "@").concat(packageJson.version, " has been published."));
-
-                      case 9:
-                        _logger["default"].endBlock();
-
-                      case 10:
-                      case "end":
-                        return _context5.stop();
-                    }
-                  }
-                }, _callee5);
-              }));
-
-              return function (_x15) {
-                return _ref2.apply(this, arguments);
-              };
-            }());
-
-          case 19:
-          case "end":
-            return _context6.stop();
-        }
-      }
-    }, _callee6);
-  }));
-  return _publishEach.apply(this, arguments);
 }
 "use strict";
 
@@ -9200,7 +9206,7 @@ function _createTagAndRef() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.logger = void 0;
 
 function startBlock(text) {
   console.log("=== ".concat(text, " ==="));
@@ -9218,7 +9224,7 @@ function endStep() {
   console.log("");
 }
 
-var _default = {
+var logger = {
   log: console.log,
   error: console.error,
   startBlock: startBlock,
@@ -9226,7 +9232,7 @@ var _default = {
   endBlock: endBlock,
   endStep: endStep
 };
-exports["default"] = _default;
+exports.logger = logger;
 
 
 /***/ }),
@@ -11589,6 +11595,14 @@ function authenticationBeforeRequest(state, options) {
   const secret = encodeURIComponent(state.auth.secret);
   options.url += `client_id=${key}&client_secret=${secret}`;
 }
+
+
+/***/ }),
+
+/***/ 478:
+/***/ (function(module) {
+
+module.exports = eval("require")("./utils/exec");
 
 
 /***/ }),
