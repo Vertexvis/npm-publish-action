@@ -4712,6 +4712,45 @@ module.exports = opts => {
 
 /***/ }),
 
+/***/ 173:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.logger = void 0;
+
+function startBlock(text) {
+  console.log("=== ".concat(text, " ==="));
+}
+
+function startStep(text) {
+  console.log("\u203A ".concat(text));
+}
+
+function endBlock() {
+  console.log("");
+}
+
+function endStep() {
+  console.log("");
+}
+
+var logger = {
+  log: console.log,
+  error: console.error,
+  startBlock: startBlock,
+  startStep: startStep,
+  endBlock: endBlock,
+  endStep: endStep
+};
+exports.logger = logger;
+
+/***/ }),
+
 /***/ 190:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -7934,14 +7973,6 @@ function hasLastPage (link) {
 
 /***/ }),
 
-/***/ 346:
-/***/ (function(module) {
-
-module.exports = eval("require")("./utils/logger");
-
-
-/***/ }),
-
 /***/ 348:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -8752,14 +8783,14 @@ function errname(uv, code) {
 /***/ }),
 
 /***/ 429:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 "use strict";
 
 
 var _core = __webpack_require__(470);
 
-var _publish = __webpack_require__(538);
+var _publish = __webpack_require__(468);
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -8793,447 +8824,6 @@ function _run() {
 }
 
 run();
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.publishEach = publishEach;
-
-var _exec = __webpack_require__(986);
-
-var _github = __webpack_require__(469);
-
-var _io = __webpack_require__(1);
-
-var _logger = __webpack_require__(346);
-
-var _fs = _interopRequireDefault(__webpack_require__(747));
-
-var _glob = _interopRequireDefault(__webpack_require__(120));
-
-var _path = _interopRequireDefault(__webpack_require__(622));
-
-var _git = __webpack_require__(560);
-
-var _exec2 = __webpack_require__(478);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function publish(_x, _x2, _x3, _x4, _x5) {
-  return _publish.apply(this, arguments);
-}
-
-function _publish() {
-  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(gitPath, npmPath, directory, packageJson, remoteTags) {
-    var isDryRun,
-        githubClient,
-        gitTagName,
-        packageDiffOutput,
-        packageChanged,
-        tagMessage,
-        _args = arguments;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            isDryRun = _args.length > 5 && _args[5] !== undefined ? _args[5] : false;
-            githubClient = new _github.GitHub(process.env.GITHUB_TOKEN);
-            gitTagName = "".concat(packageJson.name, "_v").concat(packageJson.version);
-            _context.next = 5;
-            return (0, _exec2.execResultAsString)(gitPath, ["diff", "HEAD~", "--", "".concat(directory, "/package.json")], {
-              silent: true
-            });
-
-          case 5:
-            packageDiffOutput = _context.sent;
-            packageChanged = packageDiffOutput != "" && packageDiffOutput.includes('"version":');
-
-            if ((0, _git.gitTagExists)(remoteTags, gitTagName)) {
-              console.log("Skipping publish, tag for v".concat(packageJson.version, " of ").concat(packageJson.name, " already exists."));
-            } else if (!packageChanged) {
-              console.log("Skipping publish, ".concat(packageJson.name, " version has not changed."));
-            } else {
-              tagMessage = (0, _git.gitTagMessage)(packageJson.name, packageJson.version);
-
-              if (!isDryRun) {
-                _logger.logger.startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version)); // await exec(npmPath, ["publish", directory]);
-
-
-                _logger.logger.endStep();
-
-                _logger.logger.startStep("Tagging and pushing ".concat(packageJson.name, "@").concat(packageJson.version));
-
-                (0, _git.createTagAndRef)(githubClient, gitTagName, tagMessage);
-
-                _logger.logger.endStep();
-              } else {
-                console.log("Would publish ".concat(directory));
-                console.log("Command: ".concat(npmPath, " publish ").concat(directory));
-              }
-            }
-
-          case 8:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _publish.apply(this, arguments);
-}
-
-function isPublishable(_x6, _x7, _x8) {
-  return _isPublishable.apply(this, arguments);
-}
-
-function _isPublishable() {
-  _isPublishable = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(npmPath, packageName, packageVersion) {
-    var versions, parsed;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return (0, _exec2.execResultAsString)(npmPath, ["info", "--json", packageName, "versions"], {
-              silent: true
-            });
-
-          case 3:
-            versions = _context2.sent;
-            parsed = JSON.parse(versions);
-            return _context2.abrupt("return", parsed.find(function (version) {
-              return version === packageVersion;
-            }) == null);
-
-          case 8:
-            _context2.prev = 8;
-            _context2.t0 = _context2["catch"](0);
-            return _context2.abrupt("return", false);
-
-          case 11:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2, null, [[0, 8]]);
-  }));
-  return _isPublishable.apply(this, arguments);
-}
-
-function publishEach(_x9, _x10) {
-  return _publishEach.apply(this, arguments);
-}
-
-function _publishEach() {
-  _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(npmRegistry, npmAuth) {
-    var isDryRun,
-        workspace,
-        gitPath,
-        npmPath,
-        remoteTags,
-        lernaJson,
-        packageDirectories,
-        _args5 = arguments;
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            isDryRun = _args5.length > 2 && _args5[2] !== undefined ? _args5[2] : false;
-            workspace = process.env.GITHUB_WORKSPACE;
-            _context5.next = 4;
-            return (0, _io.which)("git", true);
-
-          case 4:
-            gitPath = _context5.sent;
-            _context5.next = 7;
-            return (0, _io.which)("npm", true);
-
-          case 7:
-            npmPath = _context5.sent;
-            _context5.next = 10;
-            return (0, _exec.exec)(npmPath, ["config", "set", "//".concat(npmRegistry, "/:_authToken=").concat(npmAuth)]);
-
-          case 10:
-            _context5.next = 12;
-            return (0, _exec2.execResultAsString)(gitPath, ["ls-remote", "--tags"], {
-              silent: true
-            });
-
-          case 12:
-            remoteTags = _context5.sent;
-            lernaJson = require(_path["default"].resolve(workspace, "lerna.json"));
-            _context5.next = 16;
-            return lernaJson.packages.reduce( /*#__PURE__*/function () {
-              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(directories, p) {
-                var expanded;
-                return regeneratorRuntime.wrap(function _callee3$(_context3) {
-                  while (1) {
-                    switch (_context3.prev = _context3.next) {
-                      case 0:
-                        if (!p.includes("*")) {
-                          _context3.next = 7;
-                          break;
-                        }
-
-                        _context3.next = 3;
-                        return new Promise(function (resolve, reject) {
-                          return (0, _glob["default"])(p, function (error, matches) {
-                            return error != null ? reject(error) : resolve(matches);
-                          });
-                        });
-
-                      case 3:
-                        expanded = _context3.sent;
-                        return _context3.abrupt("return", [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
-                          return _path["default"].resolve(workspace, d);
-                        }))));
-
-                      case 7:
-                        return _context3.abrupt("return", [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspace, p)]));
-
-                      case 8:
-                      case "end":
-                        return _context3.stop();
-                    }
-                  }
-                }, _callee3);
-              }));
-
-              return function (_x11, _x12) {
-                return _ref.apply(this, arguments);
-              };
-            }(), []);
-
-          case 16:
-            packageDirectories = _context5.sent;
-            _context5.next = 19;
-            return packageDirectories.forEach( /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(directory) {
-                var packageJsonContent, packageJson;
-                return regeneratorRuntime.wrap(function _callee4$(_context4) {
-                  while (1) {
-                    switch (_context4.prev = _context4.next) {
-                      case 0:
-                        packageJsonContent = _fs["default"].readFileSync("".concat(directory, "/package.json"), {
-                          encoding: "utf-8"
-                        });
-                        packageJson = JSON.parse(packageJsonContent);
-
-                        _logger.logger.startBlock("".concat(packageJson.name, "@").concat(packageJson.version));
-
-                        if (!isPublishable(npmPath, packageJson.name, packageJson.version)) {
-                          _context4.next = 8;
-                          break;
-                        }
-
-                        _context4.next = 6;
-                        return publish(gitPath, npmPath, directory, packageJson, remoteTags, isDryRun);
-
-                      case 6:
-                        _context4.next = 9;
-                        break;
-
-                      case 8:
-                        console.log("Skipping, ".concat(packageJson.name, "@").concat(packageJson.version, " has been published."));
-
-                      case 9:
-                        _logger.logger.endBlock();
-
-                      case 10:
-                      case "end":
-                        return _context4.stop();
-                    }
-                  }
-                }, _callee4);
-              }));
-
-              return function (_x13) {
-                return _ref2.apply(this, arguments);
-              };
-            }());
-
-          case 19:
-          case "end":
-            return _context5.stop();
-        }
-      }
-    }, _callee5);
-  }));
-  return _publishEach.apply(this, arguments);
-}
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.execResultAsString = execResultAsString;
-
-var _exec = __webpack_require__(986);
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function execResultAsString(_x, _x2) {
-  return _execResultAsString.apply(this, arguments);
-}
-
-function _execResultAsString() {
-  _execResultAsString = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(commandLine, args) {
-    var options,
-        result,
-        _args = arguments;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
-            result = "";
-            _context.next = 4;
-            return (0, _exec.exec)(commandLine, args, _objectSpread(_objectSpread({}, options), {}, {
-              listeners: {
-                stdout: function stdout(data) {
-                  result = data.toString();
-                }
-              }
-            }));
-
-          case 4:
-            return _context.abrupt("return", result);
-
-          case 5:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _execResultAsString.apply(this, arguments);
-}
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.gitTagMessage = gitTagMessage;
-exports.gitTagExists = gitTagExists;
-exports.createTagAndRef = createTagAndRef;
-
-var _github = __webpack_require__(469);
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function gitTagMessage(packageName, packageVersion) {
-  return "".concat(packageName, "_v").concat(packageVersion, "\n\nAutomated release of v").concat(packageVersion, " for ").concat(packageName, ".");
-}
-
-function gitTagExists(remoteTags, tag) {
-  var regex = new RegExp("".concat(tag, "$"));
-  var result = regex.exec(remoteTags);
-  return result != null && result.length !== 0;
-}
-
-function createTagAndRef(_x, _x2, _x3) {
-  return _createTagAndRef.apply(this, arguments);
-}
-
-function _createTagAndRef() {
-  _createTagAndRef = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(client, tag, message) {
-    var tagResponse;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return client.git.createTag(_objectSpread(_objectSpread({}, _github.context.repo), {}, {
-              tag: tag,
-              message: message,
-              object: _github.context.sha,
-              type: "commit"
-            }));
-
-          case 2:
-            tagResponse = _context.sent;
-            _context.next = 5;
-            return client.git.createRef(_objectSpread(_objectSpread({}, _github.context.repo), {}, {
-              ref: "refs/tags/".concat(tag),
-              sha: tagResponse.data.sha
-            }));
-
-          case 5:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _createTagAndRef.apply(this, arguments);
-}
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.logger = void 0;
-
-function startBlock(text) {
-  console.log("=== ".concat(text, " ==="));
-}
-
-function startStep(text) {
-  console.log("\u203A ".concat(text));
-}
-
-function endBlock() {
-  console.log("");
-}
-
-function endStep() {
-  console.log("");
-}
-
-var logger = {
-  log: console.log,
-  error: console.error,
-  startBlock: startBlock,
-  startStep: startStep,
-  endBlock: endBlock,
-  endStep: endStep
-};
-exports.logger = logger;
-
 
 /***/ }),
 
@@ -11205,6 +10795,299 @@ exports.RequestError = RequestError;
 
 /***/ }),
 
+/***/ 468:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.publishEach = publishEach;
+
+var _exec = __webpack_require__(986);
+
+var _github = __webpack_require__(469);
+
+var _io = __webpack_require__(1);
+
+var _logger = __webpack_require__(173);
+
+var _fs = _interopRequireDefault(__webpack_require__(747));
+
+var _glob = _interopRequireDefault(__webpack_require__(120));
+
+var _path = _interopRequireDefault(__webpack_require__(622));
+
+var _git = __webpack_require__(823);
+
+var _exec2 = __webpack_require__(827);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function publish(_x, _x2, _x3, _x4, _x5) {
+  return _publish.apply(this, arguments);
+}
+
+function _publish() {
+  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(gitPath, npmPath, directory, packageJson, remoteTags) {
+    var isDryRun,
+        githubClient,
+        gitTagName,
+        packageDiffOutput,
+        packageChanged,
+        tagMessage,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            isDryRun = _args.length > 5 && _args[5] !== undefined ? _args[5] : false;
+            githubClient = new _github.GitHub(process.env.GITHUB_TOKEN);
+            gitTagName = "".concat(packageJson.name, "_v").concat(packageJson.version);
+            _context.next = 5;
+            return (0, _exec2.execResultAsString)(gitPath, ["diff", "HEAD~", "--", "".concat(directory, "/package.json")], {
+              silent: true
+            });
+
+          case 5:
+            packageDiffOutput = _context.sent;
+            packageChanged = packageDiffOutput != "" && packageDiffOutput.includes('"version":');
+
+            if ((0, _git.gitTagExists)(remoteTags, gitTagName)) {
+              console.log("Skipping publish, tag for v".concat(packageJson.version, " of ").concat(packageJson.name, " already exists."));
+            } else if (!packageChanged) {
+              console.log("Skipping publish, ".concat(packageJson.name, " version has not changed."));
+            } else {
+              tagMessage = (0, _git.gitTagMessage)(packageJson.name, packageJson.version);
+
+              if (!isDryRun) {
+                _logger.logger.startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version)); // await exec(npmPath, ["publish", directory]);
+
+
+                _logger.logger.endStep();
+
+                _logger.logger.startStep("Tagging and pushing ".concat(packageJson.name, "@").concat(packageJson.version));
+
+                (0, _git.createTagAndRef)(githubClient, gitTagName, tagMessage);
+
+                _logger.logger.endStep();
+              } else {
+                console.log("Would publish ".concat(directory));
+                console.log("Command: ".concat(npmPath, " publish ").concat(directory));
+              }
+            }
+
+          case 8:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _publish.apply(this, arguments);
+}
+
+function isPublishable(_x6, _x7, _x8) {
+  return _isPublishable.apply(this, arguments);
+}
+
+function _isPublishable() {
+  _isPublishable = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(npmPath, packageName, packageVersion) {
+    var versions, parsed;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return (0, _exec2.execResultAsString)(npmPath, ["info", "--json", packageName, "versions"], {
+              silent: true
+            });
+
+          case 3:
+            versions = _context2.sent;
+            parsed = JSON.parse(versions);
+            return _context2.abrupt("return", parsed.find(function (version) {
+              return version === packageVersion;
+            }) == null);
+
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2["catch"](0);
+            return _context2.abrupt("return", false);
+
+          case 11:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 8]]);
+  }));
+  return _isPublishable.apply(this, arguments);
+}
+
+function publishEach(_x9, _x10) {
+  return _publishEach.apply(this, arguments);
+}
+
+function _publishEach() {
+  _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(npmRegistry, npmAuth) {
+    var isDryRun,
+        workspace,
+        gitPath,
+        npmPath,
+        remoteTags,
+        lernaJson,
+        packageDirectories,
+        _args5 = arguments;
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            isDryRun = _args5.length > 2 && _args5[2] !== undefined ? _args5[2] : false;
+            workspace = process.env.GITHUB_WORKSPACE;
+            _context5.next = 4;
+            return (0, _io.which)("git", true);
+
+          case 4:
+            gitPath = _context5.sent;
+            _context5.next = 7;
+            return (0, _io.which)("npm", true);
+
+          case 7:
+            npmPath = _context5.sent;
+            _context5.next = 10;
+            return (0, _exec.exec)(npmPath, ["config", "set", "//".concat(npmRegistry, "/:_authToken=").concat(npmAuth)]);
+
+          case 10:
+            _context5.next = 12;
+            return (0, _exec2.execResultAsString)(gitPath, ["ls-remote", "--tags"], {
+              silent: true
+            });
+
+          case 12:
+            remoteTags = _context5.sent;
+            lernaJson = require(_path["default"].resolve(workspace, "lerna.json"));
+            _context5.next = 16;
+            return lernaJson.packages.reduce( /*#__PURE__*/function () {
+              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(directories, p) {
+                var expanded;
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                  while (1) {
+                    switch (_context3.prev = _context3.next) {
+                      case 0:
+                        if (!p.includes("*")) {
+                          _context3.next = 7;
+                          break;
+                        }
+
+                        _context3.next = 3;
+                        return new Promise(function (resolve, reject) {
+                          return (0, _glob["default"])(p, function (error, matches) {
+                            return error != null ? reject(error) : resolve(matches);
+                          });
+                        });
+
+                      case 3:
+                        expanded = _context3.sent;
+                        return _context3.abrupt("return", [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
+                          return _path["default"].resolve(workspace, d);
+                        }))));
+
+                      case 7:
+                        return _context3.abrupt("return", [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspace, p)]));
+
+                      case 8:
+                      case "end":
+                        return _context3.stop();
+                    }
+                  }
+                }, _callee3);
+              }));
+
+              return function (_x11, _x12) {
+                return _ref.apply(this, arguments);
+              };
+            }(), []);
+
+          case 16:
+            packageDirectories = _context5.sent;
+            _context5.next = 19;
+            return packageDirectories.forEach( /*#__PURE__*/function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(directory) {
+                var packageJsonContent, packageJson;
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                  while (1) {
+                    switch (_context4.prev = _context4.next) {
+                      case 0:
+                        packageJsonContent = _fs["default"].readFileSync("".concat(directory, "/package.json"), {
+                          encoding: "utf-8"
+                        });
+                        packageJson = JSON.parse(packageJsonContent);
+
+                        _logger.logger.startBlock("".concat(packageJson.name, "@").concat(packageJson.version));
+
+                        if (!isPublishable(npmPath, packageJson.name, packageJson.version)) {
+                          _context4.next = 8;
+                          break;
+                        }
+
+                        _context4.next = 6;
+                        return publish(gitPath, npmPath, directory, packageJson, remoteTags, isDryRun);
+
+                      case 6:
+                        _context4.next = 9;
+                        break;
+
+                      case 8:
+                        console.log("Skipping, ".concat(packageJson.name, "@").concat(packageJson.version, " has been published."));
+
+                      case 9:
+                        _logger.logger.endBlock();
+
+                      case 10:
+                      case "end":
+                        return _context4.stop();
+                    }
+                  }
+                }, _callee4);
+              }));
+
+              return function (_x13) {
+                return _ref2.apply(this, arguments);
+              };
+            }());
+
+          case 19:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+  return _publishEach.apply(this, arguments);
+}
+
+/***/ }),
+
 /***/ 469:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -11599,14 +11482,6 @@ function authenticationBeforeRequest(state, options) {
 
 /***/ }),
 
-/***/ 478:
-/***/ (function(module) {
-
-module.exports = eval("require")("./utils/exec");
-
-
-/***/ }),
-
 /***/ 489:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -11801,14 +11676,6 @@ function hasFirstPage (link) {
   deprecate(`octokit.hasFirstPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
   return getPageLinks(link).first
 }
-
-
-/***/ }),
-
-/***/ 538:
-/***/ (function(module) {
-
-module.exports = eval("require")("./publish");
 
 
 /***/ }),
@@ -12434,14 +12301,6 @@ function hasPreviousPage (link) {
   deprecate(`octokit.hasPreviousPage() – You can use octokit.paginate or async iterators instead: https://github.com/octokit/rest.js#pagination.`)
   return getPageLinks(link).prev
 }
-
-
-/***/ }),
-
-/***/ 560:
-/***/ (function(module) {
-
-module.exports = eval("require")("./utils/git");
 
 
 /***/ }),
@@ -14212,6 +14071,142 @@ function sync (path, options) {
   return checkStat(fs.statSync(path), path, options)
 }
 
+
+/***/ }),
+
+/***/ 823:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.gitTagMessage = gitTagMessage;
+exports.gitTagExists = gitTagExists;
+exports.createTagAndRef = createTagAndRef;
+
+var _github = __webpack_require__(469);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function gitTagMessage(packageName, packageVersion) {
+  return "".concat(packageName, "_v").concat(packageVersion, "\n\nAutomated release of v").concat(packageVersion, " for ").concat(packageName, ".");
+}
+
+function gitTagExists(remoteTags, tag) {
+  var regex = new RegExp("".concat(tag, "$"));
+  var result = regex.exec(remoteTags);
+  return result != null && result.length !== 0;
+}
+
+function createTagAndRef(_x, _x2, _x3) {
+  return _createTagAndRef.apply(this, arguments);
+}
+
+function _createTagAndRef() {
+  _createTagAndRef = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(client, tag, message) {
+    var tagResponse;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return client.git.createTag(_objectSpread(_objectSpread({}, _github.context.repo), {}, {
+              tag: tag,
+              message: message,
+              object: _github.context.sha,
+              type: "commit"
+            }));
+
+          case 2:
+            tagResponse = _context.sent;
+            _context.next = 5;
+            return client.git.createRef(_objectSpread(_objectSpread({}, _github.context.repo), {}, {
+              ref: "refs/tags/".concat(tag),
+              sha: tagResponse.data.sha
+            }));
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _createTagAndRef.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ 827:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.execResultAsString = execResultAsString;
+
+var _exec = __webpack_require__(986);
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function execResultAsString(_x, _x2) {
+  return _execResultAsString.apply(this, arguments);
+}
+
+function _execResultAsString() {
+  _execResultAsString = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(commandLine, args) {
+    var options,
+        result,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+            result = "";
+            _context.next = 4;
+            return (0, _exec.exec)(commandLine, args, _objectSpread(_objectSpread({}, options), {}, {
+              listeners: {
+                stdout: function stdout(data) {
+                  result = data.toString();
+                }
+              }
+            }));
+
+          case 4:
+            return _context.abrupt("return", result);
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _execResultAsString.apply(this, arguments);
+}
 
 /***/ }),
 
