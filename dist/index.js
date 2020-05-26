@@ -8223,18 +8223,19 @@ function run() {
 
 function _run() {
   _run = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var npmAuth, npmRegistry, isDryRun;
+    var configFilePath, npmAuth, npmRegistry, isDryRun;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            configFilePath = (0, _core.getInput)("packages-config-file");
             npmAuth = (0, _core.getInput)("npm-auth-token");
             npmRegistry = (0, _core.getInput)("npm-registry");
             isDryRun = (0, _core.getInput)("dry-run");
-            _context.next = 5;
-            return (0, _publish.publishEach)(npmRegistry, npmAuth, isDryRun === "true");
+            _context.next = 6;
+            return (0, _publish.publishEach)(npmRegistry, npmAuth, configFilePath, isDryRun === "true");
 
-          case 5:
+          case 6:
           case "end":
             return _context.stop();
         }
@@ -30340,25 +30341,25 @@ function _isPublishable() {
   return _isPublishable.apply(this, arguments);
 }
 
-function publishEach(_x9, _x10) {
+function publishEach(_x9, _x10, _x11) {
   return _publishEach.apply(this, arguments);
 }
 
 function _publishEach() {
-  _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(npmRegistry, npmAuth) {
+  _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(npmRegistry, npmAuth, configFilePath) {
     var isDryRun,
         workspace,
         gitPath,
         npmPath,
         remoteTags,
-        lernaJson,
+        configJson,
         packageDirectories,
         _args5 = arguments;
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            isDryRun = _args5.length > 2 && _args5[2] !== undefined ? _args5[2] : false;
+            isDryRun = _args5.length > 3 && _args5[3] !== undefined ? _args5[3] : false;
             workspace = process.env.GITHUB_WORKSPACE;
             _context5.next = 4;
             return (0, _io.which)("git", true);
@@ -30381,9 +30382,9 @@ function _publishEach() {
 
           case 12:
             remoteTags = _context5.sent;
-            lernaJson = require(_path["default"].resolve(workspace, "lerna.json"));
+            configJson = require(_path["default"].resolve(workspace, configFilePath));
             _context5.next = 16;
-            return lernaJson.packages.reduce( /*#__PURE__*/function () {
+            return configJson.packages.reduce( /*#__PURE__*/function () {
               var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(directories, p) {
                 var expanded;
                 return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -30419,7 +30420,7 @@ function _publishEach() {
                 }, _callee3);
               }));
 
-              return function (_x11, _x12) {
+              return function (_x12, _x13) {
                 return _ref.apply(this, arguments);
               };
             }(), []);
@@ -30467,7 +30468,7 @@ function _publishEach() {
                 }, _callee4);
               }));
 
-              return function (_x13) {
+              return function (_x14) {
                 return _ref2.apply(this, arguments);
               };
             }());

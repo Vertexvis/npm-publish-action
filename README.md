@@ -2,7 +2,7 @@
 
 This repository contains the definition for a custom [GitHub Action](https://help.github.com/en/actions/creating-actions/about-actions)
 that will perform a diff between the current HEAD and HEAD~1 of the branch it is run on, and look for
-differences in the `package.json` versions for each of the packages specified in a `lerna.json`'s `packages` property.
+differences in the `package.json` versions for each of the packages specified in a JSON configuration file's `packages` property.
 
 ## Usage
 
@@ -29,16 +29,21 @@ an [NPM authentication token](https://docs.npmjs.com/about-authentication-tokens
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   with:
-    # The url of the NPM registry that the packages in this repository should be published to.
-    # Defaults to "registry.npmjs.org"
-    npm-registry: ""
+    # The location of a JSON file containing a `packages` property that specifies
+    # the directories that contain `package.json` files, and that should be published.
+    # This input is required, and will not be defaulted
+    packages-config-file: ""
 
     # The NPM authentication token that the npm cli will be configured to use when publishing.
     # This input is required, and will not be defaulted
     npm-auth-token: ""
 
+    # The url of the NPM registry that the packages in this repository should be published to.
+    # Defaults to "registry.npmjs.org"
+    npm-registry: ""
+
     # Boolean string indicating whether this action should perform a "dry run" 
-    # which will not publish to NPM or push tags to GitHub
+    # which will not publish to NPM or push tags to GitHub.
     # Defaults to "false"
     dry-run: ""
 ```
