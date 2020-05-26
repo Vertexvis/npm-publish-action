@@ -2,10 +2,10 @@
   "name": "npm-publish-action",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ncc build index.js --out build"
+    "build": "rm -rf dist && babel src --out-dir dist --extensions '.ts' && ncc build dist/index.js --out build"
   },
   "keywords": [],
   "author": "",
@@ -13,10 +13,18 @@
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/exec": "^1.0.4",
+    "@actions/github": "^2.2.0",
     "@actions/io": "^1.0.2",
-    "glob": "^7.1.6"
+    "glob": "^7.1.6",
+    "regenerator-runtime": "^0.13.5"
   },
   "devDependencies": {
+    "@babel/cli": "7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-typescript": "^7.9.0",
+    "@types/glob": "^7.1.1",
+    "@types/node": "^13.13.4",
     "@zeit/ncc": "^0.22.2"
   }
 }
