@@ -10873,31 +10873,54 @@ function _publish() {
             packageDiffOutput = _context.sent;
             packageChanged = packageDiffOutput != "" && packageDiffOutput.includes('"version":');
 
-            if ((0, _git.gitTagExists)(remoteTags, gitTagName)) {
-              console.log("Skipping publish, tag for v".concat(packageJson.version, " of ").concat(packageJson.name, " already exists."));
-            } else if (!packageChanged) {
-              console.log("Skipping publish, ".concat(packageJson.name, " version has not changed."));
-            } else {
-              tagMessage = (0, _git.gitTagMessage)(packageJson.name, packageJson.version);
-
-              if (!isDryRun) {
-                _logger.logger.startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version)); // await exec(npmPath, ["publish", directory]);
-
-
-                _logger.logger.endStep();
-
-                _logger.logger.startStep("Tagging and pushing ".concat(packageJson.name, "@").concat(packageJson.version));
-
-                (0, _git.createTagAndRef)(githubClient, gitTagName, tagMessage);
-
-                _logger.logger.endStep();
-              } else {
-                console.log("Would publish ".concat(directory));
-                console.log("Command: ".concat(npmPath, " publish ").concat(directory));
-              }
+            if (!(0, _git.gitTagExists)(remoteTags, gitTagName)) {
+              _context.next = 11;
+              break;
             }
 
-          case 8:
+            console.log("Skipping publish, tag for v".concat(packageJson.version, " of ").concat(packageJson.name, " already exists."));
+            _context.next = 27;
+            break;
+
+          case 11:
+            if (packageChanged) {
+              _context.next = 15;
+              break;
+            }
+
+            console.log("Skipping publish, ".concat(packageJson.name, " version has not changed."));
+            _context.next = 27;
+            break;
+
+          case 15:
+            tagMessage = (0, _git.gitTagMessage)(packageJson.name, packageJson.version);
+
+            if (isDryRun) {
+              _context.next = 25;
+              break;
+            }
+
+            _logger.logger.startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version)); // await exec(npmPath, ["publish", directory]);
+
+
+            _logger.logger.endStep();
+
+            _logger.logger.startStep("Tagging and pushing ".concat(packageJson.name, "@").concat(packageJson.version));
+
+            _context.next = 22;
+            return (0, _git.createTagAndRef)(githubClient, gitTagName, tagMessage);
+
+          case 22:
+            _logger.logger.endStep();
+
+            _context.next = 27;
+            break;
+
+          case 25:
+            console.log("Would publish ".concat(directory));
+            console.log("Command: ".concat(npmPath, " publish ").concat(directory));
+
+          case 27:
           case "end":
             return _context.stop();
         }

@@ -50,7 +50,7 @@ async function publish(
       logger.startStep(
         `Tagging and pushing ${packageJson.name}@${packageJson.version}`
       );
-      createTagAndRef(githubClient, gitTagName, tagMessage);
+      await createTagAndRef(githubClient, gitTagName, tagMessage);
       logger.endStep();
     } else {
       console.log(`Would publish ${directory}`);
