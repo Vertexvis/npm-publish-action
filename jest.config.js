@@ -5,10 +5,10 @@ module.exports = {
   collectCoverageFrom: ["**/src/**", "!**/src/__*__/**"],
   coverageThreshold: {
     global: {
-      branches: 5,
-      functions: 10,
-      lines: 10,
-      statements: 10,
+      branches: 30,
+      functions: 40,
+      lines: 40,
+      statements: 35,
     },
   },
   testPathIgnorePatterns: [
