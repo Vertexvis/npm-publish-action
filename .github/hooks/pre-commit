@@ -1,0 +1,15 @@
+#!/bin/bash
+
+status=$(git status)
+
+changes=$(grep "src/" <<< $status)
+built_changes=$(grep "dist/index.js" <<< $status)
+
+if test -n "$changes" && test -z "$built_changes" ;
+then
+  echo Building and adding updated dist/index.js file to commit...
+
+  yarn build
+
+  git add dist/index.js
+fi

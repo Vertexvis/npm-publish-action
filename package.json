@@ -4,6 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
+    "preinstall": "git config core.hooksPath .github/hooks",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf build && babel src --out-dir build --extensions '.ts' && ncc build build/index.js --out dist"
   },
