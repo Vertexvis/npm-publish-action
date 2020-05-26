@@ -63,7 +63,7 @@ jspm_packages/
 temp
 
 # Temp build directories
-dist
+build
 
 # VS Code files
 .shadowroot

@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && babel src --out-dir dist --extensions '.ts' && ncc build dist/index.js --out build"
+    "build": "rm -rf build && babel src --out-dir build --extensions '.ts' && ncc build build/index.js --out dist"
   },
   "keywords": [],
   "author": "",
