@@ -77,6 +77,7 @@ async function isPublishable(npmPath, packageName, packageVersion) {
 export async function publishEach(
   npmRegistry: string,
   npmAuth: string,
+  configFilePath: string,
   isDryRun: boolean = false
 ): Promise<void> {
   const workspace = process.env.GITHUB_WORKSPACE;
@@ -96,8 +97,8 @@ export async function publishEach(
       silent: true,
     }
   );
-  const lernaJson = require(path.resolve(workspace, "lerna.json"));
-  const packageDirectories = await lernaJson.packages.reduce(
+  const configJson = require(path.resolve(workspace, configFilePath));
+  const packageDirectories = await configJson.packages.reduce(
     async (directories: string[], p) => {
       if (p.includes("*")) {
         const expanded = await new Promise<string[]>((resolve, reject) =>

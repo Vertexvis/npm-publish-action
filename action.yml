@@ -1,6 +1,9 @@
 name: 'NPM Configure and Publish'
 description: 'Configures npm with the provided auth token, and optionally the provided registry url, then publishes packages.'
 inputs:
+  packages-config-file:
+    description: "The location of a json file that contains a `packages` property indicating the directories that will be published."
+    required: true
   npm-auth-token:
     description: "Auth token that will be set for the provided registry using npm config."
     required: true
