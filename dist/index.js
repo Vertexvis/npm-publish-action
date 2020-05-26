@@ -11199,7 +11199,7 @@ function authenticationBeforeRequest(state, options) {
 
 
 const path = __webpack_require__(622);
-const which = __webpack_require__(814);
+const which = __webpack_require__(968);
 const pathKey = __webpack_require__(39)();
 
 function resolveCommandAttempt(parsed, withoutPathExt) {
@@ -13027,12 +13027,19 @@ function getPageLinks (link) {
 "use strict";
 
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.execResultAsString = execResultAsString;
+exports.configureExec = configureExec;
+exports.execResultAsString = void 0;
 
-var _exec = __webpack_require__(986);
+var exec = _interopRequireWildcard(__webpack_require__(986));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -13044,42 +13051,46 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function execResultAsString(_x, _x2) {
-  return _execResultAsString.apply(this, arguments);
-}
-
-function _execResultAsString() {
-  _execResultAsString = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(commandLine, args) {
-    var options,
-        result,
-        _args = arguments;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
-            result = "";
-            _context.next = 4;
-            return (0, _exec.exec)(commandLine, args, _objectSpread(_objectSpread({}, options), {}, {
-              listeners: {
-                stdout: function stdout(data) {
-                  result = data.toString();
+function configureExec(exec) {
+  return /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(commandLine, args) {
+      var options,
+          result,
+          _args = arguments;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+              result = "";
+              _context.next = 4;
+              return exec(commandLine, args, _objectSpread(_objectSpread({}, options), {}, {
+                listeners: {
+                  stdout: function stdout(data) {
+                    result = data.toString();
+                  }
                 }
-              }
-            }));
+              }));
 
-          case 4:
-            return _context.abrupt("return", result);
+            case 4:
+              return _context.abrupt("return", result);
 
-          case 5:
-          case "end":
-            return _context.stop();
+            case 5:
+            case "end":
+              return _context.stop();
+          }
         }
-      }
-    }, _callee);
-  }));
-  return _execResultAsString.apply(this, arguments);
+      }, _callee);
+    }));
+
+    return function (_x, _x2) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 }
+
+var execResultAsString = configureExec(exec.exec);
+exports.execResultAsString = execResultAsString;
 
 /***/ }),
 
@@ -13667,28 +13678,31 @@ function createTagAndRef(_x, _x2, _x3) {
 
 function _createTagAndRef() {
   _createTagAndRef = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(client, tag, message) {
-    var tagResponse;
+    var gitContext,
+        tagResponse,
+        _args = arguments;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
-            return client.git.createTag(_objectSpread(_objectSpread({}, _github.context.repo), {}, {
+            gitContext = _args.length > 3 && _args[3] !== undefined ? _args[3] : _github.context;
+            _context.next = 3;
+            return client.git.createTag(_objectSpread(_objectSpread({}, gitContext.repo), {}, {
               tag: tag,
               message: message,
-              object: _github.context.sha,
+              object: gitContext.sha,
               type: "commit"
             }));
 
-          case 2:
+          case 3:
             tagResponse = _context.sent;
-            _context.next = 5;
-            return client.git.createRef(_objectSpread(_objectSpread({}, _github.context.repo), {}, {
+            _context.next = 6;
+            return client.git.createRef(_objectSpread(_objectSpread({}, gitContext.repo), {}, {
               ref: "refs/tags/".concat(tag),
               sha: tagResponse.data.sha
             }));
 
-          case 5:
+          case 6:
           case "end":
             return _context.stop();
         }
@@ -14451,148 +14465,6 @@ const createTokenAuth = function createTokenAuth(token) {
 
 exports.createTokenAuth = createTokenAuth;
 //# sourceMappingURL=index.js.map
-
-
-/***/ }),
-
-/***/ 814:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-module.exports = which
-which.sync = whichSync
-
-var isWindows = process.platform === 'win32' ||
-    process.env.OSTYPE === 'cygwin' ||
-    process.env.OSTYPE === 'msys'
-
-var path = __webpack_require__(622)
-var COLON = isWindows ? ';' : ':'
-var isexe = __webpack_require__(742)
-
-function getNotFoundError (cmd) {
-  var er = new Error('not found: ' + cmd)
-  er.code = 'ENOENT'
-
-  return er
-}
-
-function getPathInfo (cmd, opt) {
-  var colon = opt.colon || COLON
-  var pathEnv = opt.path || process.env.PATH || ''
-  var pathExt = ['']
-
-  pathEnv = pathEnv.split(colon)
-
-  var pathExtExe = ''
-  if (isWindows) {
-    pathEnv.unshift(process.cwd())
-    pathExtExe = (opt.pathExt || process.env.PATHEXT || '.EXE;.CMD;.BAT;.COM')
-    pathExt = pathExtExe.split(colon)
-
-
-    // Always test the cmd itself first.  isexe will check to make sure
-    // it's found in the pathExt set.
-    if (cmd.indexOf('.') !== -1 && pathExt[0] !== '')
-      pathExt.unshift('')
-  }
-
-  // If it has a slash, then we don't bother searching the pathenv.
-  // just check the file itself, and that's it.
-  if (cmd.match(/\//) || isWindows && cmd.match(/\\/))
-    pathEnv = ['']
-
-  return {
-    env: pathEnv,
-    ext: pathExt,
-    extExe: pathExtExe
-  }
-}
-
-function which (cmd, opt, cb) {
-  if (typeof opt === 'function') {
-    cb = opt
-    opt = {}
-  }
-
-  var info = getPathInfo(cmd, opt)
-  var pathEnv = info.env
-  var pathExt = info.ext
-  var pathExtExe = info.extExe
-  var found = []
-
-  ;(function F (i, l) {
-    if (i === l) {
-      if (opt.all && found.length)
-        return cb(null, found)
-      else
-        return cb(getNotFoundError(cmd))
-    }
-
-    var pathPart = pathEnv[i]
-    if (pathPart.charAt(0) === '"' && pathPart.slice(-1) === '"')
-      pathPart = pathPart.slice(1, -1)
-
-    var p = path.join(pathPart, cmd)
-    if (!pathPart && (/^\.[\\\/]/).test(cmd)) {
-      p = cmd.slice(0, 2) + p
-    }
-    ;(function E (ii, ll) {
-      if (ii === ll) return F(i + 1, l)
-      var ext = pathExt[ii]
-      isexe(p + ext, { pathExt: pathExtExe }, function (er, is) {
-        if (!er && is) {
-          if (opt.all)
-            found.push(p + ext)
-          else
-            return cb(null, p + ext)
-        }
-        return E(ii + 1, ll)
-      })
-    })(0, pathExt.length)
-  })(0, pathEnv.length)
-}
-
-function whichSync (cmd, opt) {
-  opt = opt || {}
-
-  var info = getPathInfo(cmd, opt)
-  var pathEnv = info.env
-  var pathExt = info.ext
-  var pathExtExe = info.extExe
-  var found = []
-
-  for (var i = 0, l = pathEnv.length; i < l; i ++) {
-    var pathPart = pathEnv[i]
-    if (pathPart.charAt(0) === '"' && pathPart.slice(-1) === '"')
-      pathPart = pathPart.slice(1, -1)
-
-    var p = path.join(pathPart, cmd)
-    if (!pathPart && /^\.[\\\/]/.test(cmd)) {
-      p = cmd.slice(0, 2) + p
-    }
-    for (var j = 0, ll = pathExt.length; j < ll; j ++) {
-      var cur = p + pathExt[j]
-      var is
-      try {
-        is = isexe.sync(cur, { pathExt: pathExtExe })
-        if (is) {
-          if (opt.all)
-            found.push(cur)
-          else
-            return cur
-        }
-      } catch (ex) {}
-    }
-  }
-
-  if (opt.all && found.length)
-    return found
-
-  if (opt.nothrow)
-    return null
-
-  throw getNotFoundError(cmd)
-}
 
 
 /***/ }),
@@ -30213,12 +30085,12 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function publish(_x, _x2, _x3, _x4, _x5) {
+function publish(_x, _x2, _x3, _x4, _x5, _x6) {
   return _publish.apply(this, arguments);
 }
 
 function _publish() {
-  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(gitPath, npmPath, directory, packageJson, remoteTags) {
+  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(gitPath, npmPath, githubToken, directory, packageJson, remoteTags) {
     var isDryRun,
         githubClient,
         gitTagName,
@@ -30230,8 +30102,8 @@ function _publish() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            isDryRun = _args.length > 5 && _args[5] !== undefined ? _args[5] : false;
-            githubClient = new _github.GitHub(process.env.GITHUB_TOKEN);
+            isDryRun = _args.length > 6 && _args[6] !== undefined ? _args[6] : false;
+            githubClient = new _github.GitHub(githubToken);
             gitTagName = "".concat(packageJson.name, "_v").concat(packageJson.version);
             _context.next = 5;
             return (0, _exec2.execResultAsString)(gitPath, ["diff", "HEAD~", "--", "".concat(directory, "/package.json")], {
@@ -30302,7 +30174,7 @@ function _publish() {
   return _publish.apply(this, arguments);
 }
 
-function isPublishable(_x6, _x7, _x8) {
+function isPublishable(_x7, _x8, _x9) {
   return _isPublishable.apply(this, arguments);
 }
 
@@ -30341,14 +30213,15 @@ function _isPublishable() {
   return _isPublishable.apply(this, arguments);
 }
 
-function publishEach(_x9, _x10, _x11) {
+function publishEach(_x10, _x11, _x12) {
   return _publishEach.apply(this, arguments);
 }
 
 function _publishEach() {
   _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(npmRegistry, npmAuth, configFilePath) {
     var isDryRun,
-        workspace,
+        githubWorkspace,
+        githubToken,
         gitPath,
         npmPath,
         remoteTags,
@@ -30360,30 +30233,37 @@ function _publishEach() {
         switch (_context5.prev = _context5.next) {
           case 0:
             isDryRun = _args5.length > 3 && _args5[3] !== undefined ? _args5[3] : false;
-            workspace = process.env.GITHUB_WORKSPACE;
-            _context5.next = 4;
+            githubWorkspace = process.env.GITHUB_WORKSPACE;
+            githubToken = process.env.GITHUB_TOKEN;
+
+            if (!(githubWorkspace != null && githubToken != null)) {
+              _context5.next = 23;
+              break;
+            }
+
+            _context5.next = 6;
             return (0, _io.which)("git", true);
 
-          case 4:
+          case 6:
             gitPath = _context5.sent;
-            _context5.next = 7;
+            _context5.next = 9;
             return (0, _io.which)("npm", true);
 
-          case 7:
+          case 9:
             npmPath = _context5.sent;
-            _context5.next = 10;
+            _context5.next = 12;
             return (0, _exec.exec)(npmPath, ["config", "set", "//".concat(npmRegistry, "/:_authToken=").concat(npmAuth)]);
 
-          case 10:
-            _context5.next = 12;
+          case 12:
+            _context5.next = 14;
             return (0, _exec2.execResultAsString)(gitPath, ["ls-remote", "--tags"], {
               silent: true
             });
 
-          case 12:
+          case 14:
             remoteTags = _context5.sent;
-            configJson = require(_path["default"].resolve(workspace, configFilePath));
-            _context5.next = 16;
+            configJson = require(_path["default"].resolve(githubWorkspace, configFilePath));
+            _context5.next = 18;
             return configJson.packages.reduce( /*#__PURE__*/function () {
               var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(directories, p) {
                 var expanded;
@@ -30406,11 +30286,11 @@ function _publishEach() {
                       case 3:
                         expanded = _context3.sent;
                         return _context3.abrupt("return", [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
-                          return _path["default"].resolve(workspace, d);
+                          return _path["default"].resolve(githubWorkspace, d);
                         }))));
 
                       case 7:
-                        return _context3.abrupt("return", [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspace, p)]));
+                        return _context3.abrupt("return", [].concat(_toConsumableArray(directories), [_path["default"].resolve(githubWorkspace, p)]));
 
                       case 8:
                       case "end":
@@ -30420,14 +30300,14 @@ function _publishEach() {
                 }, _callee3);
               }));
 
-              return function (_x12, _x13) {
+              return function (_x13, _x14) {
                 return _ref.apply(this, arguments);
               };
             }(), []);
 
-          case 16:
+          case 18:
             packageDirectories = _context5.sent;
-            _context5.next = 19;
+            _context5.next = 21;
             return packageDirectories.forEach( /*#__PURE__*/function () {
               var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(directory) {
                 var packageJsonContent, packageJson;
@@ -30448,7 +30328,7 @@ function _publishEach() {
                         }
 
                         _context4.next = 6;
-                        return publish(gitPath, npmPath, directory, packageJson, remoteTags, isDryRun);
+                        return publish(gitPath, npmPath, githubToken, directory, packageJson, remoteTags, isDryRun);
 
                       case 6:
                         _context4.next = 9;
@@ -30468,12 +30348,27 @@ function _publishEach() {
                 }, _callee4);
               }));
 
-              return function (_x14) {
+              return function (_x15) {
                 return _ref2.apply(this, arguments);
               };
             }());
 
-          case 19:
+          case 21:
+            _context5.next = 28;
+            break;
+
+          case 23:
+            if (!(githubToken == null)) {
+              _context5.next = 27;
+              break;
+            }
+
+            throw new Error("Unable to resolve a GITHUB_TOKEN environment variable, skipping publish. Please ensure that a \"env\" block with a GITHUB_TOKEN was provided.");
+
+          case 27:
+            throw new Error("Unable to resolve a GITHUB_WORKSPACE environment variable, skipping publish.");
+
+          case 28:
           case "end":
             return _context5.stop();
         }
@@ -31022,6 +30917,148 @@ module.exports = options => {
 
 	return stream;
 };
+
+
+/***/ }),
+
+/***/ 968:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+module.exports = which
+which.sync = whichSync
+
+var isWindows = process.platform === 'win32' ||
+    process.env.OSTYPE === 'cygwin' ||
+    process.env.OSTYPE === 'msys'
+
+var path = __webpack_require__(622)
+var COLON = isWindows ? ';' : ':'
+var isexe = __webpack_require__(742)
+
+function getNotFoundError (cmd) {
+  var er = new Error('not found: ' + cmd)
+  er.code = 'ENOENT'
+
+  return er
+}
+
+function getPathInfo (cmd, opt) {
+  var colon = opt.colon || COLON
+  var pathEnv = opt.path || process.env.PATH || ''
+  var pathExt = ['']
+
+  pathEnv = pathEnv.split(colon)
+
+  var pathExtExe = ''
+  if (isWindows) {
+    pathEnv.unshift(process.cwd())
+    pathExtExe = (opt.pathExt || process.env.PATHEXT || '.EXE;.CMD;.BAT;.COM')
+    pathExt = pathExtExe.split(colon)
+
+
+    // Always test the cmd itself first.  isexe will check to make sure
+    // it's found in the pathExt set.
+    if (cmd.indexOf('.') !== -1 && pathExt[0] !== '')
+      pathExt.unshift('')
+  }
+
+  // If it has a slash, then we don't bother searching the pathenv.
+  // just check the file itself, and that's it.
+  if (cmd.match(/\//) || isWindows && cmd.match(/\\/))
+    pathEnv = ['']
+
+  return {
+    env: pathEnv,
+    ext: pathExt,
+    extExe: pathExtExe
+  }
+}
+
+function which (cmd, opt, cb) {
+  if (typeof opt === 'function') {
+    cb = opt
+    opt = {}
+  }
+
+  var info = getPathInfo(cmd, opt)
+  var pathEnv = info.env
+  var pathExt = info.ext
+  var pathExtExe = info.extExe
+  var found = []
+
+  ;(function F (i, l) {
+    if (i === l) {
+      if (opt.all && found.length)
+        return cb(null, found)
+      else
+        return cb(getNotFoundError(cmd))
+    }
+
+    var pathPart = pathEnv[i]
+    if (pathPart.charAt(0) === '"' && pathPart.slice(-1) === '"')
+      pathPart = pathPart.slice(1, -1)
+
+    var p = path.join(pathPart, cmd)
+    if (!pathPart && (/^\.[\\\/]/).test(cmd)) {
+      p = cmd.slice(0, 2) + p
+    }
+    ;(function E (ii, ll) {
+      if (ii === ll) return F(i + 1, l)
+      var ext = pathExt[ii]
+      isexe(p + ext, { pathExt: pathExtExe }, function (er, is) {
+        if (!er && is) {
+          if (opt.all)
+            found.push(p + ext)
+          else
+            return cb(null, p + ext)
+        }
+        return E(ii + 1, ll)
+      })
+    })(0, pathExt.length)
+  })(0, pathEnv.length)
+}
+
+function whichSync (cmd, opt) {
+  opt = opt || {}
+
+  var info = getPathInfo(cmd, opt)
+  var pathEnv = info.env
+  var pathExt = info.ext
+  var pathExtExe = info.extExe
+  var found = []
+
+  for (var i = 0, l = pathEnv.length; i < l; i ++) {
+    var pathPart = pathEnv[i]
+    if (pathPart.charAt(0) === '"' && pathPart.slice(-1) === '"')
+      pathPart = pathPart.slice(1, -1)
+
+    var p = path.join(pathPart, cmd)
+    if (!pathPart && /^\.[\\\/]/.test(cmd)) {
+      p = cmd.slice(0, 2) + p
+    }
+    for (var j = 0, ll = pathExt.length; j < ll; j ++) {
+      var cur = p + pathExt[j]
+      var is
+      try {
+        is = isexe.sync(cur, { pathExt: pathExtExe })
+        if (is) {
+          if (opt.all)
+            found.push(cur)
+          else
+            return cur
+        }
+      } catch (ex) {}
+    }
+  }
+
+  if (opt.all && found.length)
+    return found
+
+  if (opt.nothrow)
+    return null
+
+  throw getNotFoundError(cmd)
+}
 
 
 /***/ }),
