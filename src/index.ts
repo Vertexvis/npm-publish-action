@@ -1,3 +1,4 @@
+import "regenerator-runtime";
 import { getInput } from "@actions/core";
 import { publishEach } from "./publish";
 
