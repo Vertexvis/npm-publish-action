@@ -53,7 +53,7 @@ export class PublishingClient {
         logger.startBlock(`${packageInfo.name}@${packageInfo.version}`);
 
         if (this.isPublishable(packageInfo.name, packageInfo.version)) {
-          await this.publish(packageInfo.path, packageInfo);
+          await this.publish(packageInfo);
         } else {
           console.log(
             `Skipping, ${packageInfo.name}@${packageInfo.version} has been published.`
@@ -69,10 +69,10 @@ export class PublishingClient {
     return await npm.versionExists(this.npmPath, name, version);
   }
 
-  private async publish(path: string, packageInfo: PackageInfo): Promise<void> {
+  private async publish(packageInfo: PackageInfo): Promise<void> {
     if (!this.isDryRun) {
       logger.startStep(`Publishing ${packageInfo.name}@${packageInfo.version}`);
-      await npm.publish(this.npmPath, path);
+      await npm.publish(this.npmPath, packageInfo.path);
       logger.endStep();
     } else {
       console.log(

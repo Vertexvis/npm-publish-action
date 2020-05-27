@@ -56,7 +56,7 @@ export class ReleaseClient {
         logger.startBlock(`${packageInfo.name}@${packageInfo.version}`);
 
         if (this.isReleasable(packageInfo.name, packageInfo.version)) {
-          await this.release(packageInfo.path, packageInfo);
+          await this.release(packageInfo);
         } else {
           console.log(
             `Skipping, ${packageInfo.name}@${packageInfo.version} has been published.`
@@ -68,7 +68,7 @@ export class ReleaseClient {
     );
   }
 
-  private async release(path: string, packageInfo: PackageInfo): Promise<void> {
+  private async release(packageInfo: PackageInfo): Promise<void> {
     const tagName = git.createTagName(packageInfo.name, packageInfo.version);
     const tagMessage = git.createMessage(packageInfo.name, packageInfo.version);
 

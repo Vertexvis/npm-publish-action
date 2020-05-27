@@ -8057,7 +8057,7 @@ var PublishingClient = /*#__PURE__*/function () {
                             }
 
                             _context.next = 4;
-                            return _this.publish(packageInfo.path, packageInfo);
+                            return _this.publish(packageInfo);
 
                           case 4:
                             _context.next = 7;
@@ -8130,7 +8130,7 @@ var PublishingClient = /*#__PURE__*/function () {
   }, {
     key: "publish",
     value: function () {
-      var _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(path, packageInfo) {
+      var _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(packageInfo) {
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -8143,7 +8143,7 @@ var PublishingClient = /*#__PURE__*/function () {
                 _logger.logger.startStep("Publishing ".concat(packageInfo.name, "@").concat(packageInfo.version));
 
                 _context4.next = 4;
-                return npm.publish(this.npmPath, path);
+                return npm.publish(this.npmPath, packageInfo.path);
 
               case 4:
                 _logger.logger.endStep();
@@ -8162,7 +8162,7 @@ var PublishingClient = /*#__PURE__*/function () {
         }, _callee4, this);
       }));
 
-      function publish(_x4, _x5) {
+      function publish(_x4) {
         return _publish.apply(this, arguments);
       }
 
@@ -28028,7 +28028,7 @@ var ReleaseClient = /*#__PURE__*/function () {
                             }
 
                             _context.next = 4;
-                            return _this.release(packageInfo.path, packageInfo);
+                            return _this.release(packageInfo);
 
                           case 4:
                             _context.next = 7;
@@ -28073,7 +28073,7 @@ var ReleaseClient = /*#__PURE__*/function () {
   }, {
     key: "release",
     value: function () {
-      var _release = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(path, packageInfo) {
+      var _release = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(packageInfo) {
         var tagName, tagMessage;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
@@ -28109,7 +28109,7 @@ var ReleaseClient = /*#__PURE__*/function () {
         }, _callee3, this);
       }));
 
-      function release(_x2, _x3) {
+      function release(_x2) {
         return _release.apply(this, arguments);
       }
 
