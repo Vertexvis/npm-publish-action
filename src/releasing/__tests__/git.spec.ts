@@ -1,4 +1,4 @@
-import { createTagAndRef, gitTagExists } from "../git";
+import { createTagAndRef, tagExists } from "../git";
 
 const createTag = jest.fn(() => ({
   data: {
@@ -15,16 +15,16 @@ const mockGitHubClient: any = {
 };
 const mockContext: any = {};
 
-describe(gitTagExists, () => {
+describe(tagExists, () => {
   describe("with no existing tag", () => {
     it("returns false", () => {
-      expect(gitTagExists("fake-tag", "real-tag")).toBeFalsy();
+      expect(tagExists("fake-tag", "real-tag")).toBeFalsy();
     });
   });
 
   describe("with an existing tag", () => {
     it("returns true", () => {
-      expect(gitTagExists("real-tag", "real-tag")).toBeTruthy();
+      expect(tagExists("real-tag", "real-tag")).toBeTruthy();
     });
   });
 });
