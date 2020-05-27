@@ -2,10 +2,7 @@ import { GitHub, context } from "@actions/github";
 import { execResultAsString } from "../utils/exec";
 
 export function tagExists(remoteTags: string, tag: string): boolean {
-  const regex = new RegExp(`${tag}$`);
-  const result = regex.exec(remoteTags);
-
-  return result != null && result.length !== 0;
+  return remoteTags.includes(tag);
 }
 
 export async function getRemoteTags(gitPath: string): Promise<string> {
