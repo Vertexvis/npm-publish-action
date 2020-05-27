@@ -1,24 +1,16 @@
 # npm-publish-action
 
 This repository contains the definition for a custom [GitHub Action](https://help.github.com/en/actions/creating-actions/about-actions)
-that will perform a diff between the current HEAD and HEAD~1 of the branch it is run on, and look for
-differences in the `package.json` versions for each of the packages specified in a JSON configuration file's `packages` property.
+that will inspect the current set of tagged releases in the repository, and determine if any of the packages specified
+in a JSON configuration file's `packages` property have a version that has not been tagged and released. This action will then create
+and push a tag for each package that is found. Once this is completed, this action will determine whether each package at the current version 
+is present in  the specified NPM registry, and publish any package that is not currently present in that registry.
 
 ## Usage
 
-Because this action refers to the commit prior to the commit being evaluated for publishing,
-more history than the typical checkout provides is necessary. This can be done through the `fetch-depth`
-input for the [`actions/checkout`](https://github.com/actions/checkout) action:
-
-```
-- uses: actions/checkout@v2
-  with:
-    fetch-depth: 2
-```
-
-After the correct history is configured, the publish action can be run. This will require at minimum the usage of the default
-[GITHUB_TOKEN](https://help.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token), and 
-an [NPM authentication token](https://docs.npmjs.com/about-authentication-tokens) for `registry.npmjs.org`
+With minimum configuration, this action requires a [GITHUB_TOKEN](https://help.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token) 
+environment variable to be present for creating releases, a JSON configuration file containing a `packages` property, and
+an [NPM authentication token](https://docs.npmjs.com/about-authentication-tokens) for the public `registry.npmjs.org` for publishing.
 
 ```
 - uses: Vertexvis/npm-publish-action@v1
