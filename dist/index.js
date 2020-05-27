@@ -28076,46 +28076,34 @@ var ReleaseClient = /*#__PURE__*/function () {
     key: "release",
     value: function () {
       var _release = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(path, packageInfo) {
-        var tagName, tagExists, tagMessage;
+        var tagName, tagMessage;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 tagName = git.createTagName(packageInfo.name, packageInfo.version);
-                tagExists = git.tagExists(this.remoteTags, tagName);
-
-                if (!tagExists) {
-                  _context3.next = 6;
-                  break;
-                }
-
-                console.log("Skipping publish, tag for v".concat(packageInfo.version, " of ").concat(packageInfo.name, " already exists."));
-                _context3.next = 15;
-                break;
-
-              case 6:
                 tagMessage = git.createMessage(packageInfo.name, packageInfo.version);
 
                 if (this.isDryRun) {
-                  _context3.next = 14;
+                  _context3.next = 9;
                   break;
                 }
 
                 _logger.logger.startStep("Tagging and pushing ".concat(packageInfo.name, "@").concat(packageInfo.version));
 
-                _context3.next = 11;
+                _context3.next = 6;
                 return git.createTagAndRef(this.githubClient, tagName, tagMessage);
 
-              case 11:
+              case 6:
                 _logger.logger.endStep();
 
-                _context3.next = 15;
+                _context3.next = 10;
                 break;
 
-              case 14:
+              case 9:
                 console.log("Dry-run is enabled, skipping release. Would create tag: ".concat(tagName));
 
-              case 15:
+              case 10:
               case "end":
                 return _context3.stop();
             }
@@ -28133,7 +28121,7 @@ var ReleaseClient = /*#__PURE__*/function () {
     key: "isReleasable",
     value: function isReleasable(name, version) {
       var tagName = git.createTagName(name, version);
-      return git.tagExists(this.remoteTags, tagName);
+      return !git.tagExists(this.remoteTags, tagName);
     }
   }]);
 

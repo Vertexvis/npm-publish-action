@@ -70,35 +70,24 @@ export class ReleaseClient {
 
   private async release(path: string, packageInfo: PackageInfo): Promise<void> {
     const tagName = git.createTagName(packageInfo.name, packageInfo.version);
-    const tagExists = git.tagExists(this.remoteTags, tagName);
+    const tagMessage = git.createMessage(packageInfo.name, packageInfo.version);
 
-    if (tagExists) {
-      console.log(
-        `Skipping publish, tag for v${packageInfo.version} of ${packageInfo.name} already exists.`
+    if (!this.isDryRun) {
+      logger.startStep(
+        `Tagging and pushing ${packageInfo.name}@${packageInfo.version}`
       );
+      await git.createTagAndRef(this.githubClient, tagName, tagMessage);
+      logger.endStep();
     } else {
-      const tagMessage = git.createMessage(
-        packageInfo.name,
-        packageInfo.version
+      console.log(
+        `Dry-run is enabled, skipping release. Would create tag: ${tagName}`
       );
-
-      if (!this.isDryRun) {
-        logger.startStep(
-          `Tagging and pushing ${packageInfo.name}@${packageInfo.version}`
-        );
-        await git.createTagAndRef(this.githubClient, tagName, tagMessage);
-        logger.endStep();
-      } else {
-        console.log(
-          `Dry-run is enabled, skipping release. Would create tag: ${tagName}`
-        );
-      }
     }
   }
 
   private isReleasable(name: string, version: string): boolean {
     const tagName = git.createTagName(name, version);
 
-    return git.tagExists(this.remoteTags, tagName);
+    return !git.tagExists(this.remoteTags, tagName);
   }
 }
