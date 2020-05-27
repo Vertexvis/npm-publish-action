@@ -30120,7 +30120,7 @@ function _publish() {
             }
 
             console.log("Skipping publish, tag for v".concat(packageJson.version, " of ").concat(packageJson.name, " already exists."));
-            _context.next = 29;
+            _context.next = 27;
             break;
 
           case 11:
@@ -30130,41 +30130,38 @@ function _publish() {
             }
 
             console.log("Skipping publish, ".concat(packageJson.name, " version has not changed."));
-            _context.next = 29;
+            _context.next = 27;
             break;
 
           case 15:
             tagMessage = (0, _git.gitTagMessage)(packageJson.name, packageJson.version);
 
             if (isDryRun) {
-              _context.next = 27;
+              _context.next = 25;
               break;
             }
 
-            _logger.logger.startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version));
+            _logger.logger.startStep("Publishing ".concat(packageJson.name, "@").concat(packageJson.version)); // await exec(npmPath, ["publish", directory]);
 
-            _context.next = 20;
-            return (0, _exec.exec)(npmPath, ["publish", directory]);
 
-          case 20:
             _logger.logger.endStep();
 
             _logger.logger.startStep("Tagging and pushing ".concat(packageJson.name, "@").concat(packageJson.version));
 
-            _context.next = 24;
+            _context.next = 22;
             return (0, _git.createTagAndRef)(githubClient, gitTagName, tagMessage);
 
-          case 24:
+          case 22:
             _logger.logger.endStep();
 
-            _context.next = 29;
+            _context.next = 27;
             break;
 
-          case 27:
+          case 25:
             console.log("Would publish ".concat(directory));
             console.log("Command: ".concat(npmPath, " publish ").concat(directory));
 
-          case 29:
+          case 27:
           case "end":
             return _context.stop();
         }

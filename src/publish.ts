@@ -45,7 +45,7 @@ async function publish(
 
     if (!isDryRun) {
       logger.startStep(`Publishing ${packageJson.name}@${packageJson.version}`);
-      await exec(npmPath, ["publish", directory]);
+      // await exec(npmPath, ["publish", directory]);
       logger.endStep();
 
       logger.startStep(
