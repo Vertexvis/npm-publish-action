@@ -16,8 +16,8 @@ async function run(): Promise<void> {
   const releaseClient = new ReleaseClient({
     gitPath,
     configFilePath,
-    isDryRun: isDryRun === "true"
-  })
+    isDryRun: isDryRun === "true",
+  });
   const publishingClient = new PublishingClient({
     npmPath,
     npmRegistry,

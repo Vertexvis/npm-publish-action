@@ -6,20 +6,22 @@ export function tagExists(remoteTags: string, tag: string): boolean {
 }
 
 export async function getRemoteTags(gitPath: string): Promise<string> {
-  return await execResultAsString(
-    gitPath,
-    ["ls-remote", "--tags"],
-    {
-      silent: true,
-    }
-  );
+  return await execResultAsString(gitPath, ["ls-remote", "--tags"], {
+    silent: true,
+  });
 }
 
-export function createTagName(packageName: string, packageVersion: string): string {
+export function createTagName(
+  packageName: string,
+  packageVersion: string
+): string {
   return `${packageName}_v${packageVersion}`;
 }
 
-export function createMessage(packageName: string, packageVersion: string): string {
+export function createMessage(
+  packageName: string,
+  packageVersion: string
+): string {
   return `${packageName}_v${packageVersion}\n\nAutomated release of v${packageVersion} for ${packageName}.`;
 }
 

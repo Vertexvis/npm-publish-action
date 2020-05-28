@@ -35,9 +35,6 @@ export async function versionExists(
   }
 }
 
-export async function publish(
-  npmPath: string,
-  path: string,
-): Promise<void> {
+export async function publish(npmPath: string, path: string): Promise<void> {
   await exec(npmPath, ["publish", path]);
 }

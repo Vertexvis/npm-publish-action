@@ -1,5 +1,5 @@
 import { ReleaseClient } from "../releaseClient";
-import { exec, execResultAsString } from "../../utils/exec";
+import { execResultAsString } from "../../utils/exec";
 import { packages } from "../../../test";
 import * as git from "../git";
 
