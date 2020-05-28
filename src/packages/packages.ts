@@ -2,9 +2,7 @@ import fs from "fs";
 import glob from "glob";
 import path from "path";
 
-type PackageInfoMapper = (
-  packageInfo: PackageInfo
-) => Promise<void> | void;
+type PackageInfoMapper = (packageInfo: PackageInfo) => Promise<void> | void;
 
 export interface PackageInfo {
   name: string;
@@ -12,27 +10,28 @@ export interface PackageInfo {
   path: string;
 }
 
-export async function getPaths(
+export function getPaths(
   workspacePath: string,
   configFilePath: string
-): Promise<string[]> {
-  const configJson = require(path.resolve(workspacePath, configFilePath));
-  return await configJson.packages.reduce(
-    async (directories: string[], p: string) => {
-      if (p.includes("*")) {
-        const expanded = await new Promise<string[]>((resolve, reject) =>
-          glob(p, (error, matches) =>
-            error != null ? reject(error) : resolve(matches)
-          )
-        );
-        return [
-          ...directories,
-          ...expanded.map((d) => path.resolve(workspacePath, d)),
-        ];
-      } else return [...directories, path.resolve(workspacePath, p)];
-    },
-    []
+): string[] {
+  const configJsonContent = fs.readFileSync(
+    path.resolve(workspacePath, configFilePath),
+    { encoding: "utf-8" }
   );
+  const configJson = JSON.parse(configJsonContent);
+
+  return configJson.packages.reduce((directories: string[], p: string) => {
+    if (p.includes("*")) {
+      const expanded = glob.sync(path.resolve(workspacePath, p));
+
+      return [
+        ...directories,
+        ...expanded.map((d) => path.resolve(workspacePath, d)),
+      ];
+    }
+
+    return [...directories, path.resolve(workspacePath, p)];
+  }, []);
 }
 
 export async function map(
@@ -52,7 +51,7 @@ export async function map(
       await f({
         name: packageJson.name,
         version: packageJson.version,
-        path: packagePath
+        path: packagePath,
       });
     })
   );

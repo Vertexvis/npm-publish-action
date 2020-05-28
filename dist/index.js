@@ -8036,14 +8036,8 @@ var PublishingClient = /*#__PURE__*/function () {
                 return npm.configure(this.npmPath, this.npmRegistry, this.npmAuth);
 
               case 2:
-                _context2.t0 = _packages.map;
-                _context2.next = 5;
-                return (0, _packages.getPaths)(this.githubWorkspace, this.configFilePath);
-
-              case 5:
-                _context2.t1 = _context2.sent;
-
-                _context2.t2 = /*#__PURE__*/function () {
+                _context2.next = 4;
+                return (0, _packages.map)((0, _packages.getPaths)(this.githubWorkspace, this.configFilePath), /*#__PURE__*/function () {
                   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packageInfo) {
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                       while (1) {
@@ -8064,7 +8058,7 @@ var PublishingClient = /*#__PURE__*/function () {
                             break;
 
                           case 6:
-                            console.log("Skipping, ".concat(packageInfo.name, "@").concat(packageInfo.version, " has been published."));
+                            _logger.logger.log("Skipping, ".concat(packageInfo.name, "@").concat(packageInfo.version, " has been published."));
 
                           case 7:
                             _logger.logger.endBlock();
@@ -8080,12 +8074,9 @@ var PublishingClient = /*#__PURE__*/function () {
                   return function (_x) {
                     return _ref2.apply(this, arguments);
                   };
-                }();
+                }());
 
-                _context2.next = 9;
-                return (0, _context2.t0)(_context2.t1, _context2.t2);
-
-              case 9:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -8152,7 +8143,7 @@ var PublishingClient = /*#__PURE__*/function () {
                 break;
 
               case 7:
-                console.log("Dry-run is enabled, skipping publish. Would publish: ".concat(packageInfo.name, " at version ").concat(packageInfo.version));
+                _logger.logger.log("Dry-run is enabled, skipping publish. Would publish: ".concat(packageInfo.name, " at version ").concat(packageInfo.version));
 
               case 8:
               case "end":
@@ -27990,9 +27981,21 @@ var ReleaseClient = /*#__PURE__*/function () {
     }
 
     this.githubClient = new _github.GitHub(this.githubToken);
+    this.githubContext = _github.context;
   }
+  /**
+   * Testing utility, should not be used outside of tests.
+   */
+
 
   _createClass(ReleaseClient, [{
+    key: "setGithubClientAndContext",
+    value: function setGithubClientAndContext(client) {
+      var ctx = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _github.context;
+      this.githubClient = client;
+      this.githubContext = ctx;
+    }
+  }, {
     key: "releaseEach",
     value: function () {
       var _releaseEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
@@ -28007,14 +28010,8 @@ var ReleaseClient = /*#__PURE__*/function () {
 
               case 2:
                 this.remoteTags = _context2.sent;
-                _context2.t0 = _packages.map;
-                _context2.next = 6;
-                return (0, _packages.getPaths)(this.githubWorkspace, this.configFilePath);
-
-              case 6:
-                _context2.t1 = _context2.sent;
-
-                _context2.t2 = /*#__PURE__*/function () {
+                _context2.next = 5;
+                return (0, _packages.map)((0, _packages.getPaths)(this.githubWorkspace, this.configFilePath), /*#__PURE__*/function () {
                   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packageInfo) {
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                       while (1) {
@@ -28035,7 +28032,7 @@ var ReleaseClient = /*#__PURE__*/function () {
                             break;
 
                           case 6:
-                            console.log("Skipping, ".concat(packageInfo.name, "@").concat(packageInfo.version, " has been published."));
+                            _logger.logger.log("Skipping, ".concat(packageInfo.name, "@").concat(packageInfo.version, " has been published."));
 
                           case 7:
                             _logger.logger.endBlock();
@@ -28051,12 +28048,9 @@ var ReleaseClient = /*#__PURE__*/function () {
                   return function (_x) {
                     return _ref2.apply(this, arguments);
                   };
-                }();
+                }());
 
-                _context2.next = 10;
-                return (0, _context2.t0)(_context2.t1, _context2.t2);
-
-              case 10:
+              case 5:
               case "end":
                 return _context2.stop();
             }
@@ -28090,7 +28084,7 @@ var ReleaseClient = /*#__PURE__*/function () {
                 _logger.logger.startStep("Tagging and pushing ".concat(packageInfo.name, "@").concat(packageInfo.version));
 
                 _context3.next = 6;
-                return git.createTagAndRef(this.githubClient, tagName, tagMessage);
+                return git.createTagAndRef(this.githubClient, tagName, tagMessage, this.githubContext);
 
               case 6:
                 _logger.logger.endStep();
@@ -28099,7 +28093,7 @@ var ReleaseClient = /*#__PURE__*/function () {
                 break;
 
               case 9:
-                console.log("Dry-run is enabled, skipping release. Would create tag: ".concat(tagName));
+                _logger.logger.log("Dry-run is enabled, skipping release. Would create tag: ".concat(tagName));
 
               case 10:
               case "end":
@@ -31229,6 +31223,10 @@ var _path = _interopRequireDefault(__webpack_require__(622));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -31241,100 +31239,48 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function getPaths(workspacePath, configFilePath) {
+  var configJsonContent = _fs["default"].readFileSync(_path["default"].resolve(workspacePath, configFilePath), {
+    encoding: "utf-8"
+  });
 
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+  var configJson = JSON.parse(configJsonContent);
+  return configJson.packages.reduce(function (directories, p) {
+    if (p.includes("*")) {
+      var expanded = _glob["default"].sync(_path["default"].resolve(workspacePath, p));
 
-function getPaths(_x, _x2) {
-  return _getPaths.apply(this, arguments);
+      return [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
+        return _path["default"].resolve(workspacePath, d);
+      })));
+    }
+
+    return [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspacePath, p)]);
+  }, []);
 }
 
-function _getPaths() {
-  _getPaths = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(workspacePath, configFilePath) {
-    var configJson;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            configJson = require(_path["default"].resolve(workspacePath, configFilePath));
-            _context2.next = 3;
-            return configJson.packages.reduce( /*#__PURE__*/function () {
-              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(directories, p) {
-                var expanded;
-                return regeneratorRuntime.wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        if (!p.includes("*")) {
-                          _context.next = 7;
-                          break;
-                        }
-
-                        _context.next = 3;
-                        return new Promise(function (resolve, reject) {
-                          return (0, _glob["default"])(p, function (error, matches) {
-                            return error != null ? reject(error) : resolve(matches);
-                          });
-                        });
-
-                      case 3:
-                        expanded = _context.sent;
-                        return _context.abrupt("return", [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
-                          return _path["default"].resolve(workspacePath, d);
-                        }))));
-
-                      case 7:
-                        return _context.abrupt("return", [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspacePath, p)]));
-
-                      case 8:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }
-                }, _callee);
-              }));
-
-              return function (_x5, _x6) {
-                return _ref.apply(this, arguments);
-              };
-            }(), []);
-
-          case 3:
-            return _context2.abrupt("return", _context2.sent);
-
-          case 4:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-  return _getPaths.apply(this, arguments);
-}
-
-function map(_x3, _x4) {
+function map(_x, _x2) {
   return _map.apply(this, arguments);
 }
 
 function _map() {
-  _map = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(packagePaths, f) {
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+  _map = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(packagePaths, f) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
-            _context4.next = 2;
+            _context2.next = 2;
             return Promise.all(packagePaths.map( /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(packagePath) {
+              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packagePath) {
                 var packageJsonContent, packageJson;
-                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
                   while (1) {
-                    switch (_context3.prev = _context3.next) {
+                    switch (_context.prev = _context.next) {
                       case 0:
                         packageJsonContent = _fs["default"].readFileSync("".concat(packagePath, "/package.json"), {
                           encoding: "utf-8"
                         });
                         packageJson = JSON.parse(packageJsonContent);
-                        _context3.next = 4;
+                        _context.next = 4;
                         return f({
                           name: packageJson.name,
                           version: packageJson.version,
@@ -31343,23 +31289,23 @@ function _map() {
 
                       case 4:
                       case "end":
-                        return _context3.stop();
+                        return _context.stop();
                     }
                   }
-                }, _callee3);
+                }, _callee);
               }));
 
-              return function (_x7) {
-                return _ref2.apply(this, arguments);
+              return function (_x3) {
+                return _ref.apply(this, arguments);
               };
             }()));
 
           case 2:
           case "end":
-            return _context4.stop();
+            return _context2.stop();
         }
       }
-    }, _callee4);
+    }, _callee2);
   }));
   return _map.apply(this, arguments);
 }

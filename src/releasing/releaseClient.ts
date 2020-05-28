@@ -5,7 +5,8 @@ import {
 } from "../packages/packages";
 import * as git from "./git";
 import { logger } from "../utils/logger";
-import { GitHub } from "@actions/github";
+import { GitHub, context } from "@actions/github";
+import { Context } from "@actions/github/lib/context";
 
 interface ReleaseClientProps {
   gitPath: string;
@@ -18,6 +19,7 @@ export class ReleaseClient {
   private configFilePath: string;
   private isDryRun?: boolean;
   private githubClient: GitHub;
+  private githubContext: Context;
   private githubToken: string;
   private githubWorkspace: string;
   private remoteTags: string;
@@ -45,20 +47,29 @@ export class ReleaseClient {
     }
 
     this.githubClient = new GitHub(this.githubToken);
+    this.githubContext = context;
+  }
+
+  /**
+   * Testing utility, should not be used outside of tests.
+   */
+  public setGithubClientAndContext(client: GitHub, ctx = context): void {
+    this.githubClient = client;
+    this.githubContext = ctx;
   }
 
   public async releaseEach(): Promise<void> {
     this.remoteTags = await git.getRemoteTags(this.gitPath);
 
     await mapPackages(
-      await getPackagePaths(this.githubWorkspace, this.configFilePath),
+      getPackagePaths(this.githubWorkspace, this.configFilePath),
       async (packageInfo: PackageInfo) => {
         logger.startBlock(`${packageInfo.name}@${packageInfo.version}`);
 
         if (this.isReleasable(packageInfo.name, packageInfo.version)) {
           await this.release(packageInfo);
         } else {
-          console.log(
+          logger.log(
             `Skipping, ${packageInfo.name}@${packageInfo.version} has been published.`
           );
         }
@@ -76,10 +87,15 @@ export class ReleaseClient {
       logger.startStep(
         `Tagging and pushing ${packageInfo.name}@${packageInfo.version}`
       );
-      await git.createTagAndRef(this.githubClient, tagName, tagMessage);
+      await git.createTagAndRef(
+        this.githubClient,
+        tagName,
+        tagMessage,
+        this.githubContext
+      );
       logger.endStep();
     } else {
-      console.log(
+      logger.log(
         `Dry-run is enabled, skipping release. Would create tag: ${tagName}`
       );
     }

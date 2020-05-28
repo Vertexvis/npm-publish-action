@@ -48,14 +48,14 @@ export class PublishingClient {
     await npm.configure(this.npmPath, this.npmRegistry, this.npmAuth);
 
     await mapPackages(
-      await getPackagePaths(this.githubWorkspace, this.configFilePath),
+      getPackagePaths(this.githubWorkspace, this.configFilePath),
       async (packageInfo: PackageInfo) => {
         logger.startBlock(`${packageInfo.name}@${packageInfo.version}`);
 
         if (this.isPublishable(packageInfo.name, packageInfo.version)) {
           await this.publish(packageInfo);
         } else {
-          console.log(
+          logger.log(
             `Skipping, ${packageInfo.name}@${packageInfo.version} has been published.`
           );
         }
@@ -75,7 +75,7 @@ export class PublishingClient {
       await npm.publish(this.npmPath, packageInfo.path);
       logger.endStep();
     } else {
-      console.log(
+      logger.log(
         `Dry-run is enabled, skipping publish. Would publish: ${packageInfo.name} at version ${packageInfo.version}`
       );
     }
