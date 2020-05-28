@@ -1,9 +1,9 @@
-import * as exec from "@actions/exec";
+import * as actionsExec from "@actions/exec";
 
 export type ExecFunction<T> = (
   commandLine: string,
   args?: string[],
-  options?: exec.ExecOptions
+  options?: actionsExec.ExecOptions
 ) => Promise<T>;
 
 export function configureExec(
@@ -12,7 +12,7 @@ export function configureExec(
   return async (
     commandLine: string,
     args?: string[],
-    options: exec.ExecOptions = {}
+    options: actionsExec.ExecOptions = {}
   ): Promise<string> => {
     let result = "";
     await exec(commandLine, args, {
@@ -28,4 +28,5 @@ export function configureExec(
   };
 }
 
-export const execResultAsString = configureExec(exec.exec);
+export const exec = actionsExec.exec;
+export const execResultAsString = configureExec(actionsExec.exec);
