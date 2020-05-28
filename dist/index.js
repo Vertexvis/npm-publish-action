@@ -8102,7 +8102,7 @@ var PublishingClient = /*#__PURE__*/function () {
                 return npm.versionExists(this.npmPath, name, version);
 
               case 2:
-                return _context3.abrupt("return", _context3.sent);
+                return _context3.abrupt("return", !_context3.sent);
 
               case 3:
               case "end":

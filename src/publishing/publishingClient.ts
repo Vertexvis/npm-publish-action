@@ -66,7 +66,7 @@ export class PublishingClient {
   }
 
   private async isPublishable(name: string, version: string): Promise<boolean> {
-    return await npm.versionExists(this.npmPath, name, version);
+    return !(await npm.versionExists(this.npmPath, name, version));
   }
 
   private async publish(packageInfo: PackageInfo): Promise<void> {
