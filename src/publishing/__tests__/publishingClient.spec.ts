@@ -24,7 +24,6 @@ describe(PublishingClient, () => {
       npmPath: "npm",
       npmRegistry,
       npmAuth,
-      configFilePath,
     });
   });
 

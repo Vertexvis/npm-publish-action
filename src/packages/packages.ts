@@ -10,17 +10,9 @@ export interface PackageInfo {
   path: string;
 }
 
-export function getPaths(
-  workspacePath: string,
-  configFilePath: string
-): string[] {
-  const configJsonContent = fs.readFileSync(
-    path.resolve(workspacePath, configFilePath),
-    { encoding: "utf-8" }
-  );
-  const configJson = JSON.parse(configJsonContent);
-
-  return configJson.packages.reduce((directories: string[], p: string) => {
+export function getPaths(workspacePath: string): string[] {
+  const packages = getPackages(workspacePath);
+  return packages.reduce((directories: string[], p: string) => {
     if (p.includes("*")) {
       const expanded = glob.sync(path.resolve(workspacePath, p));
 
@@ -34,6 +26,31 @@ export function getPaths(
   }, []);
 }
 
+function getPackages(workspacePath: string): string[] {
+  if (fs.existsSync(path.resolve(workspacePath, "lerna.json"))) {
+    return getLernaPackages(workspacePath);
+  } else {
+    return [workspacePath];
+  }
+}
+
+function getLernaPackages(workspacePath: string): string[] {
+  const lernaConfigPath = path.resolve(workspacePath, "lerna.json");
+  const lernaJson = JSON.parse(
+    fs.readFileSync(lernaConfigPath, { encoding: "utf-8" })
+  );
+
+  if (lernaJson.useWorkspaces === true) {
+    const packageJsonPath = path.resolve(workspacePath, "package.json");
+    const packageJson = JSON.parse(
+      fs.readFileSync(packageJsonPath, { encoding: "utf-8" })
+    );
+    return packageJson.workspaces;
+  } else {
+    return lernaJson.packages;
+  }
+}
+
 export async function map(
   packagePaths: string[],
   f: PackageInfoMapper
@@ -42,9 +59,7 @@ export async function map(
     packagePaths.map(async (packagePath: string) => {
       const packageJsonContent = fs.readFileSync(
         `${packagePath}/package.json`,
-        {
-          encoding: "utf-8",
-        }
+        { encoding: "utf-8" }
       );
       const packageJson = JSON.parse(packageJsonContent);
 

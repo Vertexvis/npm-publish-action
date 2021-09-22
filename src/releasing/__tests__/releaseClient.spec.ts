@@ -36,7 +36,6 @@ describe(ReleaseClient, () => {
     createRef.mockClear();
     releaseClient = new ReleaseClient({
       gitPath: "git",
-      configFilePath,
     });
     releaseClient.setGithubClientAndContext(mockGitHubClient, mockContext);
   });

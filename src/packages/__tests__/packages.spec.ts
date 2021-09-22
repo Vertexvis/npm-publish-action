@@ -9,7 +9,7 @@ const workspacePath = "test";
 
 describe(getPaths, () => {
   it("should read the config file and return a set of paths to packages", () => {
-    const result = getPaths(workspacePath, "config.json");
+    const result = getPaths(workspacePath);
 
     expect(result).toEqual(
       packagePaths.map((path) =>
@@ -19,7 +19,7 @@ describe(getPaths, () => {
   });
 
   it("should expand a glob and return resulting packages", () => {
-    const result = getPaths(workspacePath, "configGlob.json");
+    const result = getPaths(workspacePath);
 
     expect(result).toEqual(
       packagePaths.map((path) =>
@@ -36,7 +36,7 @@ describe(map, () => {
   });
 
   it("should read the package.json at each path, and invoke the mapping function information about the package", async () => {
-    await map(getPaths(workspacePath, "config.json"), mapper);
+    await map(getPaths(workspacePath), mapper);
 
     expect(mapper).toHaveBeenCalledTimes(3);
     expect(mapper).toHaveBeenCalledWith(

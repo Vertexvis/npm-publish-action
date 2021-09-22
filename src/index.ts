@@ -5,7 +5,6 @@ import { PublishingClient } from "./publishing/publishingClient";
 import { ReleaseClient } from "./releasing/releaseClient";
 
 async function run(): Promise<void> {
-  const configFilePath = getInput("packages-config-file");
   const npmAuth = getInput("npm-auth-token");
   const npmRegistry = getInput("npm-registry");
   const isDryRun = getInput("dry-run");
@@ -15,14 +14,12 @@ async function run(): Promise<void> {
 
   const releaseClient = new ReleaseClient({
     gitPath,
-    configFilePath,
     isDryRun: isDryRun === "true",
   });
   const publishingClient = new PublishingClient({
     npmPath,
     npmRegistry,
     npmAuth,
-    configFilePath,
     isDryRun: isDryRun === "true",
   });
 

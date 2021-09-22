@@ -68,6 +68,7 @@ build
 # VS Code files
 .shadowroot
 *.code-workspace
+.vscode/settings.json
 
 # Rollup plugin files
 .rpt2_cache/

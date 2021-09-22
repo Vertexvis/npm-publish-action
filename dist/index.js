@@ -1434,6 +1434,32 @@ function onceStrict (fn) {
 
 /***/ }),
 
+/***/ 82:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+// We use any as a valid input type
+/* eslint-disable @typescript-eslint/no-explicit-any */
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Sanitizes an input into a string so it can be passed into issueCommand safely
+ * @param input input to sanitize into a string
+ */
+function toCommandValue(input) {
+    if (input === null || input === undefined) {
+        return '';
+    }
+    else if (typeof input === 'string' || input instanceof String) {
+        return input;
+    }
+    return JSON.stringify(input);
+}
+exports.toCommandValue = toCommandValue;
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
+
 /***/ 87:
 /***/ (function(module) {
 
@@ -2368,6 +2394,42 @@ function regExpEscape (s) {
   return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
+
+/***/ }),
+
+/***/ 102:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+// For internal use, subject to change.
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// We use any as a valid input type
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const fs = __importStar(__webpack_require__(747));
+const os = __importStar(__webpack_require__(87));
+const utils_1 = __webpack_require__(82);
+function issueCommand(command, message) {
+    const filePath = process.env[`GITHUB_${command}`];
+    if (!filePath) {
+        throw new Error(`Unable to find environment variable for file command ${command}`);
+    }
+    if (!fs.existsSync(filePath)) {
+        throw new Error(`Missing file at path: ${filePath}`);
+    }
+    fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+        encoding: 'utf8'
+    });
+}
+exports.issueCommand = issueCommand;
+//# sourceMappingURL=file-command.js.map
 
 /***/ }),
 
@@ -7463,45 +7525,42 @@ function run() {
 
 function _run() {
   _run = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var configFilePath, npmAuth, npmRegistry, isDryRun, npmPath, gitPath, releaseClient, publishingClient;
+    var npmAuth, npmRegistry, isDryRun, npmPath, gitPath, releaseClient, publishingClient;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            configFilePath = (0, _core.getInput)("packages-config-file");
             npmAuth = (0, _core.getInput)("npm-auth-token");
             npmRegistry = (0, _core.getInput)("npm-registry");
             isDryRun = (0, _core.getInput)("dry-run");
-            _context.next = 6;
+            _context.next = 5;
             return (0, _io.which)("npm", true);
 
-          case 6:
+          case 5:
             npmPath = _context.sent;
-            _context.next = 9;
+            _context.next = 8;
             return (0, _io.which)("git", true);
 
-          case 9:
+          case 8:
             gitPath = _context.sent;
             releaseClient = new _releaseClient.ReleaseClient({
               gitPath: gitPath,
-              configFilePath: configFilePath,
               isDryRun: isDryRun === "true"
             });
             publishingClient = new _publishingClient.PublishingClient({
               npmPath: npmPath,
               npmRegistry: npmRegistry,
               npmAuth: npmAuth,
-              configFilePath: configFilePath,
               isDryRun: isDryRun === "true"
             });
-            _context.next = 14;
+            _context.next = 13;
             return releaseClient.releaseEach();
 
-          case 14:
-            _context.next = 16;
+          case 13:
+            _context.next = 15;
             return publishingClient.publishEach();
 
-          case 16:
+          case 15:
           case "end":
             return _context.stop();
         }
@@ -8004,7 +8063,6 @@ var PublishingClient = /*#__PURE__*/function () {
     var npmPath = _ref.npmPath,
         npmRegistry = _ref.npmRegistry,
         npmAuth = _ref.npmAuth,
-        configFilePath = _ref.configFilePath,
         isDryRun = _ref.isDryRun;
 
     _classCallCheck(this, PublishingClient);
@@ -8012,7 +8070,6 @@ var PublishingClient = /*#__PURE__*/function () {
     this.npmPath = npmPath;
     this.npmRegistry = npmRegistry;
     this.npmAuth = npmAuth;
-    this.configFilePath = configFilePath;
     this.isDryRun = isDryRun;
 
     if (process.env.GITHUB_WORKSPACE != null) {
@@ -8037,7 +8094,7 @@ var PublishingClient = /*#__PURE__*/function () {
 
               case 2:
                 _context2.next = 4;
-                return (0, _packages.map)((0, _packages.getPaths)(this.githubWorkspace, this.configFilePath), /*#__PURE__*/function () {
+                return (0, _packages.map)((0, _packages.getPaths)(this.githubWorkspace), /*#__PURE__*/function () {
                   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packageInfo) {
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                       while (1) {
@@ -9198,6 +9255,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const os = __importStar(__webpack_require__(87));
+const utils_1 = __webpack_require__(82);
 /**
  * Commands
  *
@@ -9251,28 +9309,14 @@ class Command {
         return cmdStr;
     }
 }
-/**
- * Sanitizes an input into a string so it can be passed into issueCommand safely
- * @param input input to sanitize into a string
- */
-function toCommandValue(input) {
-    if (input === null || input === undefined) {
-        return '';
-    }
-    else if (typeof input === 'string' || input instanceof String) {
-        return input;
-    }
-    return JSON.stringify(input);
-}
-exports.toCommandValue = toCommandValue;
 function escapeData(s) {
-    return toCommandValue(s)
+    return utils_1.toCommandValue(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A');
 }
 function escapeProperty(s) {
-    return toCommandValue(s)
+    return utils_1.toCommandValue(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A')
@@ -9843,6 +9887,12 @@ function convertBody(buffer, headers) {
 	// html4
 	if (!res && str) {
 		res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str);
+		if (!res) {
+			res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str);
+			if (res) {
+				res.pop(); // drop last quote
+			}
+		}
 
 		if (res) {
 			res = /charset=(.*)/i.exec(res.pop());
@@ -10850,7 +10900,7 @@ function fetch(url, opts) {
 				// HTTP fetch step 5.5
 				switch (request.redirect) {
 					case 'error':
-						reject(new FetchError(`redirect mode is set to error: ${request.url}`, 'no-redirect'));
+						reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request.url}`, 'no-redirect'));
 						finalize();
 						return;
 					case 'manual':
@@ -10889,7 +10939,8 @@ function fetch(url, opts) {
 							method: request.method,
 							body: request.body,
 							signal: request.signal,
-							timeout: request.timeout
+							timeout: request.timeout,
+							size: request.size
 						};
 
 						// HTTP-redirect fetch step 9
@@ -11276,6 +11327,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const command_1 = __webpack_require__(431);
+const file_command_1 = __webpack_require__(102);
+const utils_1 = __webpack_require__(82);
 const os = __importStar(__webpack_require__(87));
 const path = __importStar(__webpack_require__(622));
 /**
@@ -11302,9 +11355,17 @@ var ExitCode;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function exportVariable(name, val) {
-    const convertedVal = command_1.toCommandValue(val);
+    const convertedVal = utils_1.toCommandValue(val);
     process.env[name] = convertedVal;
-    command_1.issueCommand('set-env', { name }, convertedVal);
+    const filePath = process.env['GITHUB_ENV'] || '';
+    if (filePath) {
+        const delimiter = '_GitHubActionsFileCommandDelimeter_';
+        const commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
+        file_command_1.issueCommand('ENV', commandValue);
+    }
+    else {
+        command_1.issueCommand('set-env', { name }, convertedVal);
+    }
 }
 exports.exportVariable = exportVariable;
 /**
@@ -11320,7 +11381,13 @@ exports.setSecret = setSecret;
  * @param inputPath
  */
 function addPath(inputPath) {
-    command_1.issueCommand('add-path', {}, inputPath);
+    const filePath = process.env['GITHUB_PATH'] || '';
+    if (filePath) {
+        file_command_1.issueCommand('PATH', inputPath);
+    }
+    else {
+        command_1.issueCommand('add-path', {}, inputPath);
+    }
     process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
 }
 exports.addPath = addPath;
@@ -27958,13 +28025,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var ReleaseClient = /*#__PURE__*/function () {
   function ReleaseClient(_ref) {
     var gitPath = _ref.gitPath,
-        configFilePath = _ref.configFilePath,
         isDryRun = _ref.isDryRun;
 
     _classCallCheck(this, ReleaseClient);
 
     this.gitPath = gitPath;
-    this.configFilePath = configFilePath;
     this.isDryRun = isDryRun;
     this.remoteTags = "";
 
@@ -28011,7 +28076,7 @@ var ReleaseClient = /*#__PURE__*/function () {
               case 2:
                 this.remoteTags = _context2.sent;
                 _context2.next = 5;
-                return (0, _packages.map)((0, _packages.getPaths)(this.githubWorkspace, this.configFilePath), /*#__PURE__*/function () {
+                return (0, _packages.map)((0, _packages.getPaths)(this.githubWorkspace), /*#__PURE__*/function () {
                   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packageInfo) {
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                       while (1) {
@@ -31239,13 +31304,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function getPaths(workspacePath, configFilePath) {
-  var configJsonContent = _fs["default"].readFileSync(_path["default"].resolve(workspacePath, configFilePath), {
-    encoding: "utf-8"
-  });
-
-  var configJson = JSON.parse(configJsonContent);
-  return configJson.packages.reduce(function (directories, p) {
+function getPaths(workspacePath) {
+  var packages = getPackages(workspacePath);
+  return packages.reduce(function (directories, p) {
     if (p.includes("*")) {
       var expanded = _glob["default"].sync(_path["default"].resolve(workspacePath, p));
 
@@ -31256,6 +31317,33 @@ function getPaths(workspacePath, configFilePath) {
 
     return [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspacePath, p)]);
   }, []);
+}
+
+function getPackages(workspacePath) {
+  if (_fs["default"].existsSync(_path["default"].resolve(workspacePath, "lerna.json"))) {
+    return getLernaPackages(workspacePath);
+  } else {
+    return [workspacePath];
+  }
+}
+
+function getLernaPackages(workspacePath) {
+  var lernaConfigPath = _path["default"].resolve(workspacePath, "lerna.json");
+
+  var lernaJson = JSON.parse(_fs["default"].readFileSync(lernaConfigPath, {
+    encoding: "utf-8"
+  }));
+
+  if (lernaJson.useWorkspaces === true) {
+    var packageJsonPath = _path["default"].resolve(workspacePath, "package.json");
+
+    var packageJson = JSON.parse(_fs["default"].readFileSync(packageJsonPath, {
+      encoding: "utf-8"
+    }));
+    return packageJson.workspaces;
+  } else {
+    return lernaJson.packages;
+  }
 }
 
 function map(_x, _x2) {
