@@ -14,6 +14,6 @@ module.exports = {
   testPathIgnorePatterns: [
     "<rootDir>/dist/",
     "<rootDir>/build/",
-    "<rootDir>/node_modules/"
-  ]
+    "<rootDir>/node_modules/",
+  ],
 };

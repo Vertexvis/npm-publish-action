@@ -22,7 +22,7 @@ export class ReleaseClient {
   private githubWorkspace: string;
   private remoteTags: string;
 
-  constructor({ gitPath, isDryRun }: ReleaseClientProps) {
+  public constructor({ gitPath, isDryRun }: ReleaseClientProps) {
     this.gitPath = gitPath;
     this.isDryRun = isDryRun;
     this.remoteTags = "";

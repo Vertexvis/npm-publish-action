@@ -20,7 +20,7 @@ export class PublishingClient {
   private isDryRun?: boolean;
   private githubWorkspace: string;
 
-  constructor({
+  public constructor({
     npmPath,
     npmRegistry,
     npmAuth,

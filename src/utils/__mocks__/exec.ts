@@ -6,4 +6,5 @@ const execResultAsStringFn = jest.fn(async (command, args, options) => {
 });
 
 export const exec = jest.fn();
+
 export const execResultAsString = execResultAsStringFn;
