@@ -24,7 +24,6 @@ const mockGitHubClient: any = {
 const mockContext: any = {};
 const githubToken = "githubtoken";
 const workspace = "test";
-const configFilePath = "config.json";
 
 describe(ReleaseClient, () => {
   let releaseClient: ReleaseClient;
@@ -36,7 +35,6 @@ describe(ReleaseClient, () => {
     createRef.mockClear();
     releaseClient = new ReleaseClient({
       gitPath: "git",
-      configFilePath,
     });
     releaseClient.setGithubClientAndContext(mockGitHubClient, mockContext);
   });

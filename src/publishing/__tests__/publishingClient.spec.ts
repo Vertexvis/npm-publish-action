@@ -12,7 +12,6 @@ const githubToken = "githubtoken";
 const workspace = "test";
 const npmRegistry = "npm.registry";
 const npmAuth = "npm.auth";
-const configFilePath = "config.json";
 
 describe(PublishingClient, () => {
   let publishingClient: PublishingClient;
@@ -24,7 +23,6 @@ describe(PublishingClient, () => {
       npmPath: "npm",
       npmRegistry,
       npmAuth,
-      configFilePath,
     });
   });
 

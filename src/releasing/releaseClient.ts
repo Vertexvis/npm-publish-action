@@ -10,13 +10,11 @@ import { Context } from "@actions/github/lib/context";
 
 interface ReleaseClientProps {
   gitPath: string;
-  configFilePath: string;
   isDryRun?: boolean;
 }
 
 export class ReleaseClient {
   private gitPath: string;
-  private configFilePath: string;
   private isDryRun?: boolean;
   private githubClient: GitHub;
   private githubContext: Context;
@@ -24,9 +22,8 @@ export class ReleaseClient {
   private githubWorkspace: string;
   private remoteTags: string;
 
-  constructor({ gitPath, configFilePath, isDryRun }: ReleaseClientProps) {
+  public constructor({ gitPath, isDryRun }: ReleaseClientProps) {
     this.gitPath = gitPath;
-    this.configFilePath = configFilePath;
     this.isDryRun = isDryRun;
     this.remoteTags = "";
 
@@ -62,7 +59,7 @@ export class ReleaseClient {
     this.remoteTags = await git.getRemoteTags(this.gitPath);
 
     await mapPackages(
-      getPackagePaths(this.githubWorkspace, this.configFilePath),
+      getPackagePaths(this.githubWorkspace),
       async (packageInfo: PackageInfo) => {
         logger.startBlock(`${packageInfo.name}@${packageInfo.version}`);
 

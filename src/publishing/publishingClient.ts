@@ -10,7 +10,6 @@ interface PublishingClientProps {
   npmPath: string;
   npmRegistry: string;
   npmAuth: string;
-  configFilePath: string;
   isDryRun?: boolean;
 }
 
@@ -18,21 +17,18 @@ export class PublishingClient {
   private npmPath: string;
   private npmRegistry: string;
   private npmAuth: string;
-  private configFilePath: string;
   private isDryRun?: boolean;
   private githubWorkspace: string;
 
-  constructor({
+  public constructor({
     npmPath,
     npmRegistry,
     npmAuth,
-    configFilePath,
     isDryRun,
   }: PublishingClientProps) {
     this.npmPath = npmPath;
     this.npmRegistry = npmRegistry;
     this.npmAuth = npmAuth;
-    this.configFilePath = configFilePath;
     this.isDryRun = isDryRun;
 
     if (process.env.GITHUB_WORKSPACE != null) {
@@ -48,7 +44,7 @@ export class PublishingClient {
     await npm.configure(this.npmPath, this.npmRegistry, this.npmAuth);
 
     await mapPackages(
-      getPackagePaths(this.githubWorkspace, this.configFilePath),
+      getPackagePaths(this.githubWorkspace),
       async (packageInfo: PackageInfo) => {
         logger.startBlock(`${packageInfo.name}@${packageInfo.version}`);
 
