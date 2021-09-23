@@ -1,5 +1,5 @@
-import { execResultAsString, exec } from "../utils/exec";
-import { logger } from "../utils/logger";
+import { execResultAsString, exec } from "./exec";
+import { logger } from "./logger";
 
 export async function configure(
   npmPath: string,

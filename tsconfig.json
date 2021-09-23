@@ -12,7 +12,7 @@
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "lib": ["es6"]
+    "lib": ["ES2019"]
   },
   "exclude": ["node_modules", "dist", "build"]
 }

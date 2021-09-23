@@ -1184,7 +1184,7 @@ module.exports = eval("require")("encoding");
 
 module.exports = authenticationPlugin;
 
-const { Deprecation } = __webpack_require__(692);
+const { Deprecation } = __webpack_require__(513);
 const once = __webpack_require__(49);
 
 const deprecateAuthenticate = once((log, deprecation) => log.warn(deprecation));
@@ -1214,156 +1214,6 @@ function authenticationPlugin(octokit, options) {
   octokit.hook.error("request", requestError.bind(null, state));
 }
 
-
-/***/ }),
-
-/***/ 30:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.logger = void 0;
-
-function startBlock(text) {
-  console.log("=== ".concat(text, " ==="));
-}
-
-function startStep(text) {
-  console.log("\u203A ".concat(text));
-}
-
-function endBlock() {
-  console.log("");
-}
-
-function endStep() {
-  console.log("");
-}
-
-var logger = {
-  log: console.log,
-  error: console.error,
-  startBlock: startBlock,
-  startStep: startStep,
-  endBlock: endBlock,
-  endStep: endStep
-};
-exports.logger = logger;
-
-/***/ }),
-
-/***/ 37:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.tagExists = tagExists;
-exports.getRemoteTags = getRemoteTags;
-exports.createTagName = createTagName;
-exports.createMessage = createMessage;
-exports.createTagAndRef = createTagAndRef;
-
-var _github = __webpack_require__(469);
-
-var _exec = __webpack_require__(580);
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function tagExists(remoteTags, tag) {
-  return remoteTags.includes(tag);
-}
-
-function getRemoteTags(_x) {
-  return _getRemoteTags.apply(this, arguments);
-}
-
-function _getRemoteTags() {
-  _getRemoteTags = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(gitPath) {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return (0, _exec.execResultAsString)(gitPath, ["ls-remote", "--tags"], {
-              silent: true
-            });
-
-          case 2:
-            return _context.abrupt("return", _context.sent);
-
-          case 3:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _getRemoteTags.apply(this, arguments);
-}
-
-function createTagName(packageName, packageVersion) {
-  return "".concat(packageName, "_v").concat(packageVersion);
-}
-
-function createMessage(packageName, packageVersion) {
-  return "".concat(packageName, "_v").concat(packageVersion, "\n\nAutomated release of v").concat(packageVersion, " for ").concat(packageName, ".");
-}
-
-function createTagAndRef(_x2, _x3, _x4) {
-  return _createTagAndRef.apply(this, arguments);
-}
-
-function _createTagAndRef() {
-  _createTagAndRef = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(client, tag, message) {
-    var gitContext,
-        tagResponse,
-        _args2 = arguments;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            gitContext = _args2.length > 3 && _args2[3] !== undefined ? _args2[3] : _github.context;
-            _context2.next = 3;
-            return client.git.createTag(_objectSpread(_objectSpread({}, gitContext.repo), {}, {
-              tag: tag,
-              message: message,
-              object: gitContext.sha,
-              type: "commit"
-            }));
-
-          case 3:
-            tagResponse = _context2.sent;
-            _context2.next = 6;
-            return client.git.createRef(_objectSpread(_objectSpread({}, gitContext.repo), {}, {
-              ref: "refs/tags/".concat(tag),
-              sha: tagResponse.data.sha
-            }));
-
-          case 6:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-  return _createTagAndRef.apply(this, arguments);
-}
 
 /***/ }),
 
@@ -2945,6 +2795,97 @@ module.exports.default = macosRelease;
 
 /***/ }),
 
+/***/ 124:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.tagExists = tagExists;
+exports.createTagAndRef = createTagAndRef;
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function tagExists(_x, _x2, _x3) {
+  return _tagExists.apply(this, arguments);
+}
+
+function _tagExists() {
+  _tagExists = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(github, context, tag) {
+    var resp;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return github.git.getRef(_objectSpread(_objectSpread({}, context.repo), {}, {
+              ref: "tags/".concat(tag)
+            }));
+
+          case 2:
+            resp = _context.sent;
+            return _context.abrupt("return", resp.status < 400);
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _tagExists.apply(this, arguments);
+}
+
+function createTagAndRef(_x4, _x5, _x6, _x7) {
+  return _createTagAndRef.apply(this, arguments);
+}
+
+function _createTagAndRef() {
+  _createTagAndRef = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(github, context, tag, message) {
+    var tagResponse;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return github.git.createTag(_objectSpread(_objectSpread({}, context.repo), {}, {
+              tag: tag,
+              message: message,
+              object: context.sha,
+              type: "commit"
+            }));
+
+          case 2:
+            tagResponse = _context2.sent;
+            _context2.next = 5;
+            return github.git.createRef(_objectSpread(_objectSpread({}, context.repo), {}, {
+              ref: "refs/tags/".concat(tag),
+              sha: tagResponse.data.sha
+            }));
+
+          case 5:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _createTagAndRef.apply(this, arguments);
+}
+
+/***/ }),
+
 /***/ 126:
 /***/ (function(module) {
 
@@ -4284,7 +4225,7 @@ module.exports = opts => {
 module.exports = authenticationPlugin;
 
 const { createTokenAuth } = __webpack_require__(813);
-const { Deprecation } = __webpack_require__(692);
+const { Deprecation } = __webpack_require__(513);
 const once = __webpack_require__(49);
 
 const beforeRequest = __webpack_require__(863);
@@ -4420,6 +4361,90 @@ module.exports = require("https");
 /***/ (function(module) {
 
 module.exports = {"name":"@octokit/rest","version":"16.43.1","publishConfig":{"access":"public"},"description":"GitHub REST API client for Node.js","keywords":["octokit","github","rest","api-client"],"author":"Gregor Martynus (https://github.com/gr2m)","contributors":[{"name":"Mike de Boer","email":"info@mikedeboer.nl"},{"name":"Fabian Jakobs","email":"fabian@c9.io"},{"name":"Joe Gallo","email":"joe@brassafrax.com"},{"name":"Gregor Martynus","url":"https://github.com/gr2m"}],"repository":"https://github.com/octokit/rest.js","dependencies":{"@octokit/auth-token":"^2.4.0","@octokit/plugin-paginate-rest":"^1.1.1","@octokit/plugin-request-log":"^1.0.0","@octokit/plugin-rest-endpoint-methods":"2.4.0","@octokit/request":"^5.2.0","@octokit/request-error":"^1.0.2","atob-lite":"^2.0.0","before-after-hook":"^2.0.0","btoa-lite":"^1.0.0","deprecation":"^2.0.0","lodash.get":"^4.4.2","lodash.set":"^4.3.2","lodash.uniq":"^4.5.0","octokit-pagination-methods":"^1.1.0","once":"^1.4.0","universal-user-agent":"^4.0.0"},"devDependencies":{"@gimenete/type-writer":"^0.1.3","@octokit/auth":"^1.1.1","@octokit/fixtures-server":"^5.0.6","@octokit/graphql":"^4.2.0","@types/node":"^13.1.0","bundlesize":"^0.18.0","chai":"^4.1.2","compression-webpack-plugin":"^3.1.0","cypress":"^3.0.0","glob":"^7.1.2","http-proxy-agent":"^4.0.0","lodash.camelcase":"^4.3.0","lodash.merge":"^4.6.1","lodash.upperfirst":"^4.3.1","lolex":"^5.1.2","mkdirp":"^1.0.0","mocha":"^7.0.1","mustache":"^4.0.0","nock":"^11.3.3","npm-run-all":"^4.1.2","nyc":"^15.0.0","prettier":"^1.14.2","proxy":"^1.0.0","semantic-release":"^17.0.0","sinon":"^8.0.0","sinon-chai":"^3.0.0","sort-keys":"^4.0.0","string-to-arraybuffer":"^1.0.0","string-to-jsdoc-comment":"^1.0.0","typescript":"^3.3.1","webpack":"^4.0.0","webpack-bundle-analyzer":"^3.0.0","webpack-cli":"^3.0.0"},"types":"index.d.ts","scripts":{"coverage":"nyc report --reporter=html && open coverage/index.html","lint":"prettier --check '{lib,plugins,scripts,test}/**/*.{js,json,ts}' 'docs/*.{js,json}' 'docs/src/**/*' index.js README.md package.json","lint:fix":"prettier --write '{lib,plugins,scripts,test}/**/*.{js,json,ts}' 'docs/*.{js,json}' 'docs/src/**/*' index.js README.md package.json","pretest":"npm run -s lint","test":"nyc mocha test/mocha-node-setup.js \"test/*/**/*-test.js\"","test:browser":"cypress run --browser chrome","build":"npm-run-all build:*","build:ts":"npm run -s update-endpoints:typescript","prebuild:browser":"mkdirp dist/","build:browser":"npm-run-all build:browser:*","build:browser:development":"webpack --mode development --entry . --output-library=Octokit --output=./dist/octokit-rest.js --profile --json > dist/bundle-stats.json","build:browser:production":"webpack --mode production --entry . --plugin=compression-webpack-plugin --output-library=Octokit --output-path=./dist --output-filename=octokit-rest.min.js --devtool source-map","generate-bundle-report":"webpack-bundle-analyzer dist/bundle-stats.json --mode=static --no-open --report dist/bundle-report.html","update-endpoints":"npm-run-all update-endpoints:*","update-endpoints:fetch-json":"node scripts/update-endpoints/fetch-json","update-endpoints:typescript":"node scripts/update-endpoints/typescript","prevalidate:ts":"npm run -s build:ts","validate:ts":"tsc --target es6 --noImplicitAny index.d.ts","postvalidate:ts":"tsc --noEmit --target es6 test/typescript-validate.ts","start-fixtures-server":"octokit-fixtures-server"},"license":"MIT","files":["index.js","index.d.ts","lib","plugins"],"nyc":{"ignore":["test"]},"release":{"publish":["@semantic-release/npm",{"path":"@semantic-release/github","assets":["dist/*","!dist/*.map.gz"]}]},"bundlesize":[{"path":"./dist/octokit-rest.min.js.gz","maxSize":"33 kB"}]};
+
+/***/ }),
+
+/***/ 222:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getProject = getProject;
+
+var _fs = _interopRequireDefault(__webpack_require__(747));
+
+var _glob = _interopRequireDefault(__webpack_require__(402));
+
+var _path = _interopRequireDefault(__webpack_require__(622));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function getProject(workspacePath) {
+  var lernaPath = _path["default"].resolve(workspacePath, "lerna.json");
+
+  var packagePath = _path["default"].resolve(workspacePath, "package.json");
+
+  var packageJson = JSON.parse(_fs["default"].readFileSync(packagePath, {
+    encoding: "utf-8"
+  }));
+
+  var isMonoRepo = _fs["default"].existsSync(lernaPath);
+
+  var isYarnWorkspace = packageJson.workspaces != null;
+  var paths = [];
+
+  if (isYarnWorkspace) {
+    paths = packageJson.workspaces;
+  } else if (isMonoRepo) {
+    var lernaJson = JSON.parse(_fs["default"].readFileSync(lernaPath, {
+      encoding: "utf-8"
+    }));
+    paths = lernaJson.packages;
+  } else {
+    paths = [workspacePath];
+  }
+
+  return {
+    type: isMonoRepo ? "monorepo" : "single",
+    packages: getPackages(isMonoRepo, workspacePath, paths)
+  };
+}
+
+function getPackages(isMonoRepo, workspacePath, paths) {
+  var resolvedPaths = paths.map(function (p) {
+    if (p.includes("*")) {
+      var expanded = _glob["default"].sync(_path["default"].resolve(workspacePath, p));
+
+      return expanded.map(function (d) {
+        return _path["default"].resolve(workspacePath, d);
+      });
+    } else {
+      return p;
+    }
+  }).flat();
+  return resolvedPaths.map(function (p) {
+    var packagePath = _path["default"].join(p, "package.json");
+
+    var packageJson = JSON.parse(_fs["default"].readFileSync(packagePath, {
+      encoding: "utf-8"
+    }));
+    var name = packageJson.name;
+    var version = packageJson.version;
+    var isPrivate = packageJson["private"] || false;
+    var tag = isMonoRepo ? "".concat(name, "_v").concat(version) : "v".concat(version);
+    return {
+      name: name,
+      version: version,
+      isPrivate: isPrivate,
+      path: p,
+      tag: tag
+    };
+  });
+}
 
 /***/ }),
 
@@ -4926,7 +4951,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var deprecation = __webpack_require__(692);
+var deprecation = __webpack_require__(513);
 var once = _interopDefault(__webpack_require__(49));
 
 const logOnce = once(deprecation => console.warn(deprecation));
@@ -6810,7 +6835,7 @@ function authenticationRequestError(state, error, options) {
 
 module.exports = parseOptions;
 
-const { Deprecation } = __webpack_require__(692);
+const { Deprecation } = __webpack_require__(513);
 const { getUserAgent } = __webpack_require__(619);
 const once = __webpack_require__(49);
 
@@ -7709,70 +7734,9 @@ module.exports = require("assert");
 
 __webpack_require__(565);
 
-var _io = __webpack_require__(1);
+var _runner = __webpack_require__(662);
 
-var _core = __webpack_require__(470);
-
-var _publishingClient = __webpack_require__(388);
-
-var _releaseClient = __webpack_require__(843);
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function run() {
-  return _run.apply(this, arguments);
-}
-
-function _run() {
-  _run = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var npmAuth, npmRegistry, isDryRun, npmPath, gitPath, releaseClient, publishingClient;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            npmAuth = (0, _core.getInput)("npm-auth-token");
-            npmRegistry = (0, _core.getInput)("npm-registry");
-            isDryRun = (0, _core.getInput)("dry-run");
-            _context.next = 5;
-            return (0, _io.which)("npm", true);
-
-          case 5:
-            npmPath = _context.sent;
-            _context.next = 8;
-            return (0, _io.which)("git", true);
-
-          case 8:
-            gitPath = _context.sent;
-            releaseClient = new _releaseClient.ReleaseClient({
-              gitPath: gitPath,
-              isDryRun: isDryRun === "true"
-            });
-            publishingClient = new _publishingClient.PublishingClient({
-              npmPath: npmPath,
-              npmRegistry: npmRegistry,
-              npmAuth: npmAuth,
-              isDryRun: isDryRun === "true"
-            });
-            _context.next = 13;
-            return releaseClient.releaseEach();
-
-          case 13:
-            _context.next = 15;
-            return publishingClient.publishEach();
-
-          case 15:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _run.apply(this, arguments);
-}
-
-run();
+(0, _runner.run)();
 
 /***/ }),
 
@@ -8224,206 +8188,6 @@ const endpoint = withDefaults(null, DEFAULTS);
 exports.endpoint = endpoint;
 //# sourceMappingURL=index.js.map
 
-
-/***/ }),
-
-/***/ 388:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.PublishingClient = void 0;
-
-var _logger = __webpack_require__(30);
-
-var _packages = __webpack_require__(967);
-
-var npm = _interopRequireWildcard(__webpack_require__(428));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var PublishingClient = /*#__PURE__*/function () {
-  function PublishingClient(_ref) {
-    var npmPath = _ref.npmPath,
-        npmRegistry = _ref.npmRegistry,
-        npmAuth = _ref.npmAuth,
-        isDryRun = _ref.isDryRun;
-
-    _classCallCheck(this, PublishingClient);
-
-    this.npmPath = npmPath;
-    this.npmRegistry = npmRegistry;
-    this.npmAuth = npmAuth;
-    this.isDryRun = isDryRun;
-
-    if (process.env.GITHUB_WORKSPACE != null) {
-      this.githubWorkspace = process.env.GITHUB_WORKSPACE;
-    } else {
-      throw new Error("Unable to resolve a GITHUB_WORKSPACE environment variable, skipping publish.");
-    }
-  }
-
-  _createClass(PublishingClient, [{
-    key: "publishEach",
-    value: function () {
-      var _publishEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var _this = this;
-
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return npm.configure(this.npmPath, this.npmRegistry, this.npmAuth);
-
-              case 2:
-                _context2.next = 4;
-                return (0, _packages.map)((0, _packages.getPaths)(this.githubWorkspace), /*#__PURE__*/function () {
-                  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packageInfo) {
-                    return regeneratorRuntime.wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            _logger.logger.startBlock("".concat(packageInfo.name, "@").concat(packageInfo.version));
-
-                            if (!_this.isPublishable(packageInfo.name, packageInfo.version)) {
-                              _context.next = 6;
-                              break;
-                            }
-
-                            _context.next = 4;
-                            return _this.publish(packageInfo);
-
-                          case 4:
-                            _context.next = 7;
-                            break;
-
-                          case 6:
-                            _logger.logger.log("Skipping, ".concat(packageInfo.name, "@").concat(packageInfo.version, " has been published."));
-
-                          case 7:
-                            _logger.logger.endBlock();
-
-                          case 8:
-                          case "end":
-                            return _context.stop();
-                        }
-                      }
-                    }, _callee);
-                  }));
-
-                  return function (_x) {
-                    return _ref2.apply(this, arguments);
-                  };
-                }());
-
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function publishEach() {
-        return _publishEach.apply(this, arguments);
-      }
-
-      return publishEach;
-    }()
-  }, {
-    key: "isPublishable",
-    value: function () {
-      var _isPublishable = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(name, version) {
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return npm.versionExists(this.npmPath, name, version);
-
-              case 2:
-                return _context3.abrupt("return", !_context3.sent);
-
-              case 3:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function isPublishable(_x2, _x3) {
-        return _isPublishable.apply(this, arguments);
-      }
-
-      return isPublishable;
-    }()
-  }, {
-    key: "publish",
-    value: function () {
-      var _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(packageInfo) {
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                if (this.isDryRun) {
-                  _context4.next = 7;
-                  break;
-                }
-
-                _logger.logger.startStep("Publishing ".concat(packageInfo.name, "@").concat(packageInfo.version));
-
-                _context4.next = 4;
-                return npm.publish(this.npmPath, packageInfo.path);
-
-              case 4:
-                _logger.logger.endStep();
-
-                _context4.next = 8;
-                break;
-
-              case 7:
-                _logger.logger.log("Dry-run is enabled, skipping publish. Would publish: ".concat(packageInfo.name, " at version ").concat(packageInfo.version));
-
-              case 8:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4, this);
-      }));
-
-      function publish(_x4) {
-        return _publish.apply(this, arguments);
-      }
-
-      return publish;
-    }()
-  }]);
-
-  return PublishingClient;
-}();
-
-exports.PublishingClient = PublishingClient;
 
 /***/ }),
 
@@ -9275,117 +9039,6 @@ function errname(uv, code) {
 }
 
 
-
-/***/ }),
-
-/***/ 428:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.configure = configure;
-exports.versionExists = versionExists;
-exports.publish = publish;
-
-var _exec = __webpack_require__(580);
-
-var _logger = __webpack_require__(30);
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function configure(_x, _x2, _x3) {
-  return _configure.apply(this, arguments);
-}
-
-function _configure() {
-  _configure = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(npmPath, npmRegistry, npmAuth) {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return (0, _exec.exec)(npmPath, ["config", "set", "//".concat(npmRegistry, "/:_authToken=").concat(npmAuth)]);
-
-          case 2:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _configure.apply(this, arguments);
-}
-
-function versionExists(_x4, _x5, _x6) {
-  return _versionExists.apply(this, arguments);
-}
-
-function _versionExists() {
-  _versionExists = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(npmPath, name, version) {
-    var versions, parsed;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return (0, _exec.execResultAsString)(npmPath, ["info", "--json", name, "versions"], {
-              silent: true
-            });
-
-          case 3:
-            versions = _context2.sent;
-            parsed = JSON.parse(versions);
-            return _context2.abrupt("return", parsed.find(function (v) {
-              return v === version;
-            }) != null);
-
-          case 8:
-            _context2.prev = 8;
-            _context2.t0 = _context2["catch"](0);
-
-            _logger.logger.error("Failed to check NPM for version ".concat(version, " of ").concat(name, ". Assuming version does not exist."));
-
-            return _context2.abrupt("return", false);
-
-          case 12:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2, null, [[0, 8]]);
-  }));
-  return _versionExists.apply(this, arguments);
-}
-
-function publish(_x7, _x8) {
-  return _publish.apply(this, arguments);
-}
-
-function _publish() {
-  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(npmPath, path) {
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.next = 2;
-            return (0, _exec.exec)(npmPath, ["publish", path]);
-
-          case 2:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3);
-  }));
-  return _publish.apply(this, arguments);
-}
 
 /***/ }),
 
@@ -11245,7 +10898,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var deprecation = __webpack_require__(692);
+var deprecation = __webpack_require__(513);
 var once = _interopDefault(__webpack_require__(49));
 
 const logOnce = once(deprecation => console.warn(deprecation));
@@ -11906,6 +11559,34 @@ module.exports.env = opts => {
 
 /***/ }),
 
+/***/ 513:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+class Deprecation extends Error {
+  constructor(message) {
+    super(message); // Maintains proper stack trace (only available on V8)
+
+    /* istanbul ignore next */
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
+
+    this.name = 'Deprecation';
+  }
+
+}
+
+exports.Deprecation = Deprecation;
+
+
+/***/ }),
+
 /***/ 523:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -11985,7 +11666,7 @@ module.exports = factory();
 
 module.exports = authenticate;
 
-const { Deprecation } = __webpack_require__(692);
+const { Deprecation } = __webpack_require__(513);
 const once = __webpack_require__(49);
 
 const deprecateAuthenticate = once((log, deprecation) => log.warn(deprecation));
@@ -12716,6 +12397,45 @@ function getNextPage (octokit, link, headers) {
   return getPage(octokit, link, 'next', headers)
 }
 
+
+/***/ }),
+
+/***/ 554:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.logger = void 0;
+
+function startBlock(text) {
+  console.log("=== ".concat(text, " ==="));
+}
+
+function startStep(text) {
+  console.log("\u203A ".concat(text));
+}
+
+function endBlock() {
+  console.log("");
+}
+
+function endStep() {
+  console.log("");
+}
+
+var logger = {
+  log: console.log,
+  error: console.error,
+  startBlock: startBlock,
+  startStep: startStep,
+  endBlock: endBlock,
+  endStep: endStep
+};
+exports.logger = logger;
 
 /***/ }),
 
@@ -13608,81 +13328,6 @@ function getPageLinks (link) {
 
 /***/ }),
 
-/***/ 580:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.configureExec = configureExec;
-exports.execResultAsString = exports.exec = void 0;
-
-var actionsExec = _interopRequireWildcard(__webpack_require__(986));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function configureExec(exec) {
-  return /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(commandLine, args) {
-      var options,
-          result,
-          _args = arguments;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
-              result = "";
-              _context.next = 4;
-              return exec(commandLine, args, _objectSpread(_objectSpread({}, options), {}, {
-                listeners: {
-                  stdout: function stdout(data) {
-                    result = data.toString();
-                  }
-                }
-              }));
-
-            case 4:
-              return _context.abrupt("return", result);
-
-            case 5:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function (_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-}
-
-var exec = actionsExec.exec;
-exports.exec = exec;
-var execResultAsString = configureExec(actionsExec.exec);
-exports.execResultAsString = execResultAsString;
-
-/***/ }),
-
 /***/ 605:
 /***/ (function(module) {
 
@@ -13935,6 +13580,130 @@ if (process.platform === 'linux') {
   )
 }
 
+
+/***/ }),
+
+/***/ 662:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.run = run;
+
+var _core = __webpack_require__(470);
+
+var _io = __webpack_require__(1);
+
+var _project = __webpack_require__(222);
+
+var _publish2 = __webpack_require__(939);
+
+var npm = _interopRequireWildcard(__webpack_require__(692));
+
+var _env = __webpack_require__(739);
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function run() {
+  return _run.apply(this, arguments);
+}
+
+function _run() {
+  _run = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var npmAuth, npmRegistry, isDryRun, npmPath, workspacePath, githubToken, publisher;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            npmAuth = (0, _core.getInput)("npm-auth-token", {
+              required: true
+            });
+            npmRegistry = (0, _core.getInput)("npm-registry");
+            isDryRun = (0, _core.getInput)("dry-run") === "true";
+            _context.next = 6;
+            return (0, _io.which)("npm", true);
+
+          case 6:
+            npmPath = _context.sent;
+            workspacePath = (0, _env.getEnvVar)("GITHUB_WORKSPACE", true);
+            githubToken = (0, _env.getEnvVar)("GITHUB_TOKEN", true);
+            publisher = new _publish2.PublishingClient({
+              npmPath: npmPath,
+              githubToken: githubToken,
+              isDryRun: isDryRun
+            });
+            configure({
+              npmPath: npmPath,
+              npmRegistry: npmRegistry,
+              npmAuth: npmAuth
+            });
+            _context.next = 13;
+            return publish(workspacePath, publisher);
+
+          case 13:
+            _context.next = 18;
+            break;
+
+          case 15:
+            _context.prev = 15;
+            _context.t0 = _context["catch"](0);
+            (0, _core.setFailed)(_context.t0);
+
+          case 18:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[0, 15]]);
+  }));
+  return _run.apply(this, arguments);
+}
+
+function configure(_ref) {
+  var npmPath = _ref.npmPath,
+      npmRegistry = _ref.npmRegistry,
+      npmAuth = _ref.npmAuth;
+  npm.configure(npmPath, npmRegistry, npmAuth);
+}
+
+function publish(_x, _x2) {
+  return _publish.apply(this, arguments);
+}
+
+function _publish() {
+  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(workspacePath, publisher) {
+    var _getProject, packages;
+
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _getProject = (0, _project.getProject)(workspacePath), packages = _getProject.packages;
+            _context2.next = 3;
+            return publisher.publishAll(packages);
+
+          case 3:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _publish.apply(this, arguments);
+}
 
 /***/ }),
 
@@ -14263,30 +14032,113 @@ try {
 /***/ }),
 
 /***/ 692:
-/***/ (function(__unusedmodule, exports) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, '__esModule', { value: true });
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.configure = configure;
+exports.versionExists = versionExists;
+exports.publish = publish;
 
-class Deprecation extends Error {
-  constructor(message) {
-    super(message); // Maintains proper stack trace (only available on V8)
+var _exec = __webpack_require__(889);
 
-    /* istanbul ignore next */
+var _logger = __webpack_require__(554);
 
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
-    this.name = 'Deprecation';
-  }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function configure(_x, _x2, _x3) {
+  return _configure.apply(this, arguments);
 }
 
-exports.Deprecation = Deprecation;
+function _configure() {
+  _configure = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(npmPath, npmRegistry, npmAuth) {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return (0, _exec.exec)(npmPath, ["config", "set", "//".concat(npmRegistry, "/:_authToken=").concat(npmAuth)]);
 
+          case 2:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _configure.apply(this, arguments);
+}
+
+function versionExists(_x4, _x5, _x6) {
+  return _versionExists.apply(this, arguments);
+}
+
+function _versionExists() {
+  _versionExists = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(npmPath, name, version) {
+    var versions, parsed;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return (0, _exec.execResultAsString)(npmPath, ["info", "--json", name, "versions"], {
+              silent: true
+            });
+
+          case 3:
+            versions = _context2.sent;
+            parsed = JSON.parse(versions);
+            return _context2.abrupt("return", parsed.find(function (v) {
+              return v === version;
+            }) != null);
+
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2["catch"](0);
+
+            _logger.logger.error("Failed to check NPM for version ".concat(version, " of ").concat(name, ". Assuming version does not exist."));
+
+            return _context2.abrupt("return", false);
+
+          case 12:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 8]]);
+  }));
+  return _versionExists.apply(this, arguments);
+}
+
+function publish(_x7, _x8) {
+  return _publish.apply(this, arguments);
+}
+
+function _publish() {
+  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(npmPath, path) {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return (0, _exec.exec)(npmPath, ["publish", path]);
+
+          case 2:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+  return _publish.apply(this, arguments);
+}
 
 /***/ }),
 
@@ -14310,6 +14162,29 @@ module.exports = (promise, onFinally) => {
 	);
 };
 
+
+/***/ }),
+
+/***/ 739:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getEnvVar = getEnvVar;
+
+function getEnvVar(name, required) {
+  var value = process.env[name];
+
+  if (required && value == null) {
+    throw new Error("Environment variable '".concat(name, "' is not defined"));
+  }
+
+  return value;
+}
 
 /***/ }),
 
@@ -14871,7 +14746,7 @@ module.exports = require("url");
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var deprecation = __webpack_require__(692);
+var deprecation = __webpack_require__(513);
 
 var endpointsByScope = {
   actions: {
@@ -28067,208 +27942,6 @@ exports.restEndpointMethods = restEndpointMethods;
 
 /***/ }),
 
-/***/ 843:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ReleaseClient = void 0;
-
-var _packages = __webpack_require__(967);
-
-var git = _interopRequireWildcard(__webpack_require__(37));
-
-var _logger = __webpack_require__(30);
-
-var _github = __webpack_require__(469);
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var ReleaseClient = /*#__PURE__*/function () {
-  function ReleaseClient(_ref) {
-    var gitPath = _ref.gitPath,
-        isDryRun = _ref.isDryRun;
-
-    _classCallCheck(this, ReleaseClient);
-
-    this.gitPath = gitPath;
-    this.isDryRun = isDryRun;
-    this.remoteTags = "";
-
-    if (process.env.GITHUB_TOKEN != null) {
-      this.githubToken = process.env.GITHUB_TOKEN;
-    } else {
-      throw new Error("Unable to resolve a GITHUB_TOKEN environment variable, skipping publish. Please ensure that a \"env\" block with a GITHUB_TOKEN was provided.");
-    }
-
-    if (process.env.GITHUB_WORKSPACE != null) {
-      this.githubWorkspace = process.env.GITHUB_WORKSPACE;
-    } else {
-      throw new Error("Unable to resolve a GITHUB_WORKSPACE environment variable, skipping publish.");
-    }
-
-    this.githubClient = new _github.GitHub(this.githubToken);
-    this.githubContext = _github.context;
-  }
-  /**
-   * Testing utility, should not be used outside of tests.
-   */
-
-
-  _createClass(ReleaseClient, [{
-    key: "setGithubClientAndContext",
-    value: function setGithubClientAndContext(client) {
-      var ctx = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _github.context;
-      this.githubClient = client;
-      this.githubContext = ctx;
-    }
-  }, {
-    key: "releaseEach",
-    value: function () {
-      var _releaseEach = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var _this = this;
-
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return git.getRemoteTags(this.gitPath);
-
-              case 2:
-                this.remoteTags = _context2.sent;
-                _context2.next = 5;
-                return (0, _packages.map)((0, _packages.getPaths)(this.githubWorkspace), /*#__PURE__*/function () {
-                  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packageInfo) {
-                    return regeneratorRuntime.wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            _logger.logger.startBlock("".concat(packageInfo.name, "@").concat(packageInfo.version));
-
-                            if (!_this.isReleasable(packageInfo.name, packageInfo.version)) {
-                              _context.next = 6;
-                              break;
-                            }
-
-                            _context.next = 4;
-                            return _this.release(packageInfo);
-
-                          case 4:
-                            _context.next = 7;
-                            break;
-
-                          case 6:
-                            _logger.logger.log("Skipping, ".concat(packageInfo.name, "@").concat(packageInfo.version, " has been published."));
-
-                          case 7:
-                            _logger.logger.endBlock();
-
-                          case 8:
-                          case "end":
-                            return _context.stop();
-                        }
-                      }
-                    }, _callee);
-                  }));
-
-                  return function (_x) {
-                    return _ref2.apply(this, arguments);
-                  };
-                }());
-
-              case 5:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function releaseEach() {
-        return _releaseEach.apply(this, arguments);
-      }
-
-      return releaseEach;
-    }()
-  }, {
-    key: "release",
-    value: function () {
-      var _release = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(packageInfo) {
-        var tagName, tagMessage;
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                tagName = git.createTagName(packageInfo.name, packageInfo.version);
-                tagMessage = git.createMessage(packageInfo.name, packageInfo.version);
-
-                if (this.isDryRun) {
-                  _context3.next = 9;
-                  break;
-                }
-
-                _logger.logger.startStep("Tagging and pushing ".concat(packageInfo.name, "@").concat(packageInfo.version));
-
-                _context3.next = 6;
-                return git.createTagAndRef(this.githubClient, tagName, tagMessage, this.githubContext);
-
-              case 6:
-                _logger.logger.endStep();
-
-                _context3.next = 10;
-                break;
-
-              case 9:
-                _logger.logger.log("Dry-run is enabled, skipping release. Would create tag: ".concat(tagName));
-
-              case 10:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function release(_x2) {
-        return _release.apply(this, arguments);
-      }
-
-      return release;
-    }()
-  }, {
-    key: "isReleasable",
-    value: function isReleasable(name, version) {
-      var tagName = git.createTagName(name, version);
-      return !git.tagExists(this.remoteTags, tagName);
-    }
-  }]);
-
-  return ReleaseClient;
-}();
-
-exports.ReleaseClient = ReleaseClient;
-
-/***/ }),
-
 /***/ 850:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -30703,6 +30376,81 @@ module.exports = parse;
 
 /***/ }),
 
+/***/ 889:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.configureExec = configureExec;
+exports.execResultAsString = exports.exec = void 0;
+
+var actionsExec = _interopRequireWildcard(__webpack_require__(986));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function configureExec(exec) {
+  return /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(commandLine, args) {
+      var options,
+          result,
+          _args = arguments;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+              result = "";
+              _context.next = 4;
+              return exec(commandLine, args, _objectSpread(_objectSpread({}, options), {}, {
+                listeners: {
+                  stdout: function stdout(data) {
+                    result = data.toString();
+                  }
+                }
+              }));
+
+            case 4:
+              return _context.abrupt("return", result);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x, _x2) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+}
+
+var exec = actionsExec.exec;
+exports.exec = exec;
+var execResultAsString = configureExec(actionsExec.exec);
+exports.execResultAsString = execResultAsString;
+
+/***/ }),
+
 /***/ 896:
 /***/ (function(module) {
 
@@ -30894,6 +30642,307 @@ function hasNextPage (link) {
   return getPageLinks(link).next
 }
 
+
+/***/ }),
+
+/***/ 939:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PublishingClient = void 0;
+
+var _logger = __webpack_require__(554);
+
+var npm = _interopRequireWildcard(__webpack_require__(692));
+
+var github = _interopRequireWildcard(__webpack_require__(124));
+
+var _github2 = __webpack_require__(469);
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var PublishingClient = /*#__PURE__*/function () {
+  function PublishingClient(_ref) {
+    var npmPath = _ref.npmPath,
+        githubToken = _ref.githubToken,
+        isDryRun = _ref.isDryRun;
+
+    _classCallCheck(this, PublishingClient);
+
+    this.npmPath = npmPath;
+    this.isDryRun = isDryRun;
+    this.github = new _github2.GitHub(githubToken);
+    this.githubContext = _github2.context;
+  }
+
+  _createClass(PublishingClient, [{
+    key: "publishAll",
+    value: function () {
+      var _publishAll = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packages) {
+        var _iterator, _step, packageInfo;
+
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _iterator = _createForOfIteratorHelper(packages);
+                _context.prev = 1;
+
+                _iterator.s();
+
+              case 3:
+                if ((_step = _iterator.n()).done) {
+                  _context.next = 9;
+                  break;
+                }
+
+                packageInfo = _step.value;
+                _context.next = 7;
+                return this.publishAndTag(packageInfo);
+
+              case 7:
+                _context.next = 3;
+                break;
+
+              case 9:
+                _context.next = 14;
+                break;
+
+              case 11:
+                _context.prev = 11;
+                _context.t0 = _context["catch"](1);
+
+                _iterator.e(_context.t0);
+
+              case 14:
+                _context.prev = 14;
+
+                _iterator.f();
+
+                return _context.finish(14);
+
+              case 17:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[1, 11, 14, 17]]);
+      }));
+
+      function publishAll(_x) {
+        return _publishAll.apply(this, arguments);
+      }
+
+      return publishAll;
+    }()
+  }, {
+    key: "publishAndTag",
+    value: function () {
+      var _publishAndTag = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(packageInfo) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _logger.logger.startBlock("".concat(packageInfo.name, "@").concat(packageInfo.version));
+
+                if (!packageInfo.isPrivate) {
+                  _context2.next = 4;
+                  break;
+                }
+
+                _logger.logger.log("Skipping, ".concat(packageInfo.name, "@").concat(packageInfo.version, " is private."));
+
+                return _context2.abrupt("return");
+
+              case 4:
+                _context2.next = 6;
+                return this.isPublished(packageInfo);
+
+              case 6:
+                if (!_context2.sent) {
+                  _context2.next = 10;
+                  break;
+                }
+
+                _logger.logger.log("Skipping publish, ".concat(packageInfo.name, "@").concat(packageInfo.version, " is already published."));
+
+                _context2.next = 12;
+                break;
+
+              case 10:
+                _context2.next = 12;
+                return this.publish(packageInfo);
+
+              case 12:
+                _context2.next = 14;
+                return this.isTagged(packageInfo);
+
+              case 14:
+                if (!_context2.sent) {
+                  _context2.next = 18;
+                  break;
+                }
+
+                _logger.logger.log("Skipping tagging, ".concat(packageInfo.name, "@").concat(packageInfo.version, " is already tagged."));
+
+                _context2.next = 20;
+                break;
+
+              case 18:
+                _context2.next = 20;
+                return this.tag(packageInfo);
+
+              case 20:
+                _logger.logger.endBlock();
+
+              case 21:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function publishAndTag(_x2) {
+        return _publishAndTag.apply(this, arguments);
+      }
+
+      return publishAndTag;
+    }()
+  }, {
+    key: "isPublished",
+    value: function isPublished(_ref2) {
+      var name = _ref2.name,
+          version = _ref2.version;
+      return npm.versionExists(this.npmPath, name, version);
+    }
+  }, {
+    key: "isTagged",
+    value: function isTagged(_ref3) {
+      var tag = _ref3.tag;
+      return github.tagExists(this.github, this.githubContext, tag);
+    }
+  }, {
+    key: "publish",
+    value: function () {
+      var _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(packageInfo) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (this.isDryRun) {
+                  _context3.next = 7;
+                  break;
+                }
+
+                _logger.logger.startStep("Publishing ".concat(packageInfo.name, "@").concat(packageInfo.version));
+
+                _context3.next = 4;
+                return npm.publish(this.npmPath, packageInfo.path);
+
+              case 4:
+                _logger.logger.endStep();
+
+                _context3.next = 8;
+                break;
+
+              case 7:
+                _logger.logger.log("Dry-run is enabled, skipping publish. Would publish: ".concat(packageInfo.name, " at version ").concat(packageInfo.version));
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function publish(_x3) {
+        return _publish.apply(this, arguments);
+      }
+
+      return publish;
+    }()
+  }, {
+    key: "tag",
+    value: function () {
+      var _tag = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(packageInfo) {
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                if (this.isDryRun) {
+                  _context4.next = 7;
+                  break;
+                }
+
+                _logger.logger.startStep("Creating Github tag and release");
+
+                _context4.next = 4;
+                return github.createTagAndRef(this.github, this.githubContext, packageInfo.tag, this.tagMessage(packageInfo));
+
+              case 4:
+                _logger.logger.endStep();
+
+                _context4.next = 8;
+                break;
+
+              case 7:
+                _logger.logger.log("Dry-run is enabled, skipping tagging. Would create tag: ".concat(packageInfo.tag));
+
+              case 8:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function tag(_x4) {
+        return _tag.apply(this, arguments);
+      }
+
+      return tag;
+    }()
+  }, {
+    key: "tagMessage",
+    value: function tagMessage(_ref4) {
+      var name = _ref4.name,
+          version = _ref4.version,
+          tag = _ref4.tag;
+      return "".concat(tag, "\n\nAutomated release of v").concat(version, " for ").concat(name, ".");
+    }
+  }]);
+
+  return PublishingClient;
+}();
+
+exports.PublishingClient = PublishingClient;
 
 /***/ }),
 
@@ -31407,138 +31456,6 @@ module.exports = options => {
 	return stream;
 };
 
-
-/***/ }),
-
-/***/ 967:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getPaths = getPaths;
-exports.map = map;
-
-var _fs = _interopRequireDefault(__webpack_require__(747));
-
-var _glob = _interopRequireDefault(__webpack_require__(402));
-
-var _path = _interopRequireDefault(__webpack_require__(622));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function getPaths(workspacePath) {
-  var packages = getPackages(workspacePath);
-  return packages.reduce(function (directories, p) {
-    if (p.includes("*")) {
-      var expanded = _glob["default"].sync(_path["default"].resolve(workspacePath, p));
-
-      return [].concat(_toConsumableArray(directories), _toConsumableArray(expanded.map(function (d) {
-        return _path["default"].resolve(workspacePath, d);
-      })));
-    }
-
-    return [].concat(_toConsumableArray(directories), [_path["default"].resolve(workspacePath, p)]);
-  }, []);
-}
-
-function getPackages(workspacePath) {
-  if (_fs["default"].existsSync(_path["default"].resolve(workspacePath, "lerna.json"))) {
-    return getLernaPackages(workspacePath);
-  } else {
-    return [workspacePath];
-  }
-}
-
-function getLernaPackages(workspacePath) {
-  var lernaConfigPath = _path["default"].resolve(workspacePath, "lerna.json");
-
-  var lernaJson = JSON.parse(_fs["default"].readFileSync(lernaConfigPath, {
-    encoding: "utf-8"
-  }));
-
-  if (lernaJson.useWorkspaces === true) {
-    var packageJsonPath = _path["default"].resolve(workspacePath, "package.json");
-
-    var packageJson = JSON.parse(_fs["default"].readFileSync(packageJsonPath, {
-      encoding: "utf-8"
-    }));
-    return packageJson.workspaces;
-  } else {
-    return lernaJson.packages;
-  }
-}
-
-function map(_x, _x2) {
-  return _map.apply(this, arguments);
-}
-
-function _map() {
-  _map = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(packagePaths, f) {
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.next = 2;
-            return Promise.all(packagePaths.map( /*#__PURE__*/function () {
-              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(packagePath) {
-                var packageJsonContent, packageJson;
-                return regeneratorRuntime.wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        packageJsonContent = _fs["default"].readFileSync("".concat(packagePath, "/package.json"), {
-                          encoding: "utf-8"
-                        });
-                        packageJson = JSON.parse(packageJsonContent);
-                        _context.next = 4;
-                        return f({
-                          name: packageJson.name,
-                          version: packageJson.version,
-                          path: packagePath
-                        });
-
-                      case 4:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }
-                }, _callee);
-              }));
-
-              return function (_x3) {
-                return _ref.apply(this, arguments);
-              };
-            }()));
-
-          case 2:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-  return _map.apply(this, arguments);
-}
 
 /***/ }),
 
