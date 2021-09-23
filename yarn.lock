@@ -1369,6 +1369,11 @@
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.0.1.tgz#b6e98083f13faa1e5231bfa3bdb1b0feff536b6d"
   integrity sha512-boy4xPNEtiw6N3abRhBi/e7hNvy3Tt8E9ZRAQrwAGzoCGZS/1wjo9KY7JHhnfnEsG5wSjDbymCozUM9a3ea7OQ==
 
+"@types/regenerator-runtime@^0.13.1":
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/@types/regenerator-runtime/-/regenerator-runtime-0.13.1.tgz#1285f0b1b0508e0ead609104b9a42409473122d1"
+  integrity sha512-Wr4Kopo+zs7kl1mxveVrP7Hl5nEzauQKdSNFN5Eg27Ze11MAgJYKgidYc9AAkQzGXXWH9lqVzPbXUGH6M8VY6g==
+
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
