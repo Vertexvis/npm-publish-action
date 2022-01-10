@@ -2796,7 +2796,7 @@ module.exports.default = macosRelease;
 /***/ }),
 
 /***/ 124:
-/***/ (function(__unusedmodule, exports) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -2806,6 +2806,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.tagExists = tagExists;
 exports.createTagAndRef = createTagAndRef;
+
+var _http = __webpack_require__(528);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -2828,21 +2830,38 @@ function _tagExists() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
+            _context.prev = 0;
+            console.log("Checking if tag exists on github", "tags".concat(tag));
+            _context.next = 4;
             return github.git.getRef(_objectSpread(_objectSpread({}, context.repo), {}, {
               ref: "tags/".concat(tag)
             }));
 
-          case 2:
+          case 4:
             resp = _context.sent;
+            console.log("got response", resp.status);
             return _context.abrupt("return", resp.status < 400);
 
-          case 4:
+          case 9:
+            _context.prev = 9;
+            _context.t0 = _context["catch"](0);
+
+            if (!(0, _http.isErrorWithStatus)(_context.t0)) {
+              _context.next = 15;
+              break;
+            }
+
+            return _context.abrupt("return", false);
+
+          case 15:
+            throw _context.t0;
+
+          case 16:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee);
+    }, _callee, null, [[0, 9]]);
   }));
   return _tagExists.apply(this, arguments);
 }
@@ -11648,6 +11667,27 @@ module.exports.Hook = Hook
 module.exports.Singular = Hook.Singular
 module.exports.Collection = Hook.Collection
 
+
+/***/ }),
+
+/***/ 528:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isErrorWithStatus = isErrorWithStatus;
+
+function isErrorWithStatus(error) {
+  if (error != null) {
+    return error.hasOwnProperty("status");
+  } else {
+    return false;
+  }
+}
 
 /***/ }),
 
