@@ -7,21 +7,16 @@ export async function tagExists(
   context: Context,
   tag: string
 ): Promise<boolean> {
-  try {
-    console.log("Checking if tag exists on github", `tags${tag}`);
-    const resp = await github.git.getRef({
-      ...context.repo,
-      ref: `tags/${tag}`,
-    });
-    console.log("got response", resp.status);
-    return resp.status < 400;
-  } catch (e) {
-    if (isErrorWithStatus(e)) {
-      return false;
-    } else {
-      throw e;
-    }
-  }
+  return handleNotFound(
+    async () => {
+      const resp = await github.git.getRef({
+        ...context.repo,
+        ref: `tags/${tag}`,
+      });
+      return resp.status < 400;
+    },
+    () => false
+  );
 }
 
 export async function createTagAndRef(
@@ -43,4 +38,19 @@ export async function createTagAndRef(
     ref: `refs/tags/${tag}`,
     sha: tagResponse.data.sha,
   });
+}
+
+async function handleNotFound<T>(
+  execute: () => Promise<T>,
+  notFound: () => T
+): Promise<T> {
+  try {
+    return execute();
+  } catch (e) {
+    if (isErrorWithStatus(e) && e.status === 404) {
+      return notFound();
+    } else {
+      throw e;
+    }
+  }
 }
