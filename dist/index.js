@@ -2796,7 +2796,7 @@ module.exports.default = macosRelease;
 /***/ }),
 
 /***/ 124:
-/***/ (function(__unusedmodule, exports) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -2806,6 +2806,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.tagExists = tagExists;
 exports.createTagAndRef = createTagAndRef;
+
+var _http = __webpack_require__(528);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -2822,27 +2824,42 @@ function tagExists(_x, _x2, _x3) {
 }
 
 function _tagExists() {
-  _tagExists = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(github, context, tag) {
-    var resp;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+  _tagExists = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(github, context, tag) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
-            _context.next = 2;
-            return github.git.getRef(_objectSpread(_objectSpread({}, context.repo), {}, {
-              ref: "tags/".concat(tag)
+            return _context2.abrupt("return", handleNotFound( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+              var resp;
+              return regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) {
+                  switch (_context.prev = _context.next) {
+                    case 0:
+                      _context.next = 2;
+                      return github.git.getRef(_objectSpread(_objectSpread({}, context.repo), {}, {
+                        ref: "tags/".concat(tag)
+                      }));
+
+                    case 2:
+                      resp = _context.sent;
+                      return _context.abrupt("return", resp.status < 400);
+
+                    case 4:
+                    case "end":
+                      return _context.stop();
+                  }
+                }
+              }, _callee);
+            })), function () {
+              return false;
             }));
 
-          case 2:
-            resp = _context.sent;
-            return _context.abrupt("return", resp.status < 400);
-
-          case 4:
+          case 1:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
-    }, _callee);
+    }, _callee2);
   }));
   return _tagExists.apply(this, arguments);
 }
@@ -2852,13 +2869,13 @@ function createTagAndRef(_x4, _x5, _x6, _x7) {
 }
 
 function _createTagAndRef() {
-  _createTagAndRef = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(github, context, tag, message) {
+  _createTagAndRef = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(github, context, tag, message) {
     var tagResponse;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            _context2.next = 2;
+            _context3.next = 2;
             return github.git.createTag(_objectSpread(_objectSpread({}, context.repo), {}, {
               tag: tag,
               message: message,
@@ -2867,8 +2884,8 @@ function _createTagAndRef() {
             }));
 
           case 2:
-            tagResponse = _context2.sent;
-            _context2.next = 5;
+            tagResponse = _context3.sent;
+            _context3.next = 5;
             return github.git.createRef(_objectSpread(_objectSpread({}, context.repo), {}, {
               ref: "refs/tags/".concat(tag),
               sha: tagResponse.data.sha
@@ -2876,12 +2893,49 @@ function _createTagAndRef() {
 
           case 5:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2);
+    }, _callee3);
   }));
   return _createTagAndRef.apply(this, arguments);
+}
+
+function handleNotFound(_x8, _x9) {
+  return _handleNotFound.apply(this, arguments);
+}
+
+function _handleNotFound() {
+  _handleNotFound = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(execute, notFound) {
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            return _context4.abrupt("return", execute());
+
+          case 4:
+            _context4.prev = 4;
+            _context4.t0 = _context4["catch"](0);
+
+            if (!((0, _http.isErrorWithStatus)(_context4.t0) && _context4.t0.status === 404)) {
+              _context4.next = 10;
+              break;
+            }
+
+            return _context4.abrupt("return", notFound());
+
+          case 10:
+            throw _context4.t0;
+
+          case 11:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[0, 4]]);
+  }));
+  return _handleNotFound.apply(this, arguments);
 }
 
 /***/ }),
@@ -11648,6 +11702,27 @@ module.exports.Hook = Hook
 module.exports.Singular = Hook.Singular
 module.exports.Collection = Hook.Collection
 
+
+/***/ }),
+
+/***/ 528:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isErrorWithStatus = isErrorWithStatus;
+
+function isErrorWithStatus(error) {
+  if (error != null) {
+    return error.hasOwnProperty("status");
+  } else {
+    return false;
+  }
+}
 
 /***/ }),
 
