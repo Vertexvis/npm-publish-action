@@ -2,10 +2,12 @@
 # yarn lockfile v1
 
 
-"@actions/core@^1.2.4":
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/@actions/core/-/core-1.2.6.tgz#a78d49f41a4def18e88ce47c2cac615d5694bf09"
-  integrity sha512-ZQYitnqiyBc3D+k7LsgSBmMDVkOVidaagDG7j3fOym77jNunWRuYx7VSHa9GNfFZh+zh61xsCjRj4JxMZlDqTA==
+"@actions/core@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@actions/core/-/core-1.6.0.tgz#0568e47039bfb6a9170393a73f3b7eb3b22462cb"
+  integrity sha512-NB1UAZomZlCV/LmJqkLhNTqtKfFXJZAUPcfl/zqG7EfsQdeUJtaWO98SGbuQ3pydJ3fHl2CvI/51OKYlCYYcaw==
+  dependencies:
+    "@actions/http-client" "^1.0.11"
 
 "@actions/exec@^1.0.4":
   version "1.0.4"
@@ -23,6 +25,13 @@
     "@octokit/graphql" "^4.3.1"
     "@octokit/rest" "^16.43.1"
 
+"@actions/http-client@^1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@actions/http-client/-/http-client-1.0.11.tgz#c58b12e9aa8b159ee39e7dd6cbd0e91d905633c0"
+  integrity sha512-VRYHGQV1rqnROJqdMvGUbY/Kn8vriQe/F9HR2AlYHzmKuM/p3kjNuXhmdBfcVgsvRWTz5C5XW5xvndZrVBuAYg==
+  dependencies:
+    tunnel "0.0.6"
+
 "@actions/http-client@^1.0.3":
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@actions/http-client/-/http-client-1.0.8.tgz#8bd76e8eca89dc8bcf619aa128eba85f7a39af45"
@@ -30,10 +39,15 @@
   dependencies:
     tunnel "0.0.6"
 
-"@actions/io@^1.0.1", "@actions/io@^1.0.2":
+"@actions/io@^1.0.1":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@actions/io/-/io-1.0.2.tgz#2f614b6e69ce14d191180451eb38e6576a6e6b27"
   integrity sha512-J8KuFqVPr3p6U8W93DOXlXW6zFvrQAJANdS+vw0YhusLIq+bszW8zmK2Fh1C2kDPX8FMvwIl1OUcFgvJoXLbAg==
+
+"@actions/io@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@actions/io/-/io-1.1.1.tgz#4a157406309e212ab27ed3ae30e8c1d641686a66"
+  integrity sha512-Qi4JoKXjmE0O67wAOH6y0n26QXhMKMFo7GD/4IXNVcrtLjUlGjGuVys6pQgwF3ArfGTQu0XpqaNr0YhED2RaRA==
 
 "@babel/cli@7.8.4":
   version "7.8.4"
@@ -4466,10 +4480,15 @@ regenerate@^1.4.0:
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
   integrity sha512-1G6jJVDWrt0rK99kBjvEtziZNCICAuvIPkSiUFIQxVP06RCVpq3dmDo2oi6ABpYaDYaTRr67BEhL8r1wgEZZKg==
 
-regenerator-runtime@^0.13.4, regenerator-runtime@^0.13.5:
+regenerator-runtime@^0.13.4:
   version "0.13.5"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.5.tgz#d878a1d094b4306d10b9096484b33ebd55e26697"
   integrity sha512-ZS5w8CpKFinUzOwW3c83oPeVXoNsrLsaCoLtJvAClH135j/R77RuymhiSErhm2lKcwSCIpmvIWSbDkIfAqKQlA==
+
+regenerator-runtime@^0.13.8:
+  version "0.13.9"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
+  integrity sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==
 
 regenerator-transform@^0.14.2:
   version "0.14.4"
