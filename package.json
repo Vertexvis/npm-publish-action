@@ -15,12 +15,12 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.6.0",
     "@actions/exec": "^1.1.0",
     "@actions/github": "^2.2.0",
-    "@actions/io": "^1.0.2",
-    "glob": "^7.1.6",
-    "regenerator-runtime": "^0.13.5"
+    "@actions/io": "^1.1.1",
+    "glob": "^7.2.0",
+    "regenerator-runtime": "^0.13.8"
   },
   "devDependencies": {
     "@babel/cli": "7.8.4",
