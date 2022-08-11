@@ -45,7 +45,7 @@ async function handleNotFound<T>(
   notFound: () => T
 ): Promise<T> {
   try {
-    return execute();
+    return await execute();
   } catch (e) {
     if (isErrorWithStatus(e) && e.status === 404) {
       return notFound();
