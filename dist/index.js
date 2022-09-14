@@ -14948,7 +14948,7 @@ function _versionExists() {
             _context2.prev = 0;
             _context2.next = 3;
             return (0, _exec.execResultAsString)(npmPath, ["info", "--json", name, "versions"], {
-              silent: true
+              silent: false
             });
 
           case 3:

@@ -22,7 +22,7 @@ export async function versionExists(
     const versions = await execResultAsString(
       npmPath,
       ["info", "--json", name, "versions"],
-      { silent: true }
+      { silent: false }
     );
     const parsed = JSON.parse(versions);
 
