@@ -28,6 +28,7 @@ export async function versionExists(
 
     return parsed.find((v: string) => v === version) != null;
   } catch (e) {
+    logger.error(e);
     logger.error(
       `Failed to check NPM for version ${version} of ${name}. Assuming version does not exist.`
     );
