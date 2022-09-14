@@ -14,17 +14,22 @@ export function configureExec(
     args?: string[],
     options: actionsExec.ExecOptions = {}
   ): Promise<string> => {
+    try {
     let result = "";
-    await exec(commandLine, args, {
-      ...options,
-      listeners: {
-        stdout: (data) => {
-          result = data.toString();
+      await exec(commandLine, args, {
+        ...options,
+        listeners: {
+          stdout: (data) => {
+            result = data.toString();
+          },
         },
-      },
-    });
+      });
 
-    return result;
+      return result;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   };
 }
 

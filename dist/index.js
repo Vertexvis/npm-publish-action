@@ -30285,8 +30285,9 @@ function configureExec(exec) {
           switch (_context.prev = _context.next) {
             case 0:
               options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+              _context.prev = 1;
               result = "";
-              _context.next = 4;
+              _context.next = 5;
               return exec(commandLine, args, _objectSpread(_objectSpread({}, options), {}, {
                 listeners: {
                   stdout: function stdout(data) {
@@ -30295,15 +30296,21 @@ function configureExec(exec) {
                 }
               }));
 
-            case 4:
+            case 5:
               return _context.abrupt("return", result);
 
-            case 5:
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](1);
+              console.error(_context.t0);
+              throw _context.t0;
+
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[1, 8]]);
     }));
 
     return function (_x, _x2) {
