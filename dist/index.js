@@ -14098,11 +14098,13 @@ function _versionExists() {
 
             _logger.logger.error(_context2.t0);
 
+            _logger.logger.error(_context2.t0.message);
+
             _logger.logger.error("Failed to check NPM for version ".concat(version, " of ").concat(name, ". Assuming version does not exist."));
 
             return _context2.abrupt("return", false);
 
-          case 13:
+          case 14:
           case "end":
             return _context2.stop();
         }
