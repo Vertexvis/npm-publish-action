@@ -15,7 +15,7 @@ export function configureExec(
     options: actionsExec.ExecOptions = {}
   ): Promise<string> => {
     try {
-    let result = "";
+      let result = "";
       await exec(commandLine, args, {
         ...options,
         listeners: {
