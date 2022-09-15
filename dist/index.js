@@ -14232,55 +14232,50 @@ function _run() {
               githubToken: githubToken,
               isDryRun: isDryRun
             });
-            configure({
+            _context.next = 12;
+            return configure({
               npmPath: npmPath,
               npmRegistry: npmRegistry,
               npmAuth: npmAuth
             });
-            _context.next = 13;
+
+          case 12:
+            _context.next = 14;
             return publish(workspacePath, publisher);
 
-          case 13:
-            _context.next = 18;
+          case 14:
+            _context.next = 19;
             break;
 
-          case 15:
-            _context.prev = 15;
+          case 16:
+            _context.prev = 16;
             _context.t0 = _context["catch"](0);
             (0, _core.setFailed)(_context.t0);
 
-          case 18:
+          case 19:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 15]]);
+    }, _callee, null, [[0, 16]]);
   }));
   return _run.apply(this, arguments);
 }
 
-function configure(_ref) {
-  var npmPath = _ref.npmPath,
-      npmRegistry = _ref.npmRegistry,
-      npmAuth = _ref.npmAuth;
-  npm.configure(npmPath, npmRegistry, npmAuth);
+function configure(_x) {
+  return _configure.apply(this, arguments);
 }
 
-function publish(_x, _x2) {
-  return _publish.apply(this, arguments);
-}
-
-function _publish() {
-  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(workspacePath, publisher) {
-    var _getProject, packages;
-
+function _configure() {
+  _configure = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(_ref) {
+    var npmPath, npmRegistry, npmAuth;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            _getProject = (0, _project.getProject)(workspacePath), packages = _getProject.packages;
+            npmPath = _ref.npmPath, npmRegistry = _ref.npmRegistry, npmAuth = _ref.npmAuth;
             _context2.next = 3;
-            return publisher.publishAll(packages);
+            return npm.configure(npmPath, npmRegistry, npmAuth);
 
           case 3:
           case "end":
@@ -14288,6 +14283,32 @@ function _publish() {
         }
       }
     }, _callee2);
+  }));
+  return _configure.apply(this, arguments);
+}
+
+function publish(_x2, _x3) {
+  return _publish.apply(this, arguments);
+}
+
+function _publish() {
+  _publish = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(workspacePath, publisher) {
+    var _getProject, packages;
+
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _getProject = (0, _project.getProject)(workspacePath), packages = _getProject.packages;
+            _context3.next = 3;
+            return publisher.publishAll(packages);
+
+          case 3:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
   }));
   return _publish.apply(this, arguments);
 }

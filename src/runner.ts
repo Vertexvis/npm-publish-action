@@ -24,15 +24,19 @@ export async function run(): Promise<void> {
 
     const publisher = new PublishingClient({ npmPath, githubToken, isDryRun });
 
-    configure({ npmPath, npmRegistry, npmAuth });
+    await configure({ npmPath, npmRegistry, npmAuth });
     await publish(workspacePath, publisher);
   } catch (e) {
     setFailed(e);
   }
 }
 
-function configure({ npmPath, npmRegistry, npmAuth }: ConfigureParams): void {
-  npm.configure(npmPath, npmRegistry, npmAuth);
+async function configure({
+  npmPath,
+  npmRegistry,
+  npmAuth,
+}: ConfigureParams): Promise<void> {
+  await npm.configure(npmPath, npmRegistry, npmAuth);
 }
 
 async function publish(
