@@ -2,7 +2,7 @@
   "$schema": "http://json.schemastore.org/tsconfig",
 
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2019",
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,

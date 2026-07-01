@@ -1,5 +1,5 @@
 import fs from "fs";
-import glob from "glob";
+import { globSync } from "glob";
 import path from "path";
 
 export interface Project {
@@ -52,7 +52,7 @@ function getPackages(
   const resolvedPaths = paths
     .map((p) => {
       if (p.includes("*")) {
-        const expanded = glob.sync(path.resolve(workspacePath, p));
+        const expanded = globSync(path.resolve(workspacePath, p)).sort();
         return expanded.map((d) => path.resolve(workspacePath, d));
       } else {
         return p;
