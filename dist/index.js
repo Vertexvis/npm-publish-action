@@ -416,7 +416,7 @@ var _github = __nccwpck_require__(3228);
 var github = _interopRequireWildcard(__nccwpck_require__(8624));
 var _logger = __nccwpck_require__(975);
 var npm = _interopRequireWildcard(__nccwpck_require__(7366));
-function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, "default": e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t2 in e) "default" !== _t2 && {}.hasOwnProperty.call(e, _t2) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t2)) && (i.get || i.set) ? o(f, _t2, i) : f[_t2] = e[_t2]); return f; })(e, t); }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, "default": e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t3 in e) "default" !== _t3 && {}.hasOwnProperty.call(e, _t3) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t3)) && (i.get || i.set) ? o(f, _t3, i) : f[_t3] = e[_t3]); return f; })(e, t); }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
@@ -445,39 +445,51 @@ var PublishingClient = exports.PublishingClient = /*#__PURE__*/function () {
     key: "publishAll",
     value: function () {
       var _publishAll = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(packages) {
-        var _iterator, _step, packageInfo, _t;
+        var taggingErrors, _iterator, _step, packageInfo, result, _t;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
+              taggingErrors = [];
               _iterator = _createForOfIteratorHelper(packages);
               _context.p = 1;
               _iterator.s();
             case 2:
               if ((_step = _iterator.n()).done) {
-                _context.n = 4;
+                _context.n = 5;
                 break;
               }
               packageInfo = _step.value;
               _context.n = 3;
               return this.publishAndTag(packageInfo);
             case 3:
+              result = _context.v;
+              if (result.taggingError != null) {
+                taggingErrors.push(result.taggingError);
+              }
+            case 4:
               _context.n = 2;
               break;
-            case 4:
-              _context.n = 6;
-              break;
             case 5:
-              _context.p = 5;
-              _t = _context.v;
-              _iterator.e(_t);
+              _context.n = 7;
+              break;
             case 6:
               _context.p = 6;
-              _iterator.f();
-              return _context.f(6);
+              _t = _context.v;
+              _iterator.e(_t);
             case 7:
+              _context.p = 7;
+              _iterator.f();
+              return _context.f(7);
+            case 8:
+              if (!(taggingErrors.length > 0)) {
+                _context.n = 9;
+                break;
+              }
+              throw new Error(this.taggingFailureMessage(taggingErrors));
+            case 9:
               return _context.a(2);
           }
-        }, _callee, this, [[1, 5, 6, 7]]);
+        }, _callee, this, [[1, 6, 7, 8]]);
       }));
       function publishAll(_x) {
         return _publishAll.apply(this, arguments);
@@ -488,50 +500,71 @@ var PublishingClient = exports.PublishingClient = /*#__PURE__*/function () {
     key: "publishAndTag",
     value: function () {
       var _publishAndTag = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(packageInfo) {
+        var error, _t2;
         return _regenerator().w(function (_context2) {
-          while (1) switch (_context2.n) {
+          while (1) switch (_context2.p = _context2.n) {
             case 0:
               _logger.logger.startBlock("".concat(packageInfo.name, "@").concat(packageInfo.version));
+              _context2.p = 1;
               if (!packageInfo.isPrivate) {
-                _context2.n = 1;
+                _context2.n = 2;
                 break;
               }
               _logger.logger.log("Skipping, ".concat(packageInfo.name, "@").concat(packageInfo.version, " is private."));
-              return _context2.a(2);
-            case 1:
-              _context2.n = 2;
-              return this.isPublished(packageInfo);
+              return _context2.a(2, {});
             case 2:
+              _context2.n = 3;
+              return this.isPublished(packageInfo);
+            case 3:
               if (!_context2.v) {
-                _context2.n = 3;
+                _context2.n = 4;
                 break;
               }
               _logger.logger.log("Skipping publish, ".concat(packageInfo.name, "@").concat(packageInfo.version, " is already published."));
-              _context2.n = 4;
+              _context2.n = 5;
               break;
-            case 3:
-              _context2.n = 4;
-              return this.publish(packageInfo);
             case 4:
               _context2.n = 5;
-              return this.isTagged(packageInfo);
+              return this.publish(packageInfo);
             case 5:
+              _context2.p = 5;
+              _context2.n = 6;
+              return this.isTagged(packageInfo);
+            case 6:
               if (!_context2.v) {
-                _context2.n = 6;
+                _context2.n = 7;
                 break;
               }
               _logger.logger.log("Skipping tagging, ".concat(packageInfo.name, "@").concat(packageInfo.version, " is already tagged."));
-              _context2.n = 7;
+              _context2.n = 8;
               break;
-            case 6:
-              _context2.n = 7;
-              return this.tag(packageInfo);
             case 7:
-              _logger.logger.endBlock();
+              _context2.n = 8;
+              return this.tag(packageInfo);
             case 8:
+              _context2.n = 10;
+              break;
+            case 9:
+              _context2.p = 9;
+              _t2 = _context2.v;
+              error = this.asError(_t2);
+              _logger.logger.error("Failed to tag ".concat(packageInfo.name, "@").concat(packageInfo.version, ". Continuing with remaining packages. ").concat(error.message));
+              return _context2.a(2, {
+                taggingError: {
+                  packageInfo: packageInfo,
+                  error: error
+                }
+              });
+            case 10:
+              return _context2.a(2, {});
+            case 11:
+              _context2.p = 11;
+              _logger.logger.endBlock();
+              return _context2.f(11);
+            case 12:
               return _context2.a(2);
           }
-        }, _callee2, this);
+        }, _callee2, this, [[5, 9], [1,, 11, 12]]);
       }));
       function publishAndTag(_x2) {
         return _publishAndTag.apply(this, arguments);
@@ -618,6 +651,21 @@ var PublishingClient = exports.PublishingClient = /*#__PURE__*/function () {
         version = _ref4.version,
         tag = _ref4.tag;
       return "".concat(tag, "\n\nAutomated release of v").concat(version, " for ").concat(name, ".");
+    }
+  }, {
+    key: "taggingFailureMessage",
+    value: function taggingFailureMessage(errors) {
+      var formatted = errors.map(function (_ref5) {
+        var packageInfo = _ref5.packageInfo,
+          error = _ref5.error;
+        return "- ".concat(packageInfo.name, "@").concat(packageInfo.version, " (").concat(packageInfo.tag, "): ").concat(error.message);
+      }).join("\n");
+      return ["One or more packages could not be tagged after publishing checks completed.", "All packages were still processed for publishing before failing the action.", "If this is a GitHub token permission issue, grant `contents: write` to the workflow token.", formatted].join("\n");
+    }
+  }, {
+    key: "asError",
+    value: function asError(error) {
+      return error instanceof Error ? error : new Error(String(error));
     }
   }]);
 }();

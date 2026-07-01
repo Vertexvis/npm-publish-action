@@ -15,27 +15,35 @@ environment variable to be present for creating releases, a JSON configuration f
 an [NPM authentication token](https://docs.npmjs.com/about-authentication-tokens) for the public `registry.npmjs.org` for publishing.
 
 ```
-- uses: Vertexvis/npm-publish-action@v1
-  env:
-    # The GitHub token that will be used to create tags corresponding to this release.
-    # By default, the ${{ secrets.GITHUB_TOKEN }} can be used, and tags will show as
-    # created by the "GitHub Actions" user.
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+permissions:
+  contents: write
 
-  with:
-    # The NPM authentication token that the npm cli will be configured to use when publishing.
-    # This input is required, and will not be defaulted
-    npm-auth-token: ""
+steps:
+  - uses: Vertexvis/npm-publish-action@v1
+    env:
+      # The GitHub token that will be used to create tags corresponding to this release.
+      # By default, the ${{ secrets.GITHUB_TOKEN }} can be used, and tags will show as
+      # created by the "GitHub Actions" user.
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # The url of the NPM registry that the packages in this repository should be published to.
-    # Defaults to "registry.npmjs.org"
-    npm-registry: ""
+    with:
+      # The NPM authentication token that the npm cli will be configured to use when publishing.
+      # This input is required, and will not be defaulted
+      npm-auth-token: ""
 
-    # Boolean string indicating whether this action should perform a "dry run"
-    # which will not publish to NPM or push tags to GitHub.
-    # Defaults to "false"
-    dry-run: ""
+      # The url of the NPM registry that the packages in this repository should be published to.
+      # Defaults to "registry.npmjs.org"
+      npm-registry: ""
+
+      # Boolean string indicating whether this action should perform a "dry run"
+      # which will not publish to NPM or push tags to GitHub.
+      # Defaults to "false"
+      dry-run: ""
 ```
+
+The `contents: write` permission is required when the action creates GitHub tags.
+Without it, GitHub can return a non-descriptive `HttpError: Not Found` from the
+tag API.
 
 ## Building
 
@@ -49,5 +57,3 @@ in the consuming workflow file. E.g.
 ```
 - uses: Vertexvis/npm-publish-action@your-branch-name
 ```
-
-

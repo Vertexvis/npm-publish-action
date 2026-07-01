@@ -142,4 +142,30 @@ describe("lerna yarn workspace", () => {
     expect(publish).not.toHaveBeenCalled();
     expect(createTagAndRef).not.toHaveBeenCalled();
   });
+
+  it("continues publishing remaining packages when tagging fails", async () => {
+    mockInput(getInputMock, npmAuth, npmRegistry, undefined);
+    mockWhich(whichMock, npmPath);
+    mockEnvVars(getEnvVarMock, workspacePath, githubToken);
+
+    (versionExists as jest.Mock).mockResolvedValue(false);
+    (tagExists as jest.Mock).mockResolvedValue(false);
+    (createTagAndRef as jest.Mock)
+      .mockRejectedValueOnce(new Error("HttpError: Not Found"))
+      .mockResolvedValue(undefined);
+
+    await run();
+
+    expect(publish).toHaveBeenCalledWith(npmPath, package1Path);
+    expect(publish).toHaveBeenCalledWith(npmPath, package2Path);
+    expect(publish).toHaveBeenCalledWith(npmPath, package3Path);
+    expect(createTagAndRef).toHaveBeenCalledTimes(3);
+    expect(setFailed).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining(
+          "All packages were still processed for publishing"
+        ),
+      })
+    );
+  });
 });
