@@ -1,4 +1,4 @@
-import { execResultAsString, exec } from "./exec";
+import { exec, execResultAsString } from "./exec";
 import { logger } from "./logger";
 
 export async function configure(

@@ -4,12 +4,14 @@ jest.mock("../env");
 jest.mock("../github");
 jest.mock("../npm");
 
-import path from "path";
 import { getInput, setFailed } from "@actions/core";
 import { which } from "@actions/io";
-import { run } from "../runner";
-import { configure, publish, versionExists } from "../npm";
+import path from "path";
+
+import { getEnvVar } from "../env";
 import { createTagAndRef, tagExists } from "../github";
+import { configure, publish, versionExists } from "../npm";
+import { run } from "../runner";
 import {
   missingGithubTokenEnvVar,
   missingNpmAuthTokenInput,
@@ -18,7 +20,6 @@ import {
   mockInput,
   mockWhich,
 } from "../testing";
-import { getEnvVar } from "../env";
 
 const npmAuth = "npm-auth-token";
 const npmRegistry = "https://npm.example.com";
