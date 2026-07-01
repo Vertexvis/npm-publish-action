@@ -2360,6 +2360,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vercel/ncc@npm:^0.38.3":
+  version: 0.38.4
+  resolution: "@vercel/ncc@npm:0.38.4"
+  dependencies:
+    node-gyp: "npm:latest"
+  bin:
+    ncc: dist/ncc/cli.js
+  checksum: 10c0/dd6f5e95c09aa2db957788dd1fc7e5dc208b5268dc19a1560f8a71c1b18d234bb8ca0990f972051efcbc8d1cc5458242168bbdca54212a605ed0b4f680d3d876
+  languageName: node
+  linkType: hard
+
 "@vertexvis/eslint-config-vertexvis-typescript@npm:^0.5.2":
   version: 0.5.2
   resolution: "@vertexvis/eslint-config-vertexvis-typescript@npm:0.5.2"
@@ -2387,17 +2398,6 @@ __metadata:
   peerDependencies:
     eslint: ">=7.0.0"
   checksum: 10c0/1ae2e26c989c06059f42cb6b5ec45ce3cd010432454afe97aacada0ed33087919107e7a24e2138fcd4aec1372edf5c5264ea36ee911ee2a67a587c30fddb3208
-  languageName: node
-  linkType: hard
-
-"@zeit/ncc@npm:^0.22.3":
-  version: 0.22.3
-  resolution: "@zeit/ncc@npm:0.22.3"
-  dependencies:
-    node-gyp: "npm:latest"
-  bin:
-    ncc: dist/ncc/cli.js
-  checksum: 10c0/472ba6e650ec5451c217c558221ec5111204c789da051ee678d487a1d70d8ff191f9c05ee27cdfcb09012d1a08acf46a88399f017e5ce238f572e85d9d00548f
   languageName: node
   linkType: hard
 
@@ -4848,8 +4848,8 @@ __metadata:
     "@types/jest": "npm:^29.5.14"
     "@types/node": "npm:^22.20.0"
     "@types/regenerator-runtime": "npm:^0.13.8"
+    "@vercel/ncc": "npm:^0.38.3"
     "@vertexvis/eslint-config-vertexvis-typescript": "npm:^0.5.2"
-    "@zeit/ncc": "npm:^0.22.3"
     eslint: "npm:^8.57.1"
     glob: "npm:^7.2.3"
     jest: "npm:^29.7.0"
