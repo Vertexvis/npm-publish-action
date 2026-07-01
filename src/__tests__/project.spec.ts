@@ -1,4 +1,5 @@
 import path from "path";
+
 import { getProject } from "../project";
 
 const singleProjectPath = path.resolve(

@@ -9,7 +9,7 @@ const exec = jest.fn(async (commandLine, args, options) => {
 });
 const execResultAsString = configureExec(exec);
 
-describe(execResultAsString, () => {
+describe("execResultAsString", () => {
   beforeEach(() => {
     exec.mockClear();
   });

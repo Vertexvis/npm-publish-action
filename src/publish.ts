@@ -1,9 +1,10 @@
-import { logger } from "./logger";
-import { PackageInfo } from "./project";
-import * as npm from "./npm";
-import * as github from "./github";
 import { context, GitHub } from "@actions/github";
 import { Context } from "@actions/github/lib/context";
+
+import * as github from "./github";
+import { logger } from "./logger";
+import * as npm from "./npm";
+import { PackageInfo } from "./project";
 
 interface PublishingClientProps {
   npmPath: string;

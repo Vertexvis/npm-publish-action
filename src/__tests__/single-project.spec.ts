@@ -7,10 +7,11 @@ jest.mock("../npm");
 import { getInput } from "@actions/core";
 import { which } from "@actions/io";
 import path from "path";
-import { run } from "../runner";
+
 import { getEnvVar } from "../env";
-import { configure, publish, versionExists } from "../npm";
 import { createTagAndRef, tagExists } from "../github";
+import { configure, publish, versionExists } from "../npm";
+import { run } from "../runner";
 import { mockEnvVars, mockInput, mockWhich } from "../testing";
 
 const npmAuth = "npm-auth-token";

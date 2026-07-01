@@ -1,5 +1,6 @@
 import { GitHub } from "@actions/github";
 import { Context } from "@actions/github/lib/context";
+
 import { isErrorWithStatus } from "./http";
 
 export async function tagExists(

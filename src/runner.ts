@@ -1,9 +1,10 @@
 import { getInput, setFailed } from "@actions/core";
 import { which } from "@actions/io";
+
+import { getEnvVar } from "./env";
+import * as npm from "./npm";
 import { getProject } from "./project";
 import { PublishingClient } from "./publish";
-import * as npm from "./npm";
-import { getEnvVar } from "./env";
 
 interface ConfigureParams {
   npmPath: string;
@@ -27,7 +28,7 @@ export async function run(): Promise<void> {
     await configure({ npmPath, npmRegistry, npmAuth });
     await publish(workspacePath, publisher);
   } catch (e) {
-    setFailed(e);
+    setFailed(e instanceof Error ? e : String(e));
   }
 }
 
