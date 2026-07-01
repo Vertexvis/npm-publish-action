@@ -1,5 +1,5 @@
-name: 'NPM Configure and Publish'
-description: 'Configures NPM with the provided auth token, and optionally the provided registry url, then publishes packages.'
+name: "NPM Configure and Publish"
+description: "Configures NPM with the provided auth token, and optionally the provided registry url, then publishes packages."
 inputs:
   npm-auth-token:
     description: "Auth token that will be set for the provided registry using npm config."
@@ -13,5 +13,5 @@ inputs:
     required: false
     default: "false"
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node24"
+  main: "dist/index.js"
