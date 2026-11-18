@@ -1,16 +1,19 @@
-import { GitHub } from "@actions/github";
-import { Context } from "@actions/github/lib/context";
+import { context, getOctokit } from "@actions/github";
 
 import { isErrorWithStatus } from "./http";
 
+// v9 removed the GitHub class and the lib/context export. REST calls live on octokit.rest.
+export type GitHubClient = ReturnType<typeof getOctokit>;
+export type GitHubContext = typeof context;
+
 export async function tagExists(
-  github: GitHub,
-  context: Context,
+  github: GitHubClient,
+  context: GitHubContext,
   tag: string
 ): Promise<boolean> {
   return handleNotFound(
     async () => {
-      const resp = await github.git.getRef({
+      const resp = await github.rest.git.getRef({
         ...context.repo,
         ref: `tags/${tag}`,
       });
@@ -21,12 +24,12 @@ export async function tagExists(
 }
 
 export async function createTagAndRef(
-  github: GitHub,
-  context: Context,
+  github: GitHubClient,
+  context: GitHubContext,
   tag: string,
   message: string
 ): Promise<void> {
-  const tagResponse = await github.git.createTag({
+  const tagResponse = await github.rest.git.createTag({
     ...context.repo,
     tag,
     message,
@@ -34,7 +37,7 @@ export async function createTagAndRef(
     type: "commit",
   });
 
-  await github.git.createRef({
+  await github.rest.git.createRef({
     ...context.repo,
     ref: `refs/tags/${tag}`,
     sha: tagResponse.data.sha,

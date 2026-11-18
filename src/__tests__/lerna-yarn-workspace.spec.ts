@@ -1,4 +1,9 @@
 jest.mock("@actions/core");
+// v9 is ESM-only, and Jest does not transform it. A plain function survives resetAllMocks.
+jest.mock("@actions/github", () => ({
+  getOctokit: () => ({}),
+  context: {},
+}));
 jest.mock("@actions/io");
 jest.mock("../env");
 jest.mock("../github");
