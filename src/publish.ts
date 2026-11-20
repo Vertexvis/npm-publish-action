@@ -1,5 +1,4 @@
-import { context, GitHub } from "@actions/github";
-import { Context } from "@actions/github/lib/context";
+import { context, getOctokit } from "@actions/github";
 
 import * as github from "./github";
 import { logger } from "./logger";
@@ -24,8 +23,8 @@ interface PublishResult {
 export class PublishingClient {
   private npmPath: string;
   private isDryRun?: boolean;
-  private github: GitHub;
-  private githubContext: Context;
+  private github: github.GitHubClient;
+  private githubContext: github.GitHubContext;
 
   public constructor({
     npmPath,
@@ -34,7 +33,8 @@ export class PublishingClient {
   }: PublishingClientProps) {
     this.npmPath = npmPath;
     this.isDryRun = isDryRun;
-    this.github = new GitHub(githubToken);
+    // v9 removed the GitHub constructor.
+    this.github = getOctokit(githubToken);
     this.githubContext = context;
   }
 

@@ -1,5 +1,14 @@
 {
   "presets": ["@babel/env", "@babel/preset-typescript"],
+  "overrides": [
+    {
+      // github.ts and publish.ts import @actions/github@9, whose exports map only has `import`.
+      // Leave those imports as ESM so ncc resolves that condition and still emits CommonJS dist/index.js.
+      // Do not set modules:false repo-wide; glob's ESM build makes ncc copy node_modules into dist/.
+      "test": ["**/github.ts", "**/publish.ts"],
+      "presets": [["@babel/env", { "modules": false }]]
+    }
+  ],
   "ignore": [
     "node_modules",
     "test",

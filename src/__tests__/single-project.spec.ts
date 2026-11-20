@@ -1,4 +1,14 @@
 jest.mock("@actions/core");
+// v9 only exports an `import` condition, so Jest's require resolver cannot load it.
+// virtual skips that lookup. A plain function survives resetAllMocks.
+jest.mock(
+  "@actions/github",
+  () => ({
+    getOctokit: () => ({}),
+    context: {},
+  }),
+  { virtual: true }
+);
 jest.mock("@actions/io");
 jest.mock("../env");
 jest.mock("../github");
