@@ -17,7 +17,7 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
-    "@actions/github": "patch:@actions/github@npm%3A9.1.1#~/.yarn/patches/@actions-github-npm-9.1.1-ef461bf9df.patch",
+    "@actions/github": "9.1.1",
     "@actions/io": "^1.1.3",
     "glob": "^13.0.7",
     "regenerator-runtime": "^0.13.11"

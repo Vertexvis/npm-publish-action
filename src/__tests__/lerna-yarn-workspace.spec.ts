@@ -1,9 +1,14 @@
 jest.mock("@actions/core");
-// v9 is ESM-only, and Jest does not transform it. A plain function survives resetAllMocks.
-jest.mock("@actions/github", () => ({
-  getOctokit: () => ({}),
-  context: {},
-}));
+// v9 only exports an `import` condition, so Jest's require resolver cannot load it.
+// virtual skips that lookup. A plain function survives resetAllMocks.
+jest.mock(
+  "@actions/github",
+  () => ({
+    getOctokit: () => ({}),
+    context: {},
+  }),
+  { virtual: true }
+);
 jest.mock("@actions/io");
 jest.mock("../env");
 jest.mock("../github");

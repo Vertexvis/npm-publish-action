@@ -39,21 +39,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/github@patch:@actions/github@npm%3A9.1.1#~/.yarn/patches/@actions-github-npm-9.1.1-ef461bf9df.patch":
-  version: 9.1.1
-  resolution: "@actions/github@patch:@actions/github@npm%3A9.1.1#~/.yarn/patches/@actions-github-npm-9.1.1-ef461bf9df.patch::version=9.1.1&hash=f14e5b"
-  dependencies:
-    "@actions/http-client": "npm:^3.0.2"
-    "@octokit/core": "npm:^7.0.6"
-    "@octokit/plugin-paginate-rest": "npm:^14.0.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^17.0.0"
-    "@octokit/request": "npm:^10.0.7"
-    "@octokit/request-error": "npm:^7.1.0"
-    undici: "npm:^6.23.0"
-  checksum: 10c0/631baca43df7ca2804c50a2de44413748e6738707cc75c95fa9db84245f51dbdab3f24b5c0e4e90892b3478c696429f0fd9f54de22e804a6fad47ad41f167ced
-  languageName: node
-  linkType: hard
-
 "@actions/http-client@npm:^2.0.1":
   version: 2.0.1
   resolution: "@actions/http-client@npm:2.0.1"
@@ -5035,7 +5020,7 @@ __metadata:
   dependencies:
     "@actions/core": "npm:^1.11.1"
     "@actions/exec": "npm:^1.1.1"
-    "@actions/github": "patch:@actions/github@npm%3A9.1.1#~/.yarn/patches/@actions-github-npm-9.1.1-ef461bf9df.patch"
+    "@actions/github": "npm:9.1.1"
     "@actions/io": "npm:^1.1.3"
     "@babel/cli": "npm:7.29.7"
     "@babel/core": "npm:^7.29.7"

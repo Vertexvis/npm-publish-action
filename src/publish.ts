@@ -33,8 +33,7 @@ export class PublishingClient {
   }: PublishingClientProps) {
     this.npmPath = npmPath;
     this.isDryRun = isDryRun;
-    // v9 has no GitHub constructor. The package is ESM-only; the Yarn patch adds a
-    // require export so ncc can bundle this call into dist/index.js.
+    // v9 removed the GitHub constructor.
     this.github = getOctokit(githubToken);
     this.githubContext = context;
   }
